@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-7RCXB14L96"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-7RCXB14L96');
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Admin Dashboard — Genartml</title>
+  <meta name="robots" content="noindex, nofollow" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <!-- Styles -->
+  <style>
+    /* CSS Variables for Premium Light Theme */
+    :root {
+      --bg-body: #fafafa;
+      --bg-surface: #ffffff;
+      --bg-nav: #ffffff;
+      --bg-hover: #f1f3f5;
+      --border-light: #eaeaea;
+      --border-hover: #d1d5db;
+      --text-main: #111827;
+      --text-muted: #6b7280;
+      --accent: #000000;
+      --accent-hover: #333333;
+      --danger: #ef4444;
+      --danger-hover: #dc2626;
+      --success: #10b981;
+      --success-bg: #d1fae5;
+      
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body { 
+      background: var(--bg-body); 
+      color: var(--text-main); 
+      font-family: var(--font-sans); 
+      font-size: 14px; 
+      line-height: 1.5; 
+      min-height: 100vh; 
+      display: flex; 
+      flex-direction: column; 
+    }
+
+    /* Top Navigation */
+    .admin-nav {
+      background: var(--bg-nav); 
+      border-bottom: 1px solid var(--border-light); 
+      padding: 0 24px; 
+      height: 64px; 
+      display: flex; 
+      align-items: center; 
+      justify-content: space-between; 
+      position: sticky; 
+      top: 0; 
+      z-index: 100;
+    }
+    .nav-left { display: flex; align-items: center; gap: 16px; }
+    .nav-brand { font-weight: 600; font-size: 16px; display: flex; align-items: center; gap: 12px; }
+    .nav-brand img { filter: invert(1); height: 20px; } /* Invert logo since nav is white */
+    .nav-workspace { color: var(--text-muted); font-size: 14px; display: flex; align-items: center; gap: 8px; }
+    .nav-workspace::before { content: "/"; color: var(--border-light); }
+    .nav-right a { color: var(--text-muted); text-decoration: none; font-size: 13px; font-weight: 500; transition: color 0.2s; }
+    .nav-right a:hover { color: var(--text-main); }
+
+    /* Layout Wrapper */
+    .admin-layout {
+      display: flex; 
+      flex: 1; 
+      max-width: 1400px; 
+      margin: 0 auto; 
+      width: 100%; 
+      padding: 40px 24px; 
+      gap: 48px;
+    }
+    @media (max-width: 900px) { 
+      .admin-layout { flex-direction: column; gap: 24px; padding: 24px 16px; } 
+    }
+
+    /* Sidebar Navigation */
+    .admin-menu { 
+      width: 220px; 
+      display: flex; 
+      flex-direction: column; 
+      gap: 4px; 
+      flex-shrink: 0; 
+    }
+    .admin-menu-item {
+      padding: 8px 12px; 
+      border-radius: 6px; 
+      color: var(--text-muted); 
+      text-decoration: none; 
+      font-weight: 500; 
+      font-size: 14px; 
+      transition: all 0.2s ease; 
+      cursor: pointer; 
+      display: flex; 
+      align-items: center; 
+      gap: 12px;
+    }
+    .admin-menu-item svg { width: 16px; height: 16px; opacity: 0.7; }
+    .admin-menu-item:hover { background: var(--bg-hover); color: var(--text-main); }
+    .admin-menu-item.active { background: var(--accent); color: white; }
+    .admin-menu-item.active svg { opacity: 1; }
+
+    /* Main Content Area */
+    .admin-content { flex: 1; min-width: 0; }
+    
+    .admin-panel { display: none; animation: fadeIn 0.3s ease; }
+    .admin-panel.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+    .admin-panel-header { 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      margin-bottom: 24px; 
+    }
+    .admin-panel-header h2 { font-size: 20px; font-weight: 600; letter-spacing: -0.02em; }
+
+    /* Cards */
+    .card {
+      background: var(--bg-surface); 
+      border: 1px solid var(--border-light); 
+      border-radius: 12px; 
+      padding: 24px; 
+      box-shadow: var(--shadow-sm);
+    }
+    .stats-grid { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
+      gap: 16px; 
+      margin-bottom: 24px; 
+    }
+    .stat-card {
+      background: var(--bg-surface); 
+      border: 1px solid var(--border-light); 
+      border-radius: 12px; 
+      padding: 20px; 
+      box-shadow: var(--shadow-sm);
+    }
+    .stat-title { font-size: 12px; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+    .stat-value { font-size: 32px; font-weight: 600; color: var(--text-main); letter-spacing: -0.02em; }
+    
+    .chart-container { 
+      background: var(--bg-surface); 
+      border: 1px solid var(--border-light); 
+      border-radius: 12px; 
+      padding: 24px; 
+      box-shadow: var(--shadow-sm); 
+      height: 400px; 
+    }
+
+    /* Tables */
+    .table-container {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-light);
+      border-radius: 12px;
+      overflow-x: auto;
+      box-shadow: var(--shadow-sm);
+    }
+    .data-table { width: 100%; border-collapse: collapse; text-align: left; }
+    .data-table th { 
+      padding: 12px 24px; 
+      font-size: 12px; 
+      text-transform: uppercase; 
+      letter-spacing: 0.05em; 
+      color: var(--text-muted); 
+      font-weight: 500; 
+      border-bottom: 1px solid var(--border-light); 
+      background: var(--bg-body);
+    }
+    .data-table td { 
+      padding: 16px 24px; 
+      border-bottom: 1px solid var(--border-light); 
+      font-size: 14px; 
+      vertical-align: middle; 
+    }
+    .data-table tbody tr:hover td { background: var(--bg-hover); }
+    .data-table tbody tr:last-child td { border-bottom: none; }
+    
+    .badge { 
+      padding: 4px 10px; 
+      border-radius: 9999px; 
+      font-size: 12px; 
+      font-weight: 500; 
+      background: var(--bg-hover); 
+      color: var(--text-muted); 
+    }
+    .badge.active { background: var(--success-bg); color: var(--success); }
+
+    /* Forms */
+    .form-field { margin-bottom: 20px; }
+    .form-label { font-size: 13px; font-weight: 500; color: var(--text-main); margin-bottom: 6px; display: block; }
+    .form-input, .form-textarea, .form-select {
+      width: 100%; 
+      padding: 10px 14px; 
+      background: var(--bg-surface); 
+      border: 1px solid var(--border-light); 
+      border-radius: 8px; 
+      font-family: inherit; 
+      font-size: 14px; 
+      color: var(--text-main);
+      transition: all 0.2s ease;
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    }
+    .form-input:focus, .form-textarea:focus, .form-select:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px var(--accent);
+    }
+    .form-textarea { min-height: 250px; line-height: 1.5; resize: vertical; font-family: var(--font-mono); font-size: 13px; }
+    
+    /* Buttons */
+    .admin-btn {
+      display: inline-flex; 
+      justify-content: center; 
+      align-items: center; 
+      padding: 10px 18px; 
+      background: var(--accent); 
+      color: white; 
+      border: 1px solid var(--accent); 
+      border-radius: 8px; 
+      font-weight: 500; 
+      font-size: 14px; 
+      cursor: pointer; 
+      transition: all 0.2s ease;
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    }
+    .admin-btn:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+    .admin-btn.small { padding: 6px 12px; font-size: 13px; }
+    .admin-btn.secondary { background: var(--bg-surface); color: var(--text-main); border-color: var(--border-light); }
+    .admin-btn.secondary:hover { background: var(--bg-hover); border-color: var(--border-hover); }
+    .admin-btn.danger { background: var(--danger); border-color: var(--danger); }
+    .admin-btn.danger:hover { background: var(--danger-hover); border-color: var(--danger-hover); }
+
+    /* Blog List Layout */
+    .blog-manager-layout { display: grid; grid-template-columns: 300px 1fr; gap: 32px; align-items: start; }
+    @media (max-width: 900px) { .blog-manager-layout { grid-template-columns: 1fr; } }
+    
+    .admin-blog-list { 
+      display: flex; 
+      flex-direction: column; 
+      gap: 8px; 
+      max-height: 800px; 
+      overflow-y: auto; 
+    }
+    .admin-blog-item {
+      display: flex; 
+      flex-direction: column; 
+      padding: 16px; 
+      background: var(--bg-surface); 
+      border: 1px solid var(--border-light); 
+      border-radius: 8px; 
+      cursor: pointer; 
+      transition: all 0.2s ease;
+      box-shadow: var(--shadow-sm);
+    }
+    .admin-blog-item:hover { border-color: var(--border-hover); }
+    .admin-blog-item.active { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+    .blog-item-title { font-weight: 600; font-size: 14px; margin-bottom: 6px; line-height: 1.4; }
+    .blog-item-meta { font-size: 12px; color: var(--text-muted); display: flex; gap: 6px; align-items: center; }
+
+    /* Status Messages */
+    .status-msg { margin-top: 16px; font-size: 14px; font-weight: 500; padding: 12px; border-radius: 8px; display: none; }
+    .status-msg.success { color: var(--success); background: var(--success-bg); display: block; border: 1px solid rgba(16, 185, 129, 0.2); }
+    .status-msg.error { color: var(--danger); background: #fee2e2; display: block; border: 1px solid rgba(239, 68, 68, 0.2); }
+
+    /* Auth Overlay */
+    #authOverlay {
+      position: fixed; inset: 0; background: var(--bg-body); z-index: 9999; display: flex; align-items: center; justify-content: center;
+    }
+    .auth-box {
+      width: 100%; max-width: 400px; padding: 40px; background: var(--bg-surface); border: 1px solid var(--border-light); border-radius: 16px; text-align: center; box-shadow: var(--shadow-md);
+    }
+  </style>
+  
+  <!-- Supabase JS -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <!-- AUTHENTICATION -->
+  <div id="authOverlay">
+    <div class="auth-box">
+      <div style="display: flex; justify-content: center; margin-bottom: 24px;">
+        <img src="../assets/logo-white.png" alt="Genartml" height="32" style="filter: invert(1);" />
+      </div>
+      <h2 style="margin-bottom: 8px; font-size: 20px; font-weight: 600;">Welcome back</h2>
+      <p style="color: var(--text-muted); margin-bottom: 32px; font-size: 14px;">Enter the Admin Password to continue</p>
+      
+      <div class="form-field" style="position: relative; text-align: left;">
+        <input type="password" id="passwordInput" class="form-input" placeholder="Password" style="padding-right: 60px;" />
+        <button type="button" id="togglePasswordBtn" style="position: absolute; right: 12px; top: 10px; background: none; border: none; cursor: pointer; color: var(--text-muted); font-size: 12px; font-weight: 500;">Show</button>
+      </div>
+      <button id="loginBtn" class="admin-btn" style="width: 100%;">Authenticate</button>
+      <div id="authError" class="status-msg error" style="display: none; margin-top: 16px;"></div>
+    </div>
+  </div>
+
+  <!-- NAVIGATION -->
+  <nav class="admin-nav">
+    <div class="nav-left">
+      <div class="nav-brand">
+        <img src="../assets/logo-white.png" alt="Genartml" /> Genartml
+      </div>
+      <div class="nav-workspace">Admin Workspace</div>
+    </div>
+    <div class="nav-right">
+      <a href="/" target="_blank">View Live Site ↗</a>
+    </div>
+  </nav>
+
+  <div class="admin-layout">
+    
+    <!-- SIDEBAR -->
+    <aside class="admin-menu">
+      <a class="admin-menu-item active" data-tab="tab-dashboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+        Overview
+      </a>
+      <a class="admin-menu-item" data-tab="tab-articles">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        Articles
+      </a>
+      <a class="admin-menu-item" data-tab="tab-subscribers">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Subscribers
+      </a>
+      <a class="admin-menu-item" data-tab="tab-messages">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Inbox
+      </a>
+    </aside>
+
+    <!-- CONTENT -->
+    <div class="admin-content">
+      
+      <!-- TAB: DASHBOARD -->
+      <section id="tab-dashboard" class="admin-panel active">
+        <div class="admin-panel-header">
+          <h2>Overview</h2>
+          <button class="admin-btn secondary small" id="refreshStatsBtn">
+            <svg style="width: 14px; height: 14px; margin-right: 6px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M2.13 15.57a10 10 0 1 0 3.44-8.82L2.5 10M2.5 10V4h6"/></svg>
+            Refresh
+          </button>
+        </div>
+        
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-title">Total Pageviews</div>
+            <div class="stat-value" id="statPageviews">--</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-title">Subscribers</div>
+            <div class="stat-value" id="statSubscribers">--</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-title">Published Articles</div>
+            <div class="stat-value" id="statArticles">--</div>
+          </div>
+        </div>
+
+        <div class="chart-container">
+          <canvas id="trafficChart"></canvas>
+        </div>
+      </section>
+
+      <!-- TAB: ARTICLES -->
+      <section id="tab-articles" class="admin-panel">
+        <div class="blog-manager-layout">
+          <div>
+            <div class="admin-panel-header" style="margin-bottom: 16px;">
+              <h2>Articles</h2>
+              <button id="newPostBtn" class="admin-btn small">+ New</button>
+            </div>
+            <div class="admin-blog-list" id="blogList">
+              <div style="color: var(--text-muted); font-size: 14px; padding: 16px;">Loading...</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2 id="editorTitle" style="font-size: 18px; font-weight: 600; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-light);">Create New Post</h2>
+            <form id="blogForm">
+              <input type="hidden" id="blogId" />
+              
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                <div class="form-field">
+                  <label class="form-label">Title</label>
+                  <input type="text" id="blogTitle" class="form-input" required />
+                </div>
+                <div class="form-field">
+                  <label class="form-label">Slug (URL)</label>
+                  <input type="text" id="blogSlug" class="form-input" required placeholder="e.g. how-ai-saved-textile" />
+                </div>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                <div class="form-field">
+                  <label class="form-label">Category</label>
+                  <select id="blogCategory" class="form-select" required>
+                    <option value="AI Automation">AI Automation</option>
+                    <option value="Software">Software</option>
+                    <option value="Business">Business</option>
+                    <option value="Product Updates">Product Updates</option>
+                  </select>
+                </div>
+                <div class="form-field">
+                  <label class="form-label">Read Time</label>
+                  <input type="text" id="blogReadTime" class="form-input" placeholder="e.g. 8 min read" required />
+                </div>
+              </div>
+
+              <div class="form-field">
+                <label class="form-label">Cover Image</label>
+                <div style="display: flex; gap: 16px; margin-bottom: 12px;">
+                  <label style="font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                    <input type="radio" name="coverType" value="url" checked /> Image URL
+                  </label>
+                  <label style="font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                    <input type="radio" name="coverType" value="upload" /> Upload Image
+                  </label>
+                </div>
+                <input type="text" id="blogCover" class="form-input" placeholder="e.g. assets/blog-cover-1.jpg" required />
+                <input type="file" id="blogCoverFile" class="form-input" accept="image/jpeg, image/png, image/webp" style="display: none;" />
+                <div id="uploadPreview" style="margin-top: 12px; display: none;">
+                  <img id="uploadPreviewImg" src="" alt="Preview" style="max-width: 200px; max-height: 120px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border-light);" />
+                </div>
+              </div>
+
+              <div class="form-field">
+                <label class="form-label">Excerpt (Short Summary)</label>
+                <textarea id="blogExcerpt" class="form-textarea" style="min-height: 80px;" required></textarea>
+              </div>
+
+              <div class="form-field">
+                <label class="form-label">Content (HTML or Markdown)</label>
+                <textarea id="blogContent" class="form-textarea" required></textarea>
+              </div>
+              
+              <div class="form-field" style="display: flex; align-items: center; gap: 24px; padding: 16px; background: var(--bg-body); border-radius: 8px; border: 1px solid var(--border-light);">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <input type="checkbox" id="blogPublished" checked />
+                  <label for="blogPublished" style="margin: 0; font-size: 14px; font-weight: 500;">Published (Live)</label>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <input type="checkbox" id="blogFeatured" />
+                  <label for="blogFeatured" style="margin: 0; font-size: 14px; font-weight: 500;">🌟 Featured Post</label>
+                </div>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border-light);">
+                <div style="display: flex; gap: 12px;">
+                  <button type="submit" id="saveBtn" class="admin-btn">Save Post</button>
+                  <button type="button" id="cancelBtn" class="admin-btn secondary">Cancel</button>
+                </div>
+                <button type="button" id="deleteBtn" class="admin-btn danger" style="display: none;">Delete</button>
+              </div>
+              
+              <div id="formStatus" class="status-msg"></div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB: SUBSCRIBERS -->
+      <section id="tab-subscribers" class="admin-panel">
+        <div class="admin-panel-header">
+          <h2>Newsletter Subscribers</h2>
+          <button class="admin-btn secondary small" id="exportSubscribersBtn">Export CSV</button>
+        </div>
+        
+        <div class="table-container">
+          <table class="data-table" id="subscribersTable">
+            <thead>
+              <tr>
+                <th>Email Address</th>
+                <th>Status</th>
+                <th>Date Subscribed</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td colspan="3" style="text-align: center; color: var(--text-muted);">Loading subscribers...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- TAB: MESSAGES -->
+      <section id="tab-messages" class="admin-panel">
+        <div class="admin-panel-header">
+          <h2>Inbox Messages</h2>
+        </div>
+        
+        <div class="table-container">
+          <table class="data-table" id="messagesTable">
+            <thead>
+              <tr>
+                <th style="width: 20%;">Name</th>
+                <th style="width: 25%;">Email</th>
+                <th style="width: 40%;">Message</th>
+                <th style="width: 15%;">Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td colspan="4" style="text-align: center; color: var(--text-muted);">Loading messages...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <script src="../js/admin.js"></script>
+</body>
+</html>

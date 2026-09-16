@@ -1,0 +1,13 @@
+# Genartml Website — robots.txt
+# https://genartml.com
+
+User-agent: *
+Allow: /
+
+# Block admin panel from search engines
+Disallow: /admin/
+Disallow: /admin.html
+Disallow: /js/admin.js
+
+# Sitemap
+Sitemap: https://genartml.com/sitemap.xml

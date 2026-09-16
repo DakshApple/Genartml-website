@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-7RCXB14L96"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-7RCXB14L96');
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#FAFAF7" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0A0A0A" media="(prefers-color-scheme: dark)" />
+
+  <title>Blog — AI Automation & Software Development Insights | Genartml</title>
+  <meta name="description" content="Read expert insights on AI automation, custom software development, business workflow automation, and building AI-powered products. Practical guides from the Genartml team in India." />
+  <meta name="keywords" content="AI automation blog, software development insights, AI chatbot guides, workflow automation tips, business AI India, custom software blog" />
+  <meta name="author" content="Genartml Private Limited" />
+
+  <!-- Open Graph / Social -->
+  <meta property="og:title" content="Blog — Genartml | Insights on AI Automation & Software" />
+  <meta property="og:description" content="Insights, guides, and stories on AI automation, custom software, and building products." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://genartml.com/blog" />
+  <meta property="og:image" content="https://genartml.com/assets/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon-16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/favicon-180.png" />
+
+  <!-- Fonts — preload critical weights to prevent FOUT -->
+  <link rel="preload" href="https://fonts.gstatic.com/s/inter/v18/UcC73FwrK3iLTeHuS_fjbvMwCp50KnMa2JL7SUc.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Fraunces:ital,opsz,wght@1,144,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://genartml.com/blog/" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="../css/styles.css" />
+</head>
+
+<body id="top">
+
+  <!-- Skip to main content (a11y) -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- ============ NAV ============ -->
+  <nav class="nav" id="nav" role="navigation" aria-label="Main">
+    <div class="wrap nav-inner">
+      <a href="../index.html" class="brand" aria-label="Genartml — home">
+        <img src="../assets/logo.png" alt="Genartml" class="brand-logo" width="120" height="22" decoding="async" />
+      </a>
+      <div class="nav-links">
+        <a href="../index.html#work">Work</a>
+        <a href="../index.html#products">Products</a>
+        <a href="../index.html#about">About</a>
+        <a href="/blog/" class="nav-link-active">Blog</a>
+        <a href="../index.html#contact" class="nav-cta">Book a Call</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main-content">
+
+  <!-- ============ BLOG HERO ============ -->
+  <header class="blog-hero">
+    <div class="hero-glow" aria-hidden="true"></div>
+    <div class="wrap">
+      <div class="hero-eyebrow reveal">Blog · Insights · Guides</div>
+      <h1 class="hero-title reveal d1">
+        Insights &<br />
+        <span class="italic">Ideas</span>.
+      </h1>
+      <p class="hero-sub reveal d2">
+        Practical thinking on AI automation, software development, and building products — from the team at Genartml.
+      </p>
+    </div>
+  </header>
+
+  <!-- ============ FEATURED POST ============ -->
+  <section class="section blog-featured-section" aria-labelledby="featured-title">
+    <div class="wrap">
+      <div id="featuredContainer">
+        <!-- Featured post will be injected here by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ BLOG GRID ============ -->
+  <section class="section blog-grid-section" aria-labelledby="posts-title">
+    <div class="wrap">
+      <div class="blog-grid-header">
+        <div class="section-head">
+          <div class="eyebrow reveal"><span class="eyebrow-num">01</span> All Posts</div>
+          <h2 class="section-title reveal d1" id="posts-title">
+            Read. Learn.<br />
+            <span class="italic">Build</span>.
+          </h2>
+        </div>
+
+        <!-- Category Filters -->
+        <div class="blog-filters reveal d2" id="blogFilters">
+          <button class="blog-filter active" data-category="all">All</button>
+          <button class="blog-filter" data-category="ai-automation">AI Automation</button>
+          <button class="blog-filter" data-category="software">Software</button>
+          <button class="blog-filter" data-category="business">Business</button>
+          <button class="blog-filter" data-category="product-updates">Product Updates</button>
+        </div>
+      </div>
+
+      <!-- Blog Cards Grid -->
+      <div class="blog-grid" id="blogGrid">
+        <div style="grid-column: 1 / -1; text-align: center; padding: 60px 0; color: var(--muted);">
+          Loading articles...
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div class="blog-empty" id="blogEmpty" style="display: none;">
+        <p>No posts in this category yet. Check back soon.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ NEWSLETTER CTA ============ -->
+  <section class="cta blog-newsletter" aria-labelledby="newsletter-title">
+    <div class="wrap">
+      <div class="newsletter-inner">
+        <div class="newsletter-content">
+          <div class="cta-eyebrow reveal">Stay Updated</div>
+          <h2 class="reveal d1" id="newsletter-title">
+            Get our best<br />
+            <span class="italic">insights</span> delivered.
+          </h2>
+          <p class="reveal d2">
+            No spam. One email per week — practical ideas on AI, automation, and building better software. Unsubscribe anytime.
+          </p>
+        </div>
+        <div class="newsletter-form-wrap reveal d2">
+          <form class="newsletter-form" id="newsletterForm">
+            <div class="newsletter-input-group">
+              <input type="email" class="newsletter-input" placeholder="you@company.com" required autocomplete="email" id="newsletter-email" />
+              <button type="submit" class="newsletter-btn" id="newsletterBtn">
+                Subscribe
+                <span class="arrow" aria-hidden="true">→</span>
+              </button>
+            </div>
+            <div class="newsletter-note">Join 500+ founders and operators.</div>
+          </form>
+          <div class="newsletter-success" id="newsletterSuccess" role="status" aria-live="polite">
+            <div class="check" aria-hidden="true">✓</div>
+            <h4>You're in.</h4>
+            <p>Watch your inbox — first email drops this Friday.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer" role="contentinfo">
+    <div class="wrap footer-inner">
+      <div class="footer-brand-block">
+        <img src="../assets/logo-white.png" alt="Genartml" class="footer-logo" width="100" height="18" decoding="async" />
+        <span class="footer-copyright">© Genartml Private Limited 2026</span>
+      </div>
+      <div class="footer-links">
+        <a href="../index.html#work">Work</a>
+        <a href="../index.html#products">Products</a>
+        <a href="../index.html#about">About</a>
+        <a href="/blog/">Blog</a>
+        <a href="/admin/">Admin</a>
+        <a href="https://evoluter.in" target="_blank" rel="noopener">Evoluter</a>
+        <span class="footer-link-disabled">Extuter (coming soon)</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/main.js" defer></script>
+  <script src="../js/blog-client.js" defer></script>
+</body>
+</html>
