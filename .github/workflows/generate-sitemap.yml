@@ -1,0 +1,40 @@
+name: Generate Sitemap
+
+on:
+  schedule:
+    # Run automatically every day at midnight UTC
+    - cron: '0 0 * * *'
+  workflow_dispatch: # Allow manual trigger from GitHub UI
+
+permissions:
+  contents: write
+
+jobs:
+  generate-sitemap:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          
+      - name: Run sitemap generator
+        run: python scripts/generate_sitemap.py
+        
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Only commit if sitemap.xml has changed
+          if git diff --exit-code sitemap.xml; then
+            echo "No changes to sitemap.xml, skipping commit."
+          else
+            git add sitemap.xml
+            git commit -m "chore(seo): update dynamic sitemap.xml [skip ci]"
+            git push
+          fi

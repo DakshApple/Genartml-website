@@ -4,10 +4,21 @@
 User-agent: *
 Allow: /
 
-# Block admin panel from search engines
+# Rate Limiting
+Crawl-delay: 1
+
+# Block admin panel and internals from search engines
 Disallow: /admin/
 Disallow: /admin.html
 Disallow: /js/admin.js
+Disallow: /scripts/
+Disallow: /scratch/
+Disallow: /*?*
+
+# Explicitly allow necessary assets
+Allow: /assets/
+Allow: /css/
+Allow: /js/
 
 # Sitemap
 Sitemap: https://genartml.com/sitemap.xml
