@@ -404,6 +404,37 @@ function editPost(id) {
   }
 }
 
+async function uploadImageToSupabase(base64Data) {
+  const arr = base64Data.split(',');
+  const mime = arr[0].match(/:(.*?);/)[1];
+  const bstr = atob(arr[1]);
+  let n = bstr.length;
+  const u8arr = new Uint8Array(n);
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+  const blob = new Blob([u8arr], { type: mime });
+  
+  const fileName = `cover-${Date.now()}.jpg`;
+  
+  const res = await fetch(`${SUPABASE_URL}/storage/v1/object/blog-images/${fileName}`, {
+    method: 'POST',
+    headers: {
+      'apikey': SUPABASE_ANON_KEY,
+      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+      'Content-Type': mime
+    },
+    body: blob
+  });
+  
+  if (!res.ok) {
+    const errText = await res.text();
+    throw new Error(`Storage upload failed: ${errText}`);
+  }
+  
+  return `${SUPABASE_URL}/storage/v1/object/public/blog-images/${fileName}`;
+}
+
 blogForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   
@@ -415,19 +446,27 @@ blogForm.addEventListener('submit', async (e) => {
   const id = document.getElementById('blogId').value;
   let finalCoverImage = '';
   
-  if (radioUrl.checked) {
-    finalCoverImage = document.getElementById('blogCover').value;
-  } else {
-    if (base64Image) {
-      finalCoverImage = base64Image;
+  try {
+    if (radioUrl.checked) {
+      finalCoverImage = document.getElementById('blogCover').value;
     } else {
-      // Keep existing image if editing and no new file selected
-      const existing = currentBlogs.find(b => b.id === id);
-      if (existing) {
-        finalCoverImage = existing.cover_image;
+      if (base64Image) {
+        // If it is a full base64 image and not a previously uploaded URL
+        if (base64Image.startsWith('data:image')) {
+          submitBtn.textContent = 'Uploading Image...';
+          finalCoverImage = await uploadImageToSupabase(base64Image);
+          submitBtn.textContent = 'Saving Post...';
+        } else {
+          finalCoverImage = base64Image;
+        }
+      } else {
+        // Keep existing image if editing and no new file selected
+        const existing = currentBlogs.find(b => b.id === id);
+        if (existing) {
+          finalCoverImage = existing.cover_image;
+        }
       }
     }
-  }
 
   const blogData = {
     title: document.getElementById('blogTitle').value,
@@ -440,8 +479,6 @@ blogForm.addEventListener('submit', async (e) => {
     is_published: document.getElementById('blogPublished').checked,
     is_featured: document.getElementById('blogFeatured').checked
   };
-
-  try {
     const method = id ? 'PATCH' : 'POST';
     const url = id ? `${SUPABASE_URL}/rest/v1/blogs?id=eq.${id}` : `${SUPABASE_URL}/rest/v1/blogs`;
     
