@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const dateStr = new Date(featuredBlog.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
         
         featuredContainer.innerHTML = `
-          <a href="blog/post.html?slug=${featuredBlog.slug}" class="blog-featured reveal" id="featured-title">
+          <a href="/blog/post.html?slug=${featuredBlog.slug}" class="blog-featured reveal" id="featured-title">
             <div class="blog-featured-img">
               <img src="${featuredBlog.cover_image}" alt="${escapeHtml(featuredBlog.title)}" loading="lazy" decoding="async" onerror="this.src='assets/blog-cover-1.jpg'" />
             </div>
@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const catSlug = blog.category.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
       html += `
-        <a href="blog/post.html?slug=${blog.slug}" class="blog-card reveal ${revealClass}" data-category="${catSlug}">
+        <a href="/blog/post.html?slug=${blog.slug}" class="blog-card reveal ${revealClass}" data-category="${catSlug}">
           <div class="blog-card-image">
             <img src="${blog.cover_image}" alt="${escapeHtml(blog.title)}" loading="lazy" onerror="this.src='assets/blog-cover-1.jpg'" />
           </div>
@@ -233,7 +233,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           const delayClass = index === 0 ? '' : (index === 1 ? 'd1' : 'd2');
           
           relatedHtml += `
-            <a href="blog/post.html?slug=${relBlog.slug}" class="blog-card reveal ${delayClass}">
+            <a href="/blog/post.html?slug=${relBlog.slug}" class="blog-card reveal ${delayClass}">
               <div class="blog-card-image">
                 <img src="${relBlog.cover_image}" alt="${escapeHtml(relBlog.title)}" loading="lazy" onerror="this.src='assets/blog-cover-1.jpg'" />
               </div>

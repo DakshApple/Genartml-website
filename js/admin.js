@@ -317,16 +317,36 @@ radioUpload.addEventListener('change', () => {
 blogCoverFileInput.addEventListener('change', (e) => {
   const file = e.target.files[0];
   if (file) {
-    if (file.size > 2 * 1024 * 1024) {
-      alert("File is too large! Please select an image under 2MB.");
+    if (file.size > 5 * 1024 * 1024) {
+      alert("File is too large! Please select an image under 5MB.");
       blogCoverFileInput.value = '';
       return;
     }
     const reader = new FileReader();
     reader.onload = (evt) => {
-      base64Image = evt.target.result;
-      uploadPreviewImg.src = base64Image;
-      uploadPreview.style.display = 'block';
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const MAX_WIDTH = 1200;
+        let width = img.width;
+        let height = img.height;
+        
+        if (width > MAX_WIDTH) {
+          height = Math.round((height * MAX_WIDTH) / width);
+          width = MAX_WIDTH;
+        }
+        
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+        
+        // Compress to JPEG with 0.8 quality
+        base64Image = canvas.toDataURL('image/jpeg', 0.8);
+        uploadPreviewImg.src = base64Image;
+        uploadPreview.style.display = 'block';
+      };
+      img.src = evt.target.result;
     };
     reader.readAsDataURL(file);
   }
