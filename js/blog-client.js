@@ -1,5 +1,13 @@
 // Fetch blogs and render in blog.html
 
+function getCoverImageUrl(url) {
+  if (!url) return '/assets/blog-cover-1.jpg';
+  if (url.startsWith('http') || url.startsWith('data:') || url.startsWith('/')) {
+    return url;
+  }
+  return `/${url}`;
+}
+
 const SUPABASE_URL = 'https://czvibozmuzmlpxdafxch.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_DTa0uYY3Xa_kYY52eFwY4Q_ETGHgdqV';
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -44,7 +52,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         featuredContainer.innerHTML = `
           <a href="/blog/post.html?slug=${featuredBlog.slug}" class="blog-featured reveal" id="featured-title">
             <div class="blog-featured-img">
-              <img src="${featuredBlog.cover_image}" alt="${escapeHtml(featuredBlog.title)}" loading="lazy" decoding="async" onerror="this.src='/assets/blog-cover-1.jpg'" />
+              <img src="${getCoverImageUrl(featuredBlog.cover_image)}" alt="${escapeHtml(featuredBlog.title)}" loading="lazy" decoding="async" onerror="this.src='/assets/blog-cover-1.jpg'" />
             </div>
             <div class="blog-featured-content">
               <div class="blog-card-meta">
@@ -78,7 +86,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       html += `
         <a href="/blog/post.html?slug=${blog.slug}" class="blog-card reveal ${revealClass}" data-category="${catSlug}">
           <div class="blog-card-image">
-            <img src="${blog.cover_image}" alt="${escapeHtml(blog.title)}" loading="lazy" onerror="this.src='/assets/blog-cover-1.jpg'" />
+            <img src="${getCoverImageUrl(blog.cover_image)}" alt="${escapeHtml(blog.title)}" loading="lazy" onerror="this.src='/assets/blog-cover-1.jpg'" />
           </div>
           <div class="blog-card-body">
             <div class="blog-card-meta">
@@ -152,14 +160,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('postReadTime').textContent = blog.read_time;
     document.getElementById('postDate').textContent = new Date(blog.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
     
-    document.getElementById('postCover').src = blog.cover_image;
+    document.getElementById('postCover').src = getCoverImageUrl(blog.cover_image);
     document.getElementById('postCover').alt = blog.title;
 
     // ── Dynamic SEO Meta Tags ──
     const postUrl = `https://genartml.com/blog/post.html?slug=${blog.slug}`;
     const coverUrl = blog.cover_image.startsWith('data:') 
       ? 'https://genartml.com/assets/og-image.png' 
-      : (blog.cover_image.startsWith('http') ? blog.cover_image : `https://genartml.com/${blog.cover_image}`);
+      : (blog.cover_image.startsWith('http') ? blog.cover_image : `https://genartml.com/${blog.cover_image.startsWith('/') ? blog.cover_image.slice(1) : blog.cover_image}`);
 
     updateMeta('description', blog.excerpt);
     updateMeta('author', 'Daksh Suthar');
@@ -268,7 +276,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           relatedHtml += `
             <a href="/blog/post.html?slug=${relBlog.slug}" class="blog-card reveal ${delayClass}">
               <div class="blog-card-image">
-                <img src="${relBlog.cover_image}" alt="${escapeHtml(relBlog.title)}" loading="lazy" onerror="this.src='/assets/blog-cover-1.jpg'" />
+                <img src="${getCoverImageUrl(relBlog.cover_image)}" alt="${escapeHtml(relBlog.title)}" loading="lazy" onerror="this.src='/assets/blog-cover-1.jpg'" />
               </div>
               <div class="blog-card-body">
                 <div class="blog-card-meta">
@@ -352,7 +360,9 @@ function parseMarkdown(text) {
   
   // If content already contains HTML tags, pass it through with minimal processing
   if (/<[a-z][\s\S]*>/i.test(text) && (text.includes('<p>') || text.includes('<h2>') || text.includes('<div>'))) {
-    return text;
+    return text.replace(/<img\s+([^>]*?)src=["']([^"']+)["']([^>]*?)>/gi, (match, p1, src, p2) => {
+      return `<img ${p1}src="${getCoverImageUrl(src)}" ${p2}>`;
+    });
   }
 
   // Normalize line endings
