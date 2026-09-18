@@ -39,7 +39,7 @@
   --dark: #0A0A0A;
 
   /* Typography */
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-sans: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-serif: 'Fraunces', Georgia, serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
 
@@ -2376,6 +2376,7 @@ textarea:focus-visible,
   gap: 16px;
   max-width: 900px;
   margin: 0 auto;
+  padding-bottom: 120px;
 }
 .job-card {
   display: flex;
