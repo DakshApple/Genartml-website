@@ -170,13 +170,20 @@ async function loadMessages() {
   }
 }
 
+const statUniqueVisitors = document.getElementById('statUniqueVisitors');
+const topPagesList = document.getElementById('topPagesList');
+
 async function loadPageviews() {
   try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/pageviews?select=created_at`, { headers: getHeaders() });
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/pageviews?select=created_at,path,session_id`, { headers: getHeaders() });
     if (!res.ok) throw new Error('Failed');
     const data = await res.json();
     
     statPageviews.textContent = data.length;
+    
+    // Unique Visitors
+    const uniqueSessions = new Set(data.map(pv => pv.session_id).filter(Boolean));
+    if (statUniqueVisitors) statUniqueVisitors.textContent = uniqueSessions.size;
     
     // Group by date for chart (last 7 days)
     const countsByDate = {};
@@ -186,17 +193,36 @@ async function loadPageviews() {
       countsByDate[d.toISOString().split('T')[0]] = 0;
     }
     
+    // Top Pages
+    const pathCounts = {};
+    
     data.forEach(pv => {
       const dateStr = pv.created_at.split('T')[0];
       if (countsByDate[dateStr] !== undefined) {
         countsByDate[dateStr]++;
       }
+      
+      const p = pv.path || '/';
+      pathCounts[p] = (pathCounts[p] || 0) + 1;
     });
 
     renderChart(Object.keys(countsByDate), Object.values(countsByDate));
+    
+    // Render Top Pages
+    if (topPagesList) {
+      const sorted = Object.entries(pathCounts).sort((a, b) => b[1] - a[1]).slice(0, 5);
+      topPagesList.innerHTML = sorted.map(([path, count]) => `
+        <div style="display: flex; justify-content: space-between; padding-bottom: 8px; border-bottom: 1px solid var(--border-light);">
+          <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px;" title="${escapeHtml(path)}">${escapeHtml(path)}</span>
+          <span style="font-weight: 500;">${count}</span>
+        </div>
+      `).join('');
+    }
+    
   } catch (e) {
     console.error(e);
     statPageviews.textContent = '-';
+    if (statUniqueVisitors) statUniqueVisitors.textContent = '-';
   }
 }
 

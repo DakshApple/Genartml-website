@@ -371,8 +371,8 @@
             <div class="stat-value" id="statPageviews">--</div>
           </div>
           <div class="stat-card">
-            <div class="stat-title">Subscribers</div>
-            <div class="stat-value" id="statSubscribers">--</div>
+            <div class="stat-title">Unique Visitors</div>
+            <div class="stat-value" id="statUniqueVisitors">--</div>
           </div>
           <div class="stat-card">
             <div class="stat-title">Published Articles</div>
@@ -380,8 +380,19 @@
           </div>
         </div>
 
-        <div class="chart-container">
-          <canvas id="trafficChart"></canvas>
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px;">
+          <div class="card" style="padding: 16px;">
+            <h3 style="font-size: 14px; margin-bottom: 12px; color: var(--text-muted);">Traffic (Last 7 Days)</h3>
+            <div class="chart-container" style="height: 250px;">
+              <canvas id="trafficChart"></canvas>
+            </div>
+          </div>
+          <div class="card" style="padding: 16px;">
+            <h3 style="font-size: 14px; margin-bottom: 12px; color: var(--text-muted);">Top Pages</h3>
+            <div id="topPagesList" style="display: flex; flex-direction: column; gap: 8px; font-size: 13px;">
+              <div style="color: var(--text-muted);">Loading...</div>
+            </div>
+          </div>
         </div>
       </section>
 
