@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         featuredContainer.innerHTML = `
           <a href="/blog/post.html?slug=${featuredBlog.slug}" class="blog-featured reveal" id="featured-title">
             <div class="blog-featured-img">
-              <img src="${featuredBlog.cover_image}" alt="${escapeHtml(featuredBlog.title)}" loading="lazy" decoding="async" onerror="this.src='assets/blog-cover-1.jpg'" />
+              <img src="${featuredBlog.cover_image}" alt="${escapeHtml(featuredBlog.title)}" loading="lazy" decoding="async" onerror="this.src='/assets/blog-cover-1.jpg'" />
             </div>
             <div class="blog-featured-content">
               <div class="blog-card-meta">
@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       html += `
         <a href="/blog/post.html?slug=${blog.slug}" class="blog-card reveal ${revealClass}" data-category="${catSlug}">
           <div class="blog-card-image">
-            <img src="${blog.cover_image}" alt="${escapeHtml(blog.title)}" loading="lazy" onerror="this.src='assets/blog-cover-1.jpg'" />
+            <img src="${blog.cover_image}" alt="${escapeHtml(blog.title)}" loading="lazy" onerror="this.src='/assets/blog-cover-1.jpg'" />
           </div>
           <div class="blog-card-body">
             <div class="blog-card-meta">
@@ -138,6 +138,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (error || !blog) {
       postBody.innerHTML = '<p>Post not found.</p>';
       document.getElementById('postTitle').textContent = 'Not Found';
+      const noindex = document.createElement('meta');
+      noindex.name = 'robots';
+      noindex.content = 'noindex';
+      document.head.appendChild(noindex);
       return;
     }
 
@@ -212,8 +216,37 @@ document.addEventListener('DOMContentLoaded', async () => {
     scriptEl.textContent = JSON.stringify(jsonLd);
     document.head.appendChild(scriptEl);
 
-    // Parse markdown into HTML if it's plain text (if it looks like HTML, parser passes it mostly as is, but we'll assume it's markdown/text)
+    // Parse markdown into HTML
     postBody.innerHTML = parseMarkdown(blog.content);
+
+    // ── Dynamic Share Links (CRIT-2 fix) ──
+    const shareTwitter = document.getElementById('shareTwitter');
+    const shareLinkedIn = document.getElementById('shareLinkedIn');
+    if (shareTwitter) {
+      shareTwitter.href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(blog.title)}&url=${encodeURIComponent(postUrl)}`;
+    }
+    if (shareLinkedIn) {
+      shareLinkedIn.href = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(postUrl)}`;
+    }
+
+    // ── Dynamic Table of Contents (CRIT-3 fix) ──
+    const tocNav = document.getElementById('postToc');
+    if (tocNav) {
+      const headings = postBody.querySelectorAll('h2, h3');
+      if (headings.length > 0) {
+        let tocHtml = '';
+        headings.forEach((heading, idx) => {
+          const id = 'section-' + idx;
+          heading.id = id;
+          const indent = heading.tagName === 'H3' ? ' style="padding-left: 12px; font-size: 13px;"' : '';
+          tocHtml += `<a href="#${id}" class="post-toc-link"${indent}>${heading.textContent}</a>`;
+        });
+        tocNav.innerHTML = tocHtml;
+      } else {
+        // Hide TOC card if no headings found
+        tocNav.closest('.post-sidebar-card').style.display = 'none';
+      }
+    }
 
     // Fetch and render Related Posts (limit 3, exclude current)
     try {
@@ -235,7 +268,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           relatedHtml += `
             <a href="/blog/post.html?slug=${relBlog.slug}" class="blog-card reveal ${delayClass}">
               <div class="blog-card-image">
-                <img src="${relBlog.cover_image}" alt="${escapeHtml(relBlog.title)}" loading="lazy" onerror="this.src='assets/blog-cover-1.jpg'" />
+                <img src="${relBlog.cover_image}" alt="${escapeHtml(relBlog.title)}" loading="lazy" onerror="this.src='/assets/blog-cover-1.jpg'" />
               </div>
               <div class="blog-card-body">
                 <div class="blog-card-meta">

@@ -23,6 +23,10 @@
     // Fallback email address to show users if form fails
     FALLBACK_EMAIL: 'team@genartml.com',
 
+    // Supabase — used for newsletter subscribers and pageview analytics
+    SUPABASE_URL: 'https://czvibozmuzmlpxdafxch.supabase.co',
+    SUPABASE_ANON_KEY: 'sb_publishable_DTa0uYY3Xa_kYY52eFwY4Q_ETGHgdqV',
+
     // Tools list for the marquee (order matters — displayed left to right)
     TOOLS: [
       'WhatsApp Business', 'OpenAI', 'Zapier', 'Make', 'n8n', 'Razorpay',
@@ -30,6 +34,7 @@
       'Zoho', 'Tally', 'Meta Ads', 'Stripe', 'WordPress', 'Salesforce'
     ]
   };
+
 
 
   /* ==========================================================================
