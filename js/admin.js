@@ -580,3 +580,457 @@ document.getElementById('exportSubscribersBtn')?.addEventListener('click', () =>
       a.click();
     });
 });
+
+
+// ============================================================
+// CAREERS / JOBS ADMIN
+// ============================================================
+
+let currentJobs = [];
+let jobContentBlocks = [];
+
+const jobsTableBody = document.getElementById('jobsTableBody');
+const careersListView = document.getElementById('careersListView');
+const careersEditorView = document.getElementById('careersEditorView');
+const jobForm = document.getElementById('jobForm');
+const jobFormStatus = document.getElementById('jobFormStatus');
+const contentBlocksContainer = document.getElementById('contentBlocksContainer');
+
+// Auto-generate slug from title
+document.getElementById('jobTitleInput')?.addEventListener('input', (e) => {
+  if (!document.getElementById('jobId').value) {
+    const slug = e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+    document.getElementById('jobSlugInput').value = slug;
+  }
+});
+
+// Load jobs on careers tab
+async function loadJobs() {
+  if (!jobsTableBody) return;
+  jobsTableBody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: var(--text-muted);">Loading...</td></tr>';
+  
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/jobs?select=*&order=created_at.desc`, { headers: getHeaders() });
+    if (!res.ok) throw new Error('Failed to load jobs');
+    currentJobs = await res.json();
+    renderJobsTable(currentJobs);
+  } catch (e) {
+    console.error(e);
+    jobsTableBody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: var(--text-muted);">Failed to load jobs. Make sure the jobs table exists in Supabase.</td></tr>';
+  }
+}
+
+function renderJobsTable(jobs) {
+  if (jobs.length === 0) {
+    jobsTableBody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: var(--text-muted);">No jobs yet. Create your first job posting.</td></tr>';
+    return;
+  }
+
+  let html = '';
+  jobs.forEach(job => {
+    const statusColors = {
+      draft: 'background: #f3f4f6; color: #6b7280;',
+      published: 'background: #d1fae5; color: #059669;',
+      paused: 'background: #fef3c7; color: #d97706;',
+      closed: 'background: #fee2e2; color: #dc2626;',
+      archived: 'background: #f3f4f6; color: #9ca3af;'
+    };
+    const pubDate = job.published_at ? new Date(job.published_at).toLocaleDateString() : '—';
+    
+    html += `
+      <tr>
+        <td>
+          <div style="font-weight: 600;">${escapeHtml(job.title)}</div>
+          <div style="font-size: 12px; color: var(--text-muted); font-family: var(--font-mono);">/${job.slug}</div>
+        </td>
+        <td>${escapeHtml(job.department || '—')}</td>
+        <td><span class="badge" style="${statusColors[job.status] || ''}">${job.status}</span></td>
+        <td>${job.views || 0}</td>
+        <td>${job.apply_clicks || 0}</td>
+        <td style="color: var(--text-muted);">${pubDate}</td>
+        <td>
+          <div style="display: flex; gap: 4px; flex-wrap: wrap;">
+            <button class="admin-btn secondary small" onclick="editJob('${job.id}')" style="padding: 4px 8px; font-size: 12px;">Edit</button>
+            <button class="admin-btn secondary small" onclick="duplicateJob('${job.id}')" style="padding: 4px 8px; font-size: 12px;">Dup</button>
+            <button class="admin-btn danger small" onclick="deleteJob('${job.id}')" style="padding: 4px 8px; font-size: 12px;">Del</button>
+          </div>
+        </td>
+      </tr>
+    `;
+  });
+  jobsTableBody.innerHTML = html;
+}
+
+// Search jobs in admin
+document.getElementById('jobAdminSearch')?.addEventListener('input', (e) => {
+  const q = e.target.value.toLowerCase().trim();
+  const filtered = currentJobs.filter(j => 
+    j.title.toLowerCase().includes(q) || 
+    (j.department || '').toLowerCase().includes(q) ||
+    (j.status || '').toLowerCase().includes(q)
+  );
+  renderJobsTable(filtered);
+});
+
+// New Job
+document.getElementById('newJobBtn')?.addEventListener('click', () => {
+  resetJobForm();
+  showJobEditor('Create New Job');
+});
+
+// Back to list
+document.getElementById('jobBackBtn')?.addEventListener('click', () => {
+  careersEditorView.style.display = 'none';
+  careersListView.style.display = 'block';
+  loadJobs();
+});
+
+function showJobEditor(title) {
+  careersListView.style.display = 'none';
+  careersEditorView.style.display = 'block';
+  document.getElementById('jobEditorTitle').textContent = title;
+}
+
+function resetJobForm() {
+  document.getElementById('jobId').value = '';
+  document.getElementById('jobCurrentStatus').value = 'draft';
+  document.getElementById('jobTitleInput').value = '';
+  document.getElementById('jobSlugInput').value = '';
+  document.getElementById('jobDeptInput').value = '';
+  document.getElementById('jobTeamInput').value = '';
+  document.getElementById('jobLocationInput').value = 'Ahmedabad, India';
+  document.getElementById('jobWorkModeInput').value = 'On-site';
+  document.getElementById('jobTypeInput').value = 'Full-time';
+  document.getElementById('jobExpLevelInput').value = '';
+  document.getElementById('jobMinExpInput').value = '';
+  document.getElementById('jobMaxExpInput').value = '';
+  document.getElementById('jobSalaryInput').value = '';
+  document.getElementById('jobSalaryVisibleInput').checked = false;
+  document.getElementById('jobOpeningsInput').value = '1';
+  document.getElementById('jobRefIdInput').value = '';
+  document.getElementById('jobFeaturedInput').checked = false;
+  document.getElementById('jobPriorityInput').value = '0';
+  document.getElementById('jobApplyUrlInput').value = '';
+  document.getElementById('jobApplyBtnTextInput').value = '';
+  document.getElementById('jobDeadlineInput').value = '';
+  document.getElementById('jobNewTabInput').checked = true;
+  document.getElementById('jobNotesInput').value = '';
+  document.getElementById('jobSeoTitleInput').value = '';
+  document.getElementById('jobSeoDescInput').value = '';
+  document.getElementById('jobShowClosedInput').checked = false;
+  document.getElementById('jobShortDescInput').value = '';
+  jobContentBlocks = [];
+  renderBlocks();
+  jobFormStatus.style.display = 'none';
+}
+
+// Edit Job
+function editJob(id) {
+  const job = currentJobs.find(j => j.id === id);
+  if (!job) return;
+
+  document.getElementById('jobId').value = job.id;
+  document.getElementById('jobCurrentStatus').value = job.status;
+  document.getElementById('jobTitleInput').value = job.title || '';
+  document.getElementById('jobSlugInput').value = job.slug || '';
+  document.getElementById('jobDeptInput').value = job.department || '';
+  document.getElementById('jobTeamInput').value = job.team || '';
+  document.getElementById('jobLocationInput').value = job.location || '';
+  document.getElementById('jobWorkModeInput').value = job.work_mode || 'On-site';
+  document.getElementById('jobTypeInput').value = job.employment_type || 'Full-time';
+  document.getElementById('jobExpLevelInput').value = job.experience_level || '';
+  document.getElementById('jobMinExpInput').value = job.min_experience || '';
+  document.getElementById('jobMaxExpInput').value = job.max_experience || '';
+  document.getElementById('jobSalaryInput').value = job.salary_range || '';
+  document.getElementById('jobSalaryVisibleInput').checked = job.salary_visible || false;
+  document.getElementById('jobOpeningsInput').value = job.openings || 1;
+  document.getElementById('jobRefIdInput').value = job.reference_id || '';
+  document.getElementById('jobFeaturedInput').checked = job.is_featured || false;
+  document.getElementById('jobPriorityInput').value = job.priority || 0;
+  document.getElementById('jobApplyUrlInput').value = job.apply_url || '';
+  document.getElementById('jobApplyBtnTextInput').value = job.apply_button_text || '';
+  document.getElementById('jobDeadlineInput').value = job.application_deadline ? job.application_deadline.split('T')[0] : '';
+  document.getElementById('jobNewTabInput').checked = job.open_in_new_tab !== false;
+  document.getElementById('jobNotesInput').value = job.internal_notes || '';
+  document.getElementById('jobSeoTitleInput').value = job.seo_title || '';
+  document.getElementById('jobSeoDescInput').value = job.seo_description || '';
+  document.getElementById('jobShowClosedInput').checked = job.show_when_closed || false;
+  document.getElementById('jobShortDescInput').value = job.short_description || '';
+  
+  jobContentBlocks = Array.isArray(job.content_blocks) ? [...job.content_blocks] : [];
+  renderBlocks();
+  showJobEditor('Edit Job');
+}
+
+// Duplicate Job
+async function duplicateJob(id) {
+  const job = currentJobs.find(j => j.id === id);
+  if (!job) return;
+  
+  const newJob = { ...job };
+  delete newJob.id;
+  delete newJob.created_at;
+  delete newJob.updated_at;
+  delete newJob.published_at;
+  newJob.title = job.title + ' (Copy)';
+  newJob.slug = job.slug + '-copy-' + Date.now().toString(36);
+  newJob.status = 'draft';
+  newJob.views = 0;
+  newJob.apply_clicks = 0;
+
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/jobs`, {
+      method: 'POST',
+      headers: getHeaders(),
+      body: JSON.stringify(newJob)
+    });
+    if (!res.ok) throw new Error(await res.text());
+    loadJobs();
+  } catch (e) {
+    alert('Failed to duplicate: ' + e.message);
+  }
+}
+
+// Delete Job
+async function deleteJob(id) {
+  if (!confirm('Delete this job permanently?')) return;
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/jobs?id=eq.${id}`, {
+      method: 'DELETE',
+      headers: getHeaders()
+    });
+    if (!res.ok) throw new Error(await res.text());
+    loadJobs();
+  } catch (e) {
+    alert('Failed to delete: ' + e.message);
+  }
+}
+
+// Collect form data
+function collectJobData() {
+  return {
+    title: document.getElementById('jobTitleInput').value,
+    slug: document.getElementById('jobSlugInput').value || document.getElementById('jobTitleInput').value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, ''),
+    department: document.getElementById('jobDeptInput').value || 'Engineering',
+    team: document.getElementById('jobTeamInput').value || null,
+    location: document.getElementById('jobLocationInput').value || 'Ahmedabad, India',
+    work_mode: document.getElementById('jobWorkModeInput').value,
+    employment_type: document.getElementById('jobTypeInput').value,
+    experience_level: document.getElementById('jobExpLevelInput').value || null,
+    min_experience: document.getElementById('jobMinExpInput').value ? parseInt(document.getElementById('jobMinExpInput').value) : null,
+    max_experience: document.getElementById('jobMaxExpInput').value ? parseInt(document.getElementById('jobMaxExpInput').value) : null,
+    salary_range: document.getElementById('jobSalaryInput').value || null,
+    salary_visible: document.getElementById('jobSalaryVisibleInput').checked,
+    openings: parseInt(document.getElementById('jobOpeningsInput').value) || 1,
+    reference_id: document.getElementById('jobRefIdInput').value || null,
+    is_featured: document.getElementById('jobFeaturedInput').checked,
+    priority: parseInt(document.getElementById('jobPriorityInput').value) || 0,
+    apply_url: document.getElementById('jobApplyUrlInput').value || null,
+    apply_button_text: document.getElementById('jobApplyBtnTextInput').value || 'Apply Now',
+    application_deadline: document.getElementById('jobDeadlineInput').value ? new Date(document.getElementById('jobDeadlineInput').value).toISOString() : null,
+    open_in_new_tab: document.getElementById('jobNewTabInput').checked,
+    internal_notes: document.getElementById('jobNotesInput').value || null,
+    seo_title: document.getElementById('jobSeoTitleInput').value || null,
+    seo_description: document.getElementById('jobSeoDescInput').value || null,
+    show_when_closed: document.getElementById('jobShowClosedInput').checked,
+    short_description: document.getElementById('jobShortDescInput').value || null,
+    content_blocks: jobContentBlocks,
+    updated_at: new Date().toISOString()
+  };
+}
+
+// Save Job (Draft)
+document.getElementById('jobSaveBtn')?.addEventListener('click', async (e) => {
+  e.preventDefault();
+  await saveJob('draft');
+});
+
+// Publish Job
+document.getElementById('jobPublishBtn')?.addEventListener('click', async (e) => {
+  e.preventDefault();
+  
+  // Validate apply URL for publishing
+  const applyUrl = document.getElementById('jobApplyUrlInput').value;
+  if (!applyUrl) {
+    alert('Please add an Application URL before publishing.');
+    return;
+  }
+  
+  await saveJob('published');
+});
+
+async function saveJob(status) {
+  const saveBtn = document.getElementById('jobSaveBtn');
+  const pubBtn = document.getElementById('jobPublishBtn');
+  saveBtn.disabled = true;
+  pubBtn.disabled = true;
+  saveBtn.textContent = 'Saving...';
+  
+  const id = document.getElementById('jobId').value;
+  const data = collectJobData();
+  data.status = status || document.getElementById('jobCurrentStatus').value || 'draft';
+  
+  if (status === 'published' && !data.published_at) {
+    data.published_at = new Date().toISOString();
+  }
+
+  try {
+    const method = id ? 'PATCH' : 'POST';
+    const url = id ? `${SUPABASE_URL}/rest/v1/jobs?id=eq.${id}` : `${SUPABASE_URL}/rest/v1/jobs`;
+    
+    const res = await fetch(url, {
+      method,
+      headers: getHeaders(),
+      body: JSON.stringify(data)
+    });
+
+    if (!res.ok) {
+      const errText = await res.text();
+      throw new Error(errText);
+    }
+    
+    const result = await res.json();
+    if (!id && result && result[0]) {
+      document.getElementById('jobId').value = result[0].id;
+    }
+    
+    document.getElementById('jobCurrentStatus').value = data.status;
+    
+    jobFormStatus.textContent = status === 'published' ? 'Job published successfully!' : 'Job saved as draft.';
+    jobFormStatus.className = 'status-msg success';
+    
+    const saveStatus = document.getElementById('jobSaveStatus');
+    if (saveStatus) saveStatus.textContent = `Saved ${new Date().toLocaleTimeString()}`;
+    
+  } catch (error) {
+    jobFormStatus.textContent = 'Error: ' + error.message;
+    jobFormStatus.className = 'status-msg error';
+  } finally {
+    saveBtn.disabled = false;
+    pubBtn.disabled = false;
+    saveBtn.textContent = 'Save Draft';
+  }
+}
+
+// Preview
+document.getElementById('jobPreviewBtn')?.addEventListener('click', () => {
+  const slug = document.getElementById('jobSlugInput').value || document.getElementById('jobTitleInput').value.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+  if (slug) {
+    window.open(`/careers/job.html?slug=${slug}`, '_blank');
+  } else {
+    alert('Save the job first to preview it.');
+  }
+});
+
+// ── Content Blocks Builder ──
+
+document.getElementById('addBlockBtn')?.addEventListener('click', () => {
+  const type = document.getElementById('blockTypeSelect').value;
+  const newBlock = { type, id: 'b_' + Date.now() };
+
+  switch (type) {
+    case 'heading': newBlock.content = 'Section Title'; break;
+    case 'text': newBlock.content = 'Enter text here...'; break;
+    case 'bullet_list': newBlock.items = ['Item 1', 'Item 2', 'Item 3']; break;
+    case 'numbered_list': newBlock.items = ['Step 1', 'Step 2', 'Step 3']; break;
+    case 'callout': newBlock.content = 'Important information here...'; break;
+    case 'divider': break;
+    case 'custom_section': newBlock.title = 'Custom Section'; newBlock.content = 'Content here...'; break;
+  }
+
+  jobContentBlocks.push(newBlock);
+  renderBlocks();
+});
+
+function renderBlocks() {
+  if (!contentBlocksContainer) return;
+  
+  if (jobContentBlocks.length === 0) {
+    contentBlocksContainer.innerHTML = '<div style="text-align: center; padding: 40px; border: 2px dashed var(--border-light); border-radius: 8px; color: var(--text-muted); font-size: 13px;">No content blocks yet. Add blocks above to build the job description.</div>';
+    return;
+  }
+
+  let html = '';
+  jobContentBlocks.forEach((block, index) => {
+    const typeLabels = {
+      heading: '📌 Heading',
+      text: '📝 Text',
+      bullet_list: '• Bullet List',
+      numbered_list: '1. Numbered List',
+      callout: '💡 Callout',
+      divider: '── Divider',
+      custom_section: '📦 Custom Section'
+    };
+
+    html += `<div class="card" style="padding: 16px; border: 1px solid var(--border-light);" draggable="true" data-block-index="${index}">`;
+    html += `<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">`;
+    html += `<span style="font-size: 12px; font-weight: 600; color: var(--text-muted);">${typeLabels[block.type] || block.type}</span>`;
+    html += `<div style="display: flex; gap: 4px;">`;
+    if (index > 0) html += `<button type="button" class="admin-btn secondary small" onclick="moveBlock(${index}, -1)" style="padding: 2px 6px; font-size: 11px;">↑</button>`;
+    if (index < jobContentBlocks.length - 1) html += `<button type="button" class="admin-btn secondary small" onclick="moveBlock(${index}, 1)" style="padding: 2px 6px; font-size: 11px;">↓</button>`;
+    html += `<button type="button" class="admin-btn secondary small" onclick="duplicateBlock(${index})" style="padding: 2px 6px; font-size: 11px;">Dup</button>`;
+    html += `<button type="button" class="admin-btn danger small" onclick="removeBlock(${index})" style="padding: 2px 6px; font-size: 11px;">✕</button>`;
+    html += `</div></div>`;
+
+    if (block.type === 'heading') {
+      html += `<input type="text" class="form-input" value="${escapeHtml(block.content || '')}" onchange="updateBlockContent(${index}, 'content', this.value)" style="font-weight: 600;" />`;
+    } else if (block.type === 'text' || block.type === 'callout') {
+      html += `<textarea class="form-input" rows="3" onchange="updateBlockContent(${index}, 'content', this.value)" style="font-family: var(--font-sans); min-height: 80px;">${escapeHtml(block.content || '')}</textarea>`;
+    } else if (block.type === 'bullet_list' || block.type === 'numbered_list') {
+      html += `<textarea class="form-input" rows="4" onchange="updateBlockItems(${index}, this.value)" style="font-family: var(--font-sans); min-height: 80px;" placeholder="One item per line">${(block.items || []).join('\n')}</textarea>`;
+    } else if (block.type === 'custom_section') {
+      html += `<input type="text" class="form-input" value="${escapeHtml(block.title || '')}" onchange="updateBlockContent(${index}, 'title', this.value)" placeholder="Section Title" style="margin-bottom: 8px; font-weight: 600;" />`;
+      html += `<textarea class="form-input" rows="3" onchange="updateBlockContent(${index}, 'content', this.value)" style="font-family: var(--font-sans); min-height: 80px;">${escapeHtml(block.content || '')}</textarea>`;
+    } else if (block.type === 'divider') {
+      html += `<hr style="border: none; border-top: 1px solid var(--border-light);" />`;
+    }
+
+    html += `</div>`;
+  });
+
+  contentBlocksContainer.innerHTML = html;
+}
+
+function updateBlockContent(index, key, value) {
+  if (jobContentBlocks[index]) jobContentBlocks[index][key] = value;
+}
+
+function updateBlockItems(index, value) {
+  if (jobContentBlocks[index]) {
+    jobContentBlocks[index].items = value.split('\n').filter(line => line.trim());
+  }
+}
+
+function moveBlock(index, direction) {
+  const newIndex = index + direction;
+  if (newIndex < 0 || newIndex >= jobContentBlocks.length) return;
+  [jobContentBlocks[index], jobContentBlocks[newIndex]] = [jobContentBlocks[newIndex], jobContentBlocks[index]];
+  renderBlocks();
+}
+
+function duplicateBlock(index) {
+  const copy = JSON.parse(JSON.stringify(jobContentBlocks[index]));
+  copy.id = 'b_' + Date.now();
+  jobContentBlocks.splice(index + 1, 0, copy);
+  renderBlocks();
+}
+
+function removeBlock(index) {
+  jobContentBlocks.splice(index, 1);
+  renderBlocks();
+}
+
+// Load jobs when Careers tab is first opened
+const careersTab = document.querySelector('[data-tab="tab-careers"]');
+if (careersTab) {
+  careersTab.addEventListener('click', () => {
+    loadJobs();
+  });
+}
+
+// Also load on dashboard init
+const origInitDashboard = initDashboard;
+initDashboard = async function() {
+  await origInitDashboard();
+};
+

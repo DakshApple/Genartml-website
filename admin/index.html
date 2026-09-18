@@ -350,6 +350,10 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
         Inbox
       </a>
+      <a class="admin-menu-item" data-tab="tab-careers">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+        Careers
+      </a>
     </aside>
 
     <!-- CONTENT -->
@@ -536,6 +540,228 @@
               <tr><td colspan="4" style="text-align: center; color: var(--text-muted);">Loading messages...</td></tr>
             </tbody>
           </table>
+        </div>
+      </section>
+
+      <!-- TAB: CAREERS -->
+      <section id="tab-careers" class="admin-panel">
+        <!-- Jobs List View -->
+        <div id="careersListView">
+          <div class="admin-panel-header">
+            <h2>Careers / Jobs</h2>
+            <div style="display: flex; gap: 8px;">
+              <input type="text" class="form-input" id="jobAdminSearch" placeholder="Search jobs..." style="width: 200px; padding: 6px 12px; font-size: 13px;" />
+              <button class="admin-btn small" id="newJobBtn">+ New Job</button>
+            </div>
+          </div>
+          <div class="table-container">
+            <table class="data-table" id="jobsTable">
+              <thead>
+                <tr>
+                  <th style="width: 30%;">Title</th>
+                  <th>Department</th>
+                  <th>Status</th>
+                  <th>Views</th>
+                  <th>Clicks</th>
+                  <th>Published</th>
+                  <th style="width: 15%;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="jobsTableBody">
+                <tr><td colspan="7" style="text-align: center; color: var(--text-muted);">Loading jobs...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Job Editor View -->
+        <div id="careersEditorView" style="display: none;">
+          <div class="admin-panel-header">
+            <h2 id="jobEditorTitle">Create New Job</h2>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <span id="jobSaveStatus" style="font-size: 12px; color: var(--text-muted);"></span>
+              <button class="admin-btn secondary small" id="jobBackBtn">← Back</button>
+              <button class="admin-btn secondary small" id="jobPreviewBtn">Preview</button>
+              <button class="admin-btn small" id="jobSaveBtn">Save Draft</button>
+              <button class="admin-btn small" id="jobPublishBtn" style="background: var(--success); border-color: var(--success);">Publish</button>
+            </div>
+          </div>
+
+          <form id="jobForm" autocomplete="off">
+            <input type="hidden" id="jobId" />
+            <input type="hidden" id="jobCurrentStatus" value="draft" />
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+              <!-- Left Column -->
+              <div class="card" style="padding: 24px;">
+                <h3 style="font-size: 14px; font-weight: 600; margin-bottom: 20px;">Basic Information</h3>
+                <div class="form-field">
+                  <label class="form-label">Job Title *</label>
+                  <input type="text" class="form-input" id="jobTitleInput" required placeholder="e.g. AI Engineer" />
+                </div>
+                <div class="form-field">
+                  <label class="form-label">Slug</label>
+                  <input type="text" class="form-input" id="jobSlugInput" placeholder="auto-generated" style="font-family: var(--font-mono); font-size: 13px;" />
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                  <div class="form-field">
+                    <label class="form-label">Department</label>
+                    <input type="text" class="form-input" id="jobDeptInput" placeholder="Engineering" />
+                  </div>
+                  <div class="form-field">
+                    <label class="form-label">Team</label>
+                    <input type="text" class="form-input" id="jobTeamInput" placeholder="AI/ML" />
+                  </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                  <div class="form-field">
+                    <label class="form-label">Location</label>
+                    <input type="text" class="form-input" id="jobLocationInput" placeholder="Ahmedabad, India" />
+                  </div>
+                  <div class="form-field">
+                    <label class="form-label">Work Mode</label>
+                    <select class="form-input" id="jobWorkModeInput">
+                      <option value="On-site">On-site</option>
+                      <option value="Remote">Remote</option>
+                      <option value="Hybrid">Hybrid</option>
+                    </select>
+                  </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                  <div class="form-field">
+                    <label class="form-label">Employment Type</label>
+                    <select class="form-input" id="jobTypeInput">
+                      <option value="Full-time">Full-time</option>
+                      <option value="Part-time">Part-time</option>
+                      <option value="Internship">Internship</option>
+                      <option value="Contract">Contract</option>
+                    </select>
+                  </div>
+                  <div class="form-field">
+                    <label class="form-label">Experience Level</label>
+                    <input type="text" class="form-input" id="jobExpLevelInput" placeholder="Mid-level" />
+                  </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                  <div class="form-field">
+                    <label class="form-label">Min Experience (years)</label>
+                    <input type="number" class="form-input" id="jobMinExpInput" min="0" />
+                  </div>
+                  <div class="form-field">
+                    <label class="form-label">Max Experience (years)</label>
+                    <input type="number" class="form-input" id="jobMaxExpInput" min="0" />
+                  </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: end;">
+                  <div class="form-field">
+                    <label class="form-label">Salary Range</label>
+                    <input type="text" class="form-input" id="jobSalaryInput" placeholder="₹8L – ₹15L" />
+                  </div>
+                  <div class="form-field" style="padding-bottom: 20px;">
+                    <label style="font-size: 13px; display: flex; gap: 8px; align-items: center; cursor: pointer;">
+                      <input type="checkbox" id="jobSalaryVisibleInput" /> Show publicly
+                    </label>
+                  </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                  <div class="form-field">
+                    <label class="form-label">Openings</label>
+                    <input type="number" class="form-input" id="jobOpeningsInput" min="1" value="1" />
+                  </div>
+                  <div class="form-field">
+                    <label class="form-label">Reference ID</label>
+                    <input type="text" class="form-input" id="jobRefIdInput" placeholder="GAM-ENG-001" />
+                  </div>
+                </div>
+                <div style="display: flex; gap: 20px; margin-top: 8px;">
+                  <label style="font-size: 13px; display: flex; gap: 8px; align-items: center; cursor: pointer;">
+                    <input type="checkbox" id="jobFeaturedInput" /> Featured
+                  </label>
+                  <div class="form-field" style="margin: 0; flex: 1;">
+                    <label class="form-label" style="margin: 0;">Priority</label>
+                    <input type="number" class="form-input" id="jobPriorityInput" value="0" min="0" style="padding: 4px 8px; width: 60px;" />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Right Column -->
+              <div>
+                <div class="card" style="padding: 24px; margin-bottom: 24px;">
+                  <h3 style="font-size: 14px; font-weight: 600; margin-bottom: 20px;">Application</h3>
+                  <div class="form-field">
+                    <label class="form-label">Typeform / Application URL *</label>
+                    <input type="url" class="form-input" id="jobApplyUrlInput" placeholder="https://your-typeform.com/to/xxxxx" />
+                  </div>
+                  <div class="form-field">
+                    <label class="form-label">Button Text</label>
+                    <input type="text" class="form-input" id="jobApplyBtnTextInput" placeholder="Apply Now" />
+                  </div>
+                  <div class="form-field">
+                    <label class="form-label">Application Deadline</label>
+                    <input type="date" class="form-input" id="jobDeadlineInput" />
+                  </div>
+                  <label style="font-size: 13px; display: flex; gap: 8px; align-items: center; cursor: pointer; margin-bottom: 16px;">
+                    <input type="checkbox" id="jobNewTabInput" checked /> Open in new tab
+                  </label>
+                  <div class="form-field">
+                    <label class="form-label">Internal Hiring Notes</label>
+                    <textarea class="form-input" id="jobNotesInput" rows="3" placeholder="Internal notes (not shown publicly)" style="font-family: var(--font-sans); min-height: 80px;"></textarea>
+                  </div>
+                </div>
+
+                <div class="card" style="padding: 24px; margin-bottom: 24px;">
+                  <h3 style="font-size: 14px; font-weight: 600; margin-bottom: 20px;">SEO (optional)</h3>
+                  <div class="form-field">
+                    <label class="form-label">SEO Title</label>
+                    <input type="text" class="form-input" id="jobSeoTitleInput" placeholder="Auto-generated from title" />
+                  </div>
+                  <div class="form-field">
+                    <label class="form-label">Meta Description</label>
+                    <textarea class="form-input" id="jobSeoDescInput" rows="2" placeholder="Auto-generated from short description" style="font-family: var(--font-sans); min-height: 60px;"></textarea>
+                  </div>
+                </div>
+
+                <div class="card" style="padding: 24px;">
+                  <h3 style="font-size: 14px; font-weight: 600; margin-bottom: 20px;">Closing Options</h3>
+                  <label style="font-size: 13px; display: flex; gap: 8px; align-items: center; cursor: pointer;">
+                    <input type="checkbox" id="jobShowClosedInput" /> Show page when closed (with 'Applications Closed' banner)
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Short Description -->
+            <div class="card" style="padding: 24px; margin-top: 24px;">
+              <h3 style="font-size: 14px; font-weight: 600; margin-bottom: 16px;">Short Description</h3>
+              <textarea class="form-input" id="jobShortDescInput" rows="3" placeholder="A brief 1-2 sentence summary of the role..." style="font-family: var(--font-sans); min-height: 80px;"></textarea>
+            </div>
+
+            <!-- Content Builder -->
+            <div class="card" style="padding: 24px; margin-top: 24px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3 style="font-size: 14px; font-weight: 600;">Job Description Builder</h3>
+                <div style="display: flex; gap: 8px;">
+                  <select class="form-input" id="blockTypeSelect" style="padding: 6px 10px; font-size: 13px; width: auto;">
+                    <option value="heading">Heading</option>
+                    <option value="text">Rich Text</option>
+                    <option value="bullet_list">Bullet List</option>
+                    <option value="numbered_list">Numbered List</option>
+                    <option value="callout">Callout / Highlight</option>
+                    <option value="divider">Divider</option>
+                    <option value="custom_section">Custom Section</option>
+                  </select>
+                  <button type="button" class="admin-btn small" id="addBlockBtn">+ Add Block</button>
+                </div>
+              </div>
+              <div id="contentBlocksContainer" style="display: flex; flex-direction: column; gap: 12px;">
+                <div style="text-align: center; padding: 40px; border: 2px dashed var(--border-light); border-radius: 8px; color: var(--text-muted); font-size: 13px;">
+                  No content blocks yet. Add blocks above to build the job description.
+                </div>
+              </div>
+            </div>
+
+            <div id="jobFormStatus" class="status-msg" style="display: none;"></div>
+          </form>
         </div>
       </section>
 

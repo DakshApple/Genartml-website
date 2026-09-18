@@ -13,6 +13,8 @@ Disallow: /admin.html
 Disallow: /js/admin.js
 Disallow: /scripts/
 Disallow: /scratch/
+Allow: /careers/job.html*
+Allow: /blog/post.html*
 Disallow: /*?*
 
 # Explicitly allow necessary assets
