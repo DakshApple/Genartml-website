@@ -446,6 +446,36 @@ async function loadJobDetail() {
     script.textContent = JSON.stringify(jsonLd);
     document.head.appendChild(script);
 
+    // BreadcrumbList Schema
+    const breadcrumbLd = {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      'itemListElement': [
+        {
+          '@type': 'ListItem',
+          'position': 1,
+          'name': 'Home',
+          'item': 'https://genartml.com/'
+        },
+        {
+          '@type': 'ListItem',
+          'position': 2,
+          'name': 'Careers',
+          'item': 'https://genartml.com/careers/'
+        },
+        {
+          '@type': 'ListItem',
+          'position': 3,
+          'name': job.title,
+          'item': jobUrl
+        }
+      ]
+    };
+    const breadcrumbScript = document.createElement('script');
+    breadcrumbScript.type = 'application/ld+json';
+    breadcrumbScript.textContent = JSON.stringify(breadcrumbLd);
+    document.head.appendChild(breadcrumbScript);
+
     // ── Related Jobs ──
     loadRelatedJobs(job);
 

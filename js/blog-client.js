@@ -224,6 +224,36 @@ document.addEventListener('DOMContentLoaded', async () => {
     scriptEl.textContent = JSON.stringify(jsonLd);
     document.head.appendChild(scriptEl);
 
+    // ── JSON-LD Structured Data (BreadcrumbList schema) ──
+    const breadcrumbLd = {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      'itemListElement': [
+        {
+          '@type': 'ListItem',
+          'position': 1,
+          'name': 'Home',
+          'item': 'https://genartml.com/'
+        },
+        {
+          '@type': 'ListItem',
+          'position': 2,
+          'name': 'Blog',
+          'item': 'https://genartml.com/blog/'
+        },
+        {
+          '@type': 'ListItem',
+          'position': 3,
+          'name': blog.title,
+          'item': postUrl
+        }
+      ]
+    };
+    const breadcrumbScript = document.createElement('script');
+    breadcrumbScript.type = 'application/ld+json';
+    breadcrumbScript.textContent = JSON.stringify(breadcrumbLd);
+    document.head.appendChild(breadcrumbScript);
+
     // Parse markdown into HTML
     postBody.innerHTML = parseMarkdown(blog.content);
 

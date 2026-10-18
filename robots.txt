@@ -4,23 +4,23 @@
 User-agent: *
 Allow: /
 
-# Rate Limiting
-Crawl-delay: 1
+# Explicitly allow critical rendering assets
+Allow: /assets/
+Allow: /css/
+Allow: /js/
 
-# Block admin panel and internals from search engines
+# Allowed dynamic sections
+Allow: /blog/
+Allow: /blog/post.html*
+Allow: /careers/
+Allow: /careers/job.html*
+
+# Block admin panel and private scripts from search engines
 Disallow: /admin/
 Disallow: /admin.html
 Disallow: /js/admin.js
 Disallow: /scripts/
 Disallow: /scratch/
-Allow: /careers/job.html*
-Allow: /blog/post.html*
-Disallow: /*?*
-
-# Explicitly allow necessary assets
-Allow: /assets/
-Allow: /css/
-Allow: /js/
 
 # Sitemap
 Sitemap: https://genartml.com/sitemap.xml

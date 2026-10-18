@@ -7,7 +7,7 @@ SUPABASE_URL = "https://czvibozmuzmlpxdafxch.supabase.co"
 SUPABASE_ANON_KEY = "sb_publishable_DTa0uYY3Xa_kYY52eFwY4Q_ETGHgdqV"
 
 def fetch_blogs():
-    url = f"{SUPABASE_URL}/rest/v1/blogs?select=slug,created_at&is_published=eq.true"
+    url = f"{SUPABASE_URL}/rest/v1/blogs?select=slug,created_at&is_published=eq.true&order=created_at.desc"
     req = urllib.request.Request(url, headers={
         "apikey": SUPABASE_ANON_KEY,
         "Authorization": f"Bearer {SUPABASE_ANON_KEY}"
@@ -21,7 +21,7 @@ def fetch_blogs():
         return []
 
 def fetch_jobs():
-    url = f"{SUPABASE_URL}/rest/v1/jobs?select=slug,published_at,status&status=eq.published"
+    url = f"{SUPABASE_URL}/rest/v1/jobs?select=slug,published_at,status&status=eq.published&order=published_at.desc"
     req = urllib.request.Request(url, headers={
         "apikey": SUPABASE_ANON_KEY,
         "Authorization": f"Bearer {SUPABASE_ANON_KEY}"
