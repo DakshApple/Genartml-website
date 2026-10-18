@@ -388,11 +388,48 @@ function resetForm() {
   document.getElementById('blogId').value = '';
   editorTitle.textContent = 'Create New Post';
   deleteBtn.style.display = 'none';
-  formStatus.style.display = 'none';
+  formStatus.className = 'status-msg'; formStatus.style.display = '';
   radioUrl.click();
   base64Image = '';
   blogCoverFileInput.required = false; // reset
+  RichEditor.clear();
+  updateExcerptCount();
 }
+
+// ── Auto-generated excerpt & read time ──
+function buildExcerpt(text) {
+  const clean = (text || '').replace(/\s+/g, ' ').trim();
+  if (clean.length <= 160) return clean;
+  const cut = clean.slice(0, 160);
+  return cut.slice(0, cut.lastIndexOf(' ') > 100 ? cut.lastIndexOf(' ') : 160).replace(/[.,;:!?\-–—]+$/, '') + '…';
+}
+
+function buildReadTime(text) {
+  const words = ((text || '').trim().match(/\S+/g) || []).length;
+  return `${Math.max(1, Math.ceil(words / 200))} min read`;
+}
+
+function updateExcerptCount() {
+  const counter = document.getElementById('excerptCount');
+  if (!counter) return;
+  const len = document.getElementById('blogExcerpt').value.length;
+  counter.textContent = len ? `${len} characters` + (len > 160 ? ' · Google shows ~160' : '') : '';
+}
+
+document.getElementById('blogExcerpt').addEventListener('input', updateExcerptCount);
+
+document.getElementById('autoFillMetaBtn').addEventListener('click', () => {
+  if (RichEditor.isEmpty()) {
+    formStatus.textContent = 'Write some content first, then auto-fill the excerpt and read time.';
+    formStatus.className = 'status-msg error';
+    return;
+  }
+  const text = RichEditor.getPlainText();
+  document.getElementById('blogExcerpt').value = buildExcerpt(text);
+  document.getElementById('blogReadTime').value = buildReadTime(text);
+  formStatus.className = 'status-msg'; formStatus.style.display = '';
+  updateExcerptCount();
+});
 
 function editPost(id) {
   const blog = currentBlogs.find(b => b.id === id);
@@ -407,7 +444,8 @@ function editPost(id) {
   document.getElementById('blogCategory').value = blog.category;
   document.getElementById('blogReadTime').value = blog.read_time;
   document.getElementById('blogExcerpt').value = blog.excerpt;
-  document.getElementById('blogContent').value = blog.content;
+  RichEditor.setContent(blog.content, blog.id);
+  updateExcerptCount();
   document.getElementById('blogPublished').checked = blog.is_published;
   
   // Safe check if column exists
@@ -415,7 +453,7 @@ function editPost(id) {
 
   editorTitle.textContent = 'Edit Post';
   deleteBtn.style.display = 'inline-flex';
-  formStatus.style.display = 'none';
+  formStatus.className = 'status-msg'; formStatus.style.display = '';
 
   // Handle Cover Image state
   if (blog.cover_image && blog.cover_image.startsWith('data:image')) {
@@ -467,7 +505,7 @@ blogForm.addEventListener('submit', async (e) => {
   const submitBtn = document.getElementById('saveBtn');
   submitBtn.disabled = true;
   submitBtn.textContent = 'Saving...';
-  formStatus.style.display = 'none';
+  formStatus.className = 'status-msg'; formStatus.style.display = '';
   
   const id = document.getElementById('blogId').value;
   let finalCoverImage = '';
@@ -494,14 +532,22 @@ blogForm.addEventListener('submit', async (e) => {
       }
     }
 
+  // Content comes from the rich editor (clean, sanitized HTML)
+  if (RichEditor.isEmpty()) {
+    throw new Error('Please add some content to the post before saving.');
+  }
+  const contentHtml = RichEditor.getContent();
+  const plainText = RichEditor.getPlainText();
+  const titleValue = document.getElementById('blogTitle').value.trim();
+
   const blogData = {
-    title: document.getElementById('blogTitle').value,
-    slug: document.getElementById('blogSlug').value || document.getElementById('blogTitle').value.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+    title: titleValue,
+    slug: document.getElementById('blogSlug').value.trim() || titleValue.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, ''),
     category: document.getElementById('blogCategory').value,
-    read_time: document.getElementById('blogReadTime').value,
+    read_time: document.getElementById('blogReadTime').value.trim() || buildReadTime(plainText),
     cover_image: finalCoverImage,
-    excerpt: document.getElementById('blogExcerpt').value,
-    content: document.getElementById('blogContent').value,
+    excerpt: document.getElementById('blogExcerpt').value.trim() || buildExcerpt(plainText),
+    content: contentHtml,
     is_published: document.getElementById('blogPublished').checked,
     is_featured: document.getElementById('blogFeatured').checked
   };
@@ -521,9 +567,14 @@ blogForm.addEventListener('submit', async (e) => {
     
     formStatus.textContent = 'Post saved successfully!';
     formStatus.className = 'status-msg success';
+    RichEditor.markSaved();
     await initDashboard(); // Reload all data
     
-    if (!id) resetForm(); // Clear if it was new
+    if (!id) {
+      resetForm(); // Clear if it was new
+      formStatus.textContent = 'Post saved successfully!';
+      formStatus.className = 'status-msg success';
+    }
   } catch (error) {
     formStatus.textContent = 'Error: ' + error.message;
     formStatus.className = 'status-msg error';
@@ -551,9 +602,9 @@ deleteBtn.addEventListener('click', async () => {
     
     if (!res.ok) throw new Error('Delete failed');
     
+    resetForm();
     formStatus.textContent = 'Post deleted successfully.';
     formStatus.className = 'status-msg success';
-    resetForm();
     await initDashboard();
   } catch (error) {
     formStatus.textContent = 'Error: ' + error.message;

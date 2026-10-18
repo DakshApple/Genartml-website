@@ -1994,6 +1994,110 @@ a.contact-meta-value:hover { opacity: 0.7; }
   .post-content blockquote p { font-size: 18px; }
 }
 
+/* ── Rich content (admin editor output) ───────────────── */
+.post-content h4 {
+  margin-top: 32px;
+  margin-bottom: 12px;
+  font-size: 17px;
+  line-height: 1.4;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.post-content li a,
+.post-content h2 a,
+.post-content h3 a,
+.post-content h4 a,
+.post-content blockquote a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--line-strong);
+}
+.post-content li a:hover,
+.post-content h2 a:hover,
+.post-content h3 a:hover,
+.post-content h4 a:hover,
+.post-content blockquote a:hover { text-decoration-color: var(--ink); }
+
+.post-content img {
+  display: inline-block;
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  vertical-align: middle;
+}
+.post-content p:has(> img:only-child) { margin: 36px 0; line-height: 0; }
+.post-content figure { margin: 36px 0; }
+.post-content figcaption {
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--muted);
+  text-align: center;
+}
+
+.post-content iframe.ql-video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  height: auto;
+  margin: 36px 0;
+  border: 0;
+  border-radius: 12px;
+  background: var(--line);
+}
+
+.post-content hr {
+  border: none;
+  border-top: 1px solid var(--line);
+  margin: 48px 0;
+}
+
+.post-content pre {
+  margin: 28px 0;
+  padding: 18px 20px;
+  overflow-x: auto;
+  background: #111827;
+  color: #e5e7eb;
+  border-radius: 12px;
+  font-family: var(--font-mono);
+  font-size: 13.5px;
+  line-height: 1.65;
+}
+.post-content pre code { background: none; padding: 0; color: inherit; font-size: inherit; }
+.post-content code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: rgba(0, 0, 0, 0.06);
+  padding: 2px 6px;
+  border-radius: 5px;
+}
+
+.post-content mark { background: #fde68a; color: inherit; padding: 0 3px; border-radius: 3px; }
+.post-content sub, .post-content sup { font-size: 0.75em; line-height: 0; }
+.post-content u { text-underline-offset: 3px; }
+
+.post-content .post-table-wrap { margin: 32px 0; overflow-x: auto; }
+.post-content table { width: 100%; border-collapse: collapse; font-size: 15px; }
+.post-content th,
+.post-content td {
+  padding: 12px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+  vertical-align: top;
+}
+.post-content th { color: var(--ink); font-weight: 500; border-bottom-color: var(--line-strong); }
+
+/* Indents & nested lists from the editor */
+.post-content .ql-indent-1 { padding-left: 2em; }
+.post-content .ql-indent-2 { padding-left: 4em; }
+.post-content .ql-indent-3 { padding-left: 6em; }
+.post-content li > ul,
+.post-content li > ol { margin: 12px 0 0; }
+.post-content blockquote ul,
+.post-content blockquote ol { margin-top: 12px; }
+
 /* Post Stats Grid */
 .post-stats-grid {
   display: grid;

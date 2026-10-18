@@ -291,6 +291,10 @@
       width: 100%; max-width: 400px; padding: 40px; background: var(--bg-surface); border: 1px solid var(--border-light); border-radius: 16px; text-align: center; box-shadow: var(--shadow-md);
     }
   </style>
+
+  <!-- Rich text editor (Quill) + editor styles -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" />
+  <link rel="stylesheet" href="../css/admin-editor.css" />
   
   <!-- Supabase JS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -440,8 +444,8 @@
                   </select>
                 </div>
                 <div class="form-field">
-                  <label class="form-label">Read Time</label>
-                  <input type="text" id="blogReadTime" class="form-input" placeholder="e.g. 8 min read" required />
+                  <label class="form-label">Read Time <span style="font-weight: 400; color: var(--text-muted);">(auto if empty)</span></label>
+                  <input type="text" id="blogReadTime" class="form-input" placeholder="e.g. 8 min read" />
                 </div>
               </div>
 
@@ -463,13 +467,163 @@
               </div>
 
               <div class="form-field">
-                <label class="form-label">Excerpt (Short Summary)</label>
-                <textarea id="blogExcerpt" class="form-textarea" style="min-height: 80px;" required></textarea>
+                <label class="form-label" for="blogExcerpt">Excerpt (Short Summary) <span style="font-weight: 400; color: var(--text-muted);">(auto from content if empty)</span></label>
+                <textarea id="blogExcerpt" class="form-textarea" style="min-height: 80px; font-family: inherit; font-size: 14px;"></textarea>
+                <div style="margin-top: 8px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                  <button type="button" id="autoFillMetaBtn" class="admin-btn secondary small">✨ Auto-fill excerpt &amp; read time</button>
+                  <span id="excerptCount" style="font-size: 12px; color: var(--text-muted);"></span>
+                </div>
               </div>
 
               <div class="form-field">
-                <label class="form-label">Content (HTML or Markdown)</label>
-                <textarea id="blogContent" class="form-textarea" required></textarea>
+                <label class="form-label">Content</label>
+                <input type="hidden" id="blogContent" />
+
+                <div class="rte" id="rte">
+                  <div class="rte-head">
+                    <div class="rte-tabs" role="tablist" aria-label="Editor mode">
+                      <button type="button" class="rte-tab active" data-rte-tab="visual" role="tab" aria-selected="true">✍️ Visual</button>
+                      <button type="button" class="rte-tab" data-rte-tab="source" role="tab" aria-selected="false">&lt;/&gt; HTML</button>
+                      <button type="button" class="rte-tab" data-rte-tab="preview" role="tab" aria-selected="false">👁 Preview</button>
+                    </div>
+                    <div class="rte-meta">
+                      <span id="rteStats"></span>
+                      <span class="rte-save-state" id="rteSaveState">All changes saved</span>
+                    </div>
+                  </div>
+
+                  <div class="rte-draft-bar" id="rteDraftBar" hidden></div>
+
+                  <!-- Toolbar -->
+                  <div id="rteToolbar">
+                    <span class="ql-formats">
+                      <select class="ql-header" title="Text style">
+                        <option value="2">Heading 2</option>
+                        <option value="3">Heading 3</option>
+                        <option value="4">Heading 4</option>
+                        <option selected>Paragraph</option>
+                      </select>
+                      <select class="ql-font" title="Font">
+                        <option selected>Default</option>
+                        <option value="Fraunces, Georgia, serif">Display Serif</option>
+                        <option value="Georgia, serif">Georgia</option>
+                        <option value="Arial, sans-serif">Arial</option>
+                        <option value="Verdana, sans-serif">Verdana</option>
+                        <option value="Menlo, monospace">Monospace</option>
+                      </select>
+                      <select class="ql-size" title="Font size">
+                        <option selected>Size</option>
+                        <option value="12px">12</option>
+                        <option value="14px">14</option>
+                        <option value="16px">16</option>
+                        <option value="18px">18</option>
+                        <option value="20px">20</option>
+                        <option value="24px">24</option>
+                        <option value="28px">28</option>
+                        <option value="32px">32</option>
+                        <option value="40px">40</option>
+                        <option value="48px">48</option>
+                      </select>
+                    </span>
+                    <span class="ql-formats">
+                      <button type="button" class="ql-bold" title="Bold (Ctrl/⌘+B)"></button>
+                      <button type="button" class="ql-italic" title="Italic (Ctrl/⌘+I)"></button>
+                      <button type="button" class="ql-underline" title="Underline (Ctrl/⌘+U)"></button>
+                      <button type="button" class="ql-strike" title="Strikethrough"></button>
+                    </span>
+                    <span class="ql-formats">
+                      <select class="ql-color" title="Text colour"></select>
+                      <span class="rte-color" title="Custom text colour">
+                        <span>A</span><i class="rte-color-bar" style="background:#111111"></i>
+                        <input type="color" id="rteTextColor" value="#111111" aria-label="Custom text colour" />
+                      </span>
+                      <select class="ql-background" title="Highlight colour"></select>
+                      <span class="rte-color" title="Custom highlight colour">
+                        <span style="background:#fde68a; padding: 1px 4px; border-radius: 3px;">A</span><i class="rte-color-bar" style="background:#fde68a"></i>
+                        <input type="color" id="rteBgColor" value="#fde68a" aria-label="Custom highlight colour" />
+                      </span>
+                    </span>
+                    <span class="ql-formats">
+                      <button type="button" class="ql-script" value="sub" title="Subscript"></button>
+                      <button type="button" class="ql-script" value="super" title="Superscript"></button>
+                    </span>
+                    <span class="ql-formats">
+                      <button type="button" class="ql-list" value="bullet" title="Bulleted list"></button>
+                      <button type="button" class="ql-list" value="ordered" title="Numbered list"></button>
+                      <button type="button" class="ql-indent" value="-1" title="Decrease indent"></button>
+                      <button type="button" class="ql-indent" value="+1" title="Increase indent"></button>
+                    </span>
+                    <span class="ql-formats">
+                      <select class="ql-align" title="Alignment"></select>
+                    </span>
+                    <span class="ql-formats">
+                      <button type="button" class="ql-blockquote" title="Quote"></button>
+                      <button type="button" class="ql-code-block" title="Code block"></button>
+                      <button type="button" class="ql-link" title="Link (Ctrl/⌘+K)"></button>
+                      <button type="button" class="ql-image" title="Insert image"></button>
+                      <button type="button" class="ql-video" title="Embed YouTube / Vimeo video"></button>
+                    </span>
+                    <span class="ql-formats">
+                      <button type="button" class="ql-undo" title="Undo (Ctrl/⌘+Z)">
+                        <svg viewBox="0 0 18 18"><polygon class="ql-fill ql-stroke" points="6 10 4 12 2 10 6 10"></polygon><path class="ql-stroke" d="M8.09,13.91A4.6,4.6,0,0,0,9,14,5,5,0,1,0,4,9"></path></svg>
+                      </button>
+                      <button type="button" class="ql-redo" title="Redo (Ctrl/⌘+Shift+Z)">
+                        <svg viewBox="0 0 18 18"><polygon class="ql-fill ql-stroke" points="12 10 14 12 16 10 12 10"></polygon><path class="ql-stroke" d="M9.91,13.91A4.6,4.6,0,0,1,9,14a5,5,0,1,1,5-5"></path></svg>
+                      </button>
+                      <button type="button" class="ql-clean" title="Clear formatting"></button>
+                    </span>
+                    <span class="ql-formats">
+                      <button type="button" class="ql-autoformat" title="Detect headings, lists and paragraphs automatically (works on the selection, or the whole post if nothing is selected)">✨ Auto-format</button>
+                    </span>
+                  </div>
+
+                  <!-- Visual pane -->
+                  <div class="rte-pane" id="rtePaneVisual">
+                    <div id="rteEditor"></div>
+                    <div class="rte-imgbar" id="rteImgBar" hidden>
+                      <button type="button" data-img-action="width" data-value="25%">25%</button>
+                      <button type="button" data-img-action="width" data-value="50%">50%</button>
+                      <button type="button" data-img-action="width" data-value="75%">75%</button>
+                      <button type="button" data-img-action="width" data-value="100%">100%</button>
+                      <button type="button" data-img-action="width" data-value="auto">Original</button>
+                      <span class="sep"></span>
+                      <button type="button" data-img-action="align" data-value="left">Left</button>
+                      <button type="button" data-img-action="align" data-value="center">Center</button>
+                      <button type="button" data-img-action="align" data-value="right">Right</button>
+                      <span class="sep"></span>
+                      <button type="button" data-img-action="alt">Alt text</button>
+                      <button type="button" class="danger" data-img-action="remove">Remove</button>
+                    </div>
+                  </div>
+
+                  <!-- HTML source pane -->
+                  <div class="rte-pane" id="rtePaneSource" hidden>
+                    <div class="rte-source-bar">
+                      <span>Write or paste <strong>HTML</strong> (or Markdown). Only safe tags are kept when you save.</span>
+                      <button type="button" class="admin-btn secondary small" id="rteCleanHtml">🧹 Clean HTML</button>
+                    </div>
+                    <textarea id="rteSource" class="rte-source" spellcheck="false" placeholder="&lt;h2&gt;Heading&lt;/h2&gt;&#10;&lt;p&gt;Your HTML here…&lt;/p&gt;"></textarea>
+                  </div>
+
+                  <!-- Preview pane -->
+                  <div class="rte-pane" id="rtePanePreview" hidden>
+                    <div class="rte-preview-bar">
+                      <span>Live preview using your real website styles</span>
+                      <div class="rte-devices">
+                        <button type="button" class="rte-device active" data-rte-device="desktop">Desktop</button>
+                        <button type="button" class="rte-device" data-rte-device="mobile">Mobile</button>
+                      </div>
+                    </div>
+                    <div class="rte-preview-wrap" id="rtePreviewWrap" data-device="desktop">
+                      <iframe id="rtePreviewFrame" class="rte-preview-frame" title="Post preview" sandbox="allow-scripts allow-popups allow-presentation"></iframe>
+                    </div>
+                  </div>
+
+                  <div class="rte-hint">
+                    <strong>Tip:</strong> paste plain text and it’s organised for you · <kbd>Ctrl/⌘</kbd>+<kbd>K</kbd> link · drag &amp; drop or paste images · click an image to resize or add alt text
+                  </div>
+                  <div class="rte-toast" id="rteToast" role="status" aria-live="polite"></div>
+                </div>
               </div>
               
               <div class="form-field" style="display: flex; align-items: center; gap: 24px; padding: 16px; background: var(--bg-body); border-radius: 8px; border: 1px solid var(--border-light);">
@@ -768,6 +922,9 @@
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+  <script src="../js/content-utils.js"></script>
+  <script src="../js/rich-editor.js"></script>
   <script src="../js/admin.js"></script>
 </body>
 </html>
