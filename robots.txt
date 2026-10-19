@@ -1,26 +1,4 @@
-# Genartml Website — robots.txt
-# https://genartml.com
-
 User-agent: *
 Allow: /
-
-# Explicitly allow critical rendering assets
-Allow: /assets/
-Allow: /css/
-Allow: /js/
-
-# Allowed dynamic sections
-Allow: /blog/
-Allow: /blog/post.html*
-Allow: /careers/
-Allow: /careers/job.html*
-
-# Block admin panel and private scripts from search engines
-Disallow: /admin/
-Disallow: /admin.html
-Disallow: /js/admin.js
-Disallow: /scripts/
-Disallow: /scratch/
-
-# Sitemap
+Disallow: /contact/thank-you/
 Sitemap: https://genartml.com/sitemap.xml
