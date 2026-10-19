@@ -21,6 +21,18 @@
   </url>
   <!-- Blog Posts -->
   <url>
+    <loc>https://genartml.com/blog/post.html?slug=ai-agents-explained-what-they-can-actually-do-for-an-indian-business-in-2026</loc>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://genartml.com/blog/post.html?slug=ai-voice-agent-call-breakdown-india</loc>
+    <lastmod>2026-10-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://genartml.com/blog/post.html?slug=the-ai-doesn-t-teach-you-it-studies-you</loc>
     <lastmod>2026-09-02</lastmod>
     <changefreq>monthly</changefreq>
@@ -89,12 +101,6 @@
   <url>
     <loc>https://genartml.com/blog/post.html?slug=ai-automation-for-businesses-how-to-automate-your-business-in-2026</loc>
     <lastmod>2026-08-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://genartml.com/blog/post.html?slug=ai-voice-agent-call-breakdown-india</loc>
-    <lastmod>2026-10-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
