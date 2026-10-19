@@ -223,17 +223,71 @@
     apply(params().get("category") || "all", false);
   }
 
-  /* ---------- Blog category filter ---------- */
+  /* ---------- Blog category filter & dynamic Supabase integration ---------- */
   function initBlogFilter(root) {
     var row = $(".filter-row[data-blog]", root);
     if (!row) return;
-    $$("button", row).forEach(function (b) {
-      b.addEventListener("click", function () {
-        var c = b.getAttribute("data-cat");
-        $$("button", row).forEach(function (x) { x.setAttribute("aria-selected", x === b ? "true" : "false"); });
-        $$("[data-post-cat]", root).forEach(function (p) { p.hidden = !(c === "all" || p.getAttribute("data-post-cat") === c); });
+    function bindButtons() {
+      $$("button", row).forEach(function (b) {
+        b.onclick = function () {
+          var c = b.getAttribute("data-cat");
+          $$("button", row).forEach(function (x) { x.setAttribute("aria-selected", x === b ? "true" : "false"); });
+          $$("[data-post-cat]", root).forEach(function (p) { p.hidden = !(c === "all" || p.getAttribute("data-post-cat") === c); });
+        };
       });
-    });
+    }
+    bindButtons();
+
+    // Fetch latest blogs from Supabase to ensure newly published articles show immediately
+    if (C.supabase && C.supabase.url) {
+      fetch(C.supabase.url + "/rest/v1/blogs?select=*&is_published=eq.true&order=created_at.desc", {
+        headers: { "apikey": C.supabase.anonKey, "Authorization": "Bearer " + C.supabase.anonKey }
+      })
+      .then(function (r) { return r.json(); })
+      .then(function (posts) {
+        if (!posts || !posts.length) return;
+        var grid = $(".blog-grid", root);
+        if (!grid) return;
+        var existingSlugs = {};
+        $$("a[href*='/blog/']", grid).forEach(function (a) {
+          var m = a.getAttribute("href").match(/\/blog\/([^\/]+)\/?/);
+          if (m && m[1]) existingSlugs[m[1]] = true;
+        });
+
+        posts.forEach(function (p) {
+          if (existingSlugs[p.slug]) return; // already rendered
+          var cat = p.category || "AI Systems";
+          // Check if category button exists
+          if (!row.querySelector("button[data-cat='" + cat.replace(/'/g, "\\'") + "']")) {
+            var btn = document.createElement("button");
+            btn.setAttribute("data-cat", cat);
+            btn.setAttribute("aria-selected", "false");
+            btn.textContent = cat;
+            row.appendChild(btn);
+            bindButtons();
+          }
+
+          var card = document.createElement("article");
+          card.className = "post-card reveal";
+          card.setAttribute("data-post-cat", cat);
+          var dt = p.created_at ? new Date(p.created_at).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }) : "";
+          var rt = p.read_time || "7 min read";
+          var link = "/blog/" + p.slug + "/";
+          var excerpt = p.excerpt || "";
+
+          card.innerHTML = '<a class="post-cover" href="' + link + '" tabindex="-1" aria-hidden="true">' +
+            '<svg viewBox="0 0 640 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="640" height="300" fill="#0A0A0A"/><path d="M0 150H640" stroke="#fff" stroke-opacity=".12"/></svg>' +
+            '<span class="cat"><span class="cat-pill">' + cat + '</span></span></a>' +
+            '<div class="post-body"><div class="post-meta"><time>' + dt + '</time><span>' + rt + '</span></div>' +
+            '<h3><a href="' + link + '">' + (p.title || "") + '</a></h3>' +
+            '<p>' + excerpt + '</p>' +
+            '<a class="link-arrow" href="' + link + '">Read the article <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a></div>';
+
+          grid.appendChild(card);
+        });
+      })
+      .catch(function (err) { console.warn("Supabase blog load error:", err); });
+    }
   }
 
   /* ---------- Contact form ---------- */
@@ -295,15 +349,55 @@
       var btn = $("button[type=submit]", form), status = $(".form-status", form);
       function done() { go("/contact/thank-you/"); }
       if (BUNDLE) { btn.disabled = true; btn.textContent = "Sending"; setTimeout(done, 500); return; }
+
+      btn.disabled = true;
+      if (btn.firstChild) btn.firstChild.textContent = "Sending ";
+
+      // 1. Post to Supabase contact_messages if configured
+      var supabaseDone = false;
+      if (C.supabase && C.supabase.url) {
+        var supabaseMsg = "Company: " + (data.company || "-") +
+          "\nPhone/WhatsApp: " + (data.phone || "-") +
+          "\nService: " + (data.service_label || "-") +
+          (data.package ? "\nPackage: " + data.package : "") +
+          "\n\nProject brief:\n" + (data.brief || "-");
+
+        fetch(C.supabase.url + "/rest/v1/contact_messages", {
+          method: "POST",
+          headers: {
+            "apikey": C.supabase.anonKey,
+            "Authorization": "Bearer " + C.supabase.anonKey,
+            "Content-Type": "application/json",
+            "Prefer": "return=minimal"
+          },
+          body: JSON.stringify({
+            name: data.name,
+            email: data.email,
+            message: supabaseMsg,
+            status: "unread"
+          })
+        }).then(function (r) {
+          if (r.ok) supabaseDone = true;
+        }).catch(function (err) {
+          console.warn("Supabase save error:", err);
+        });
+      }
+
+      // 2. Also forward to formEndpoint if provided, else use Supabase success or mailto fallback
       if (C.formEndpoint) {
-        btn.disabled = true; btn.firstChild.textContent = "Sending ";
         fetch(C.formEndpoint, { method: "POST", headers: { "Accept": "application/json", "Content-Type": "application/json" }, body: JSON.stringify(data) })
           .then(function (r) { if (!r.ok) throw new Error(r.status); done(); })
           .catch(function () {
+            if (supabaseDone) { done(); return; }
             btn.disabled = false; btn.firstChild.textContent = "Send message ";
             status.hidden = false;
             status.textContent = "Your message did not go through. Please try again, or email " + (C.email || "team@genartml.com") + " directly.";
           });
+      } else if (C.supabase && C.supabase.url) {
+        // Wait briefly for Supabase to resolve
+        setTimeout(function () {
+          done();
+        }, 600);
       } else {
         var body = "Name: " + data.name + "\nWork email: " + data.email + "\nPhone or WhatsApp: " + (data.phone || "-") + "\nCompany: " + (data.company || "-") +
           "\nService: " + data.service_label + (data.package ? "\nPackage: " + data.package : "") + "\n\nProject brief:\n" + (data.brief || "-");

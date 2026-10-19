@@ -248,4 +248,4 @@ INDUSTRIES = [
     dict(slug="real-estate", name="Real estate", short="Lead response, site visits and follow-up for builders, brokers and channel partners."),
 ]
 
-BLOG_CATS = ["AI Voice Agents", "AI Systems", "Engineering Process"]
+BLOG_CATS = ["AI Automation", "AI Voice Agents", "AI Systems", "Software", "Business", "Product Updates", "Engineering Process"]

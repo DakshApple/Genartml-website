@@ -23,6 +23,12 @@ window.GENARTML_CONFIG = {
   // Empty = the form opens the visitor's email app with the message filled in, addressed to the email above.
   formEndpoint: "",
 
+  // Supabase Backend Integration (Blogs, Messages, Subscribers)
+  supabase: {
+    url: "https://czvibozmuzmlpxdafxch.supabase.co",
+    anonKey: "sb_publishable_DTa0uYY3Xa_kYY52eFwY4Q_ETGHgdqV"
+  },
+
   // Google Analytics 4 measurement ID, e.g. "G-XXXXXXX". Loads only after a visitor accepts cookies.
   ga4Id: "",
 
