@@ -48,24 +48,24 @@ export function CookieNotice() {
         <div
           role="region"
           aria-label="Cookie consent"
-          className="fixed bottom-0 left-0 right-0 z-50 border-t border-ink bg-paper p-4 text-ink shadow-md"
+          className="fixed bottom-4 left-4 right-4 z-50 mx-auto max-w-xl rounded-3xl border border-neutral-200/90 bg-paper/95 p-6 text-ink shadow-2xl backdrop-blur-md md:bottom-6"
         >
-          <div className="container-grid flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
-            <p className="text-small text-ink max-w-2xl">
+          <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+            <p className="text-small text-ink max-w-md">
               We use cookies to measure website traffic and understand visitor interest. We never sell your data.
             </p>
-            <div className="flex gap-3">
+            <div className="flex gap-2.5 shrink-0">
               <button
                 type="button"
                 onClick={handleDecline}
-                className="min-h-11 border border-ink bg-paper px-4 py-2 text-small font-medium text-ink hover:bg-ink hover:text-paper"
+                className="min-h-11 rounded-full border border-neutral-300 bg-paper px-5 py-2 text-small font-medium text-ink transition-colors hover:border-ink hover:bg-neutral-50"
               >
                 Decline
               </button>
               <button
                 type="button"
                 onClick={handleAccept}
-                className="min-h-11 border border-ink bg-ink px-4 py-2 text-small font-medium text-paper hover:bg-paper hover:text-ink"
+                className="min-h-11 rounded-full border border-ink bg-ink px-5 py-2 text-small font-medium text-paper transition-all hover:bg-neutral-900 hover:shadow-md"
               >
                 Accept
               </button>

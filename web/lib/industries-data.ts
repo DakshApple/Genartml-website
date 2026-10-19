@@ -1,6 +1,8 @@
 export interface IndustryDetail {
   slug: string;
   name: string;
+  headline: string;
+  sub: string;
   problem: string;
   whatWeBuild: { title: string; desc: string }[];
   sampleWorkflow: { step: string; title: string; desc: string }[];
@@ -12,6 +14,8 @@ export const INDUSTRIES_DETAIL: Record<string, IndustryDetail> = {
   "real-estate": {
     slug: "real-estate",
     name: "Real estate",
+    headline: "AI workflows and software built for real estate developers and brokers.",
+    sub: "Qualify inbound property buyers in seconds, automate site visit scheduling, and keep your CRM updated around the clock.",
     problem:
       "Property buyers enquire across portals, WhatsApp and property listings at all hours. When response times exceed 10 minutes, buyers move on to competitor developers and agents, causing valuable leads to drop off before site visits are booked.",
     whatWeBuild: [
@@ -54,6 +58,8 @@ export const INDUSTRIES_DETAIL: Record<string, IndustryDetail> = {
   "clinics-healthcare": {
     slug: "clinics-healthcare",
     name: "Clinics and healthcare",
+    headline: "Voice AI agents and patient scheduling systems for healthcare practices.",
+    sub: "Free up reception staff, eliminate missed phone calls, and streamline clinic appointments around the clock.",
     problem:
       "Clinic front desks are overwhelmed answering recurring phone questions about doctor availability, consultation fees, and appointment reschedules, leading to busy signals and patient frustration.",
     whatWeBuild: [

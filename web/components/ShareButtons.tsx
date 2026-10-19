@@ -24,7 +24,7 @@ export function ShareButtons({ title, slug }: { title: string; slug: string }) {
         href={shareLinkedIn}
         target="_blank"
         rel="noopener noreferrer"
-        className="border border-ink px-3 py-1 text-ink hover:bg-ink hover:text-paper"
+        className="rounded-full border border-neutral-300 px-4 py-1.5 text-xs font-medium text-ink transition-colors hover:border-ink hover:bg-neutral-50"
         onClick={() => track("share_click", { method: "linkedin", slug })}
       >
         LinkedIn
@@ -33,7 +33,7 @@ export function ShareButtons({ title, slug }: { title: string; slug: string }) {
         href={shareX}
         target="_blank"
         rel="noopener noreferrer"
-        className="border border-ink px-3 py-1 text-ink hover:bg-ink hover:text-paper"
+        className="rounded-full border border-neutral-300 px-4 py-1.5 text-xs font-medium text-ink transition-colors hover:border-ink hover:bg-neutral-50"
         onClick={() => track("share_click", { method: "x", slug })}
       >
         X (Twitter)
@@ -41,7 +41,7 @@ export function ShareButtons({ title, slug }: { title: string; slug: string }) {
       <button
         type="button"
         onClick={handleCopy}
-        className="border border-ink px-3 py-1 text-ink hover:bg-ink hover:text-paper"
+        className="rounded-full border border-neutral-300 px-4 py-1.5 text-xs font-medium text-ink transition-colors hover:border-ink hover:bg-neutral-50"
       >
         {copied ? "Link copied." : "Copy link"}
       </button>

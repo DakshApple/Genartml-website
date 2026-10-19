@@ -122,7 +122,7 @@ export const SERVICES_DETAIL: Record<string, ServiceDetail> = {
     name: "Voice AI Agents",
     headline: "Voice AI agents that speak naturally and resolve calls.",
     sub: "Deploy natural-sounding voice assistants that answer inbound questions, book appointments and qualify leads 24 hours a day.",
-    minuteRateNote: "Calling minutes: ₹12 per connected minute (domestic) / $0.20 per minute (international).",
+    minuteRateNote: "Telephony carrier minutes and AI speech models billed transparently at direct provider cost.",
     packages: [
       {
         name: "Starter",
@@ -191,7 +191,7 @@ export const SERVICES_DETAIL: Record<string, ServiceDetail> = {
       { step: "05", title: "Launch & support", desc: "We point your telephone lines and monitor real call performance." },
     ],
     runningCosts:
-      "Telephony carrier minutes and speech-to-text API charges are billed at cost. Calling minutes are ₹12 per connected minute for domestic calls and $0.20 per minute for international calls.",
+      "Telephony carrier minutes and speech-to-text API charges are billed at cost with no markup. You maintain full ownership of your accounts.",
     faq: [
       {
         q: "How natural does the voice sound?",
@@ -285,7 +285,7 @@ export const SERVICES_DETAIL: Record<string, ServiceDetail> = {
       { step: "05", title: "Deploy", desc: "We configure DNS, SSL certificates and security headers for launch." },
     ],
     runningCosts:
-      "Website hosting is typically free or under ₹1,000 per month on modern edge platforms like Cloudflare, Netlify or Vercel. Domain renewal is paid directly to your registrar.",
+      "Website hosting is typically free or low-cost on modern edge platforms like Cloudflare, Netlify or Vercel. Domain renewal is paid directly to your registrar.",
     faq: [
       {
         q: "Do you use templates or WordPress themes?",

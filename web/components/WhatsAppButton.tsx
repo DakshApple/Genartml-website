@@ -13,7 +13,7 @@ export function WhatsAppButton() {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chat with Genartml on WhatsApp"
-      className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full border border-paper bg-ink text-paper shadow-lg transition-transform hover:scale-105"
+      className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full border border-neutral-700 bg-neutral-950 text-paper shadow-2xl transition-all duration-300 ease-out hover:scale-110 hover:shadow-black/50 hover:bg-black active:scale-95"
       onClick={() => track("whatsapp_click", { location: "floating_button" })}
     >
       {/* Crisp SVG WhatsApp Icon */}

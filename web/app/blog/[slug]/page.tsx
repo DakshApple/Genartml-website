@@ -94,16 +94,22 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         {/* Post Header */}
         <Section tone="white" className="pt-20 pb-12 md:pt-24 md:pb-16">
           <div className="mx-auto flex max-w-3xl flex-col items-start gap-6">
-            <Link href="/blog/" className="text-small font-medium text-ink-70 underline hover:text-ink">
-              ← Back to all posts
+            <Link
+              href="/blog/"
+              className="group inline-flex items-center gap-2 rounded-full border border-neutral-200 bg-neutral-50 px-4 py-1.5 text-small font-medium text-ink-70 transition-colors hover:border-ink hover:text-ink"
+            >
+              <span aria-hidden="true" className="transition-transform group-hover:-translate-x-1">←</span>
+              <span>All articles</span>
             </Link>
 
-            <div className="flex flex-wrap items-center gap-4 text-small text-ink-70">
-              <span className="font-medium uppercase">{post.category || "Engineering"}</span>
+            <div className="flex flex-wrap items-center gap-2 text-xs text-ink-70">
+              <span className="rounded-full bg-neutral-100 px-3 py-1 font-medium uppercase text-neutral-800">
+                {post.category || "Engineering"}
+              </span>
               <span>·</span>
               <span>{dateStr}</span>
               <span>·</span>
-              <span>Author: Team Genartml</span>
+              <span>Team Genartml</span>
               <span>·</span>
               <span>{post.read_time || "5 min read"}</span>
             </div>
@@ -112,7 +118,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               {post.title}
             </h1>
 
-            <p className="text-body text-ink-70 font-medium border-l-2 border-ink pl-4">
+            <p className="text-body text-ink-70 font-medium border-l-2 border-ink pl-4 leading-relaxed">
               {post.excerpt}
             </p>
 
@@ -124,7 +130,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
         {/* Featured Cover Image */}
         <div className="container-grid max-w-4xl pb-12">
-          <div className="relative aspect-video w-full border border-ink overflow-hidden">
+          <div className="relative aspect-video w-full overflow-hidden rounded-3xl border border-neutral-200/90 shadow-lg">
             <Image
               src={cover}
               alt={post.title}
@@ -153,19 +159,28 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         {related.length > 0 && (
           <Section tone="white" className="border-t border-ink/10">
             <div className="flex flex-col gap-8">
-              <span className="text-small font-medium tracking-wider text-ink-70 uppercase">Related Articles</span>
+              <span className="rounded-full bg-neutral-100 px-3.5 py-1 text-xs font-medium tracking-wider text-neutral-700 uppercase w-fit">
+                Related Articles
+              </span>
               <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
                 {related.map((rel) => (
                   <Link
                     key={rel.slug}
                     href={`/blog/${rel.slug}/`}
-                    className="flex flex-col justify-between border border-ink p-6 hover:bg-ink hover:text-paper"
+                    className="group flex flex-col justify-between rounded-3xl border border-neutral-200/90 bg-paper p-6 shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:border-ink hover:shadow-xl"
                   >
                     <div className="flex flex-col gap-2">
-                      <span className="text-small font-medium text-ink-70">{rel.category}</span>
-                      <h3 className="text-body font-medium">{rel.title}</h3>
+                      <span className="rounded-full bg-neutral-100 px-2.5 py-0.5 text-xs font-medium text-neutral-600 w-fit">
+                        {rel.category}
+                      </span>
+                      <h3 className="text-body font-medium text-ink group-hover:text-black mt-2">
+                        {rel.title}
+                      </h3>
                     </div>
-                    <span className="mt-4 text-small font-medium underline">Read →</span>
+                    <span className="mt-4 inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-wider text-ink">
+                      <span>Read</span>
+                      <span aria-hidden="true" className="transition-transform group-hover:translate-x-1">→</span>
+                    </span>
                   </Link>
                 ))}
               </div>

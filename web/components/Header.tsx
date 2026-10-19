@@ -38,12 +38,12 @@ export function Header() {
               <span className="text-[10px]" aria-hidden="true">▼</span>
             </button>
             {servicesOpen && (
-              <div className="absolute left-0 top-full w-64 border border-ink bg-paper py-2 shadow-sm">
+              <div className="absolute left-0 top-full w-64 rounded-2xl border border-neutral-200/90 bg-paper/95 p-2 shadow-2xl backdrop-blur-md">
                 {siteConfig.services.map((s) => (
                   <Link
                     key={s.slug}
                     href={`/services/${s.slug}/`}
-                    className="block px-4 py-2.5 text-small font-medium text-ink hover:bg-ink hover:text-paper"
+                    className="block rounded-xl px-4 py-2.5 text-small font-medium text-ink transition-all hover:bg-neutral-100 hover:translate-x-1"
                     onClick={() => setServicesOpen(false)}
                   >
                     {s.name}
@@ -69,12 +69,12 @@ export function Header() {
                 <span className="text-[10px]" aria-hidden="true">▼</span>
               </button>
               {industriesOpen && (
-                <div className="absolute left-0 top-full w-64 border border-ink bg-paper py-2 shadow-sm">
+                <div className="absolute left-0 top-full w-64 rounded-2xl border border-neutral-200/90 bg-paper/95 p-2 shadow-2xl backdrop-blur-md">
                   {industries.map((ind) => (
                     <Link
                       key={ind.slug}
                       href={`/industries/${ind.slug}/`}
-                      className="block px-4 py-2.5 text-small font-medium text-ink hover:bg-ink hover:text-paper"
+                      className="block rounded-xl px-4 py-2.5 text-small font-medium text-ink transition-all hover:bg-neutral-100 hover:translate-x-1"
                       onClick={() => setIndustriesOpen(false)}
                     >
                       {ind.name}
@@ -112,7 +112,7 @@ export function Header() {
         {/* Mobile Hamburger Button */}
         <button
           type="button"
-          className="flex h-11 w-11 items-center justify-center border border-ink text-ink lg:hidden"
+          className="flex h-11 w-11 items-center justify-center rounded-full border border-neutral-300 text-ink transition-colors hover:border-ink lg:hidden"
           aria-label={mobileOpen ? "Close menu" : "Open menu"}
           onClick={() => setMobileOpen(!mobileOpen)}
         >

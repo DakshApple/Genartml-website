@@ -96,8 +96,8 @@ export const siteConfig = {
     "small-business": false,
   } as Record<string, boolean>,
 
-  /** false: pricing table is replaced by a form that emails the price list. */
-  showPrices: true,
+  /** false: pricing table is replaced by a form that emails the price list / consultation. */
+  showPrices: false,
 
   analytics: {
     ga4Id: "G-7RCXB14L96", // Loads only after cookie Accept.
@@ -115,7 +115,7 @@ export const siteConfig = {
     heroSub:
       "Fixed price. Fixed timeline. Built in Ahmedabad for clients across India and abroad.",
     primaryButton: "Book a free call",
-    secondaryButton: "See our prices",
+    secondaryButton: "See what we build",
     whatsappText: "Hi Genartml, I would like to talk about a project.",
     closingHeadline: "Tell us what you need.",
     closingSub: "Fixed price. Fixed timeline.",

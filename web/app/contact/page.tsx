@@ -22,12 +22,14 @@ export default function ContactPage() {
         {/* Left column: narrative & contact details */}
         <div className="flex flex-col gap-8 lg:col-span-5">
           <div className="flex flex-col gap-4">
-            <span className="text-small font-medium tracking-wider text-ink-70 uppercase">Contact</span>
+            <span className="rounded-full bg-neutral-100 px-3.5 py-1 text-xs font-medium tracking-wider text-neutral-700 uppercase w-fit">
+              Contact
+            </span>
             <h1 className="text-display font-light tracking-tight text-ink">
               Tell us what you need.
             </h1>
-            <p className="text-body text-ink-70">
-              We reply with a clear, written proposal and fixed price within 48 hours. If we cannot solve your problem, we tell you straight away.
+            <p className="text-body text-ink-70 leading-relaxed">
+              We reply with a clear, written proposal and guaranteed delivery timeline within 48 hours. If we cannot solve your problem, we tell you straight away.
             </p>
           </div>
 
@@ -98,7 +100,7 @@ export default function ContactPage() {
         </div>
 
         {/* Right column: form */}
-        <div className="border border-ink p-8 lg:col-span-7">
+        <div className="rounded-3xl border border-neutral-200/90 bg-neutral-50/40 p-8 md:p-12 shadow-sm lg:col-span-7">
           <ContactForm />
         </div>
       </div>

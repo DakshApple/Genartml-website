@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { siteConfig } from "@/site.config";
 import { buildMetadata } from "@/lib/seo";
 import { Section } from "@/components/Section";
@@ -21,13 +20,13 @@ export default function WorkPage() {
       {/* 1. HERO (White) */}
       <Section tone="white" className="pt-20 pb-20 md:pt-24 md:pb-28">
         <div className="flex max-w-4xl flex-col items-start gap-8">
-          <span className="text-small font-medium tracking-wider text-ink-70 uppercase">
+          <span className="rounded-full bg-neutral-100 px-3.5 py-1 text-xs font-medium tracking-wider text-neutral-700 uppercase">
             Portfolio & Products
           </span>
           <h1 className="text-display font-light tracking-tight text-ink">
             Software and AI systems in production.
           </h1>
-          <p className="max-w-2xl text-body text-ink-70">
+          <p className="max-w-2xl text-body text-ink-70 leading-relaxed">
             We build and operate our own proprietary software products, while designing custom platforms and AI workflows for select clients.
           </p>
         </div>
@@ -37,7 +36,7 @@ export default function WorkPage() {
       <Section tone="black">
         <div className="flex flex-col gap-16">
           <div className="flex flex-col gap-3">
-            <span className="text-small font-medium tracking-wider text-paper/70 uppercase">
+            <span className="rounded-full bg-white/10 px-3.5 py-1 text-xs font-medium tracking-wider text-white uppercase w-fit">
               Our Own Products
             </span>
             <h2 className="text-h2 font-light tracking-tight text-paper">
@@ -47,14 +46,18 @@ export default function WorkPage() {
 
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
             {/* Evoluter */}
-            <div className="flex flex-col justify-between border border-paper/20 p-8 md:p-10">
+            <div className="group flex flex-col justify-between rounded-3xl border border-white/10 bg-white/5 p-8 md:p-10 backdrop-blur-sm transition-all duration-300 hover:border-white/30 hover:-translate-y-1.5 hover:shadow-2xl">
               <div className="flex flex-col gap-6">
                 <div className="flex items-center justify-between">
-                  <span className="text-small font-medium text-paper/70">P/01 · Edtech</span>
-                  <span className="text-small font-medium text-paper">Live in production</span>
+                  <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-paper/80">
+                    P/01 · Edtech
+                  </span>
+                  <span className="rounded-full border border-white/20 px-3 py-1 text-xs font-medium text-emerald-400">
+                    ● Live in production
+                  </span>
                 </div>
                 <h3 className="text-h2 font-medium text-paper">Evoluter</h3>
-                <div className="flex flex-col gap-4 text-small text-paper/70 border-t border-paper/10 pt-4">
+                <div className="flex flex-col gap-4 text-small text-paper/70 border-t border-white/10 pt-4">
                   <div>
                     <span className="font-medium text-paper">What it is: </span>
                     AI preparation platform for UPSC and civil services aspirants.
@@ -70,7 +73,7 @@ export default function WorkPage() {
                 </div>
               </div>
 
-              <div className="mt-8 pt-6 border-t border-paper/10">
+              <div className="mt-8 pt-6 border-t border-white/10">
                 <Button href={products.evoluterUrl} variant="primary" on="black" external>
                   Visit Evoluter →
                 </Button>
@@ -78,14 +81,18 @@ export default function WorkPage() {
             </div>
 
             {/* Extuter */}
-            <div className="flex flex-col justify-between border border-paper/20 p-8 md:p-10">
+            <div className="group flex flex-col justify-between rounded-3xl border border-white/10 bg-white/5 p-8 md:p-10 backdrop-blur-sm transition-all duration-300 hover:border-white/30 hover:-translate-y-1.5 hover:shadow-2xl">
               <div className="flex flex-col gap-6">
                 <div className="flex items-center justify-between">
-                  <span className="text-small font-medium text-paper/70">P/02 · Edtech</span>
-                  <span className="text-small font-medium text-paper">Live in production</span>
+                  <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-paper/80">
+                    P/02 · Edtech
+                  </span>
+                  <span className="rounded-full border border-white/20 px-3 py-1 text-xs font-medium text-emerald-400">
+                    ● Live in production
+                  </span>
                 </div>
                 <h3 className="text-h2 font-medium text-paper">Extuter</h3>
-                <div className="flex flex-col gap-4 text-small text-paper/70 border-t border-paper/10 pt-4">
+                <div className="flex flex-col gap-4 text-small text-paper/70 border-t border-white/10 pt-4">
                   <div>
                     <span className="font-medium text-paper">What it is: </span>
                     AI learning companion for JEE and NEET competitive exam aspirants.
@@ -101,7 +108,7 @@ export default function WorkPage() {
                 </div>
               </div>
 
-              <div className="mt-8 pt-6 border-t border-paper/10">
+              <div className="mt-8 pt-6 border-t border-white/10">
                 <Button href={products.extuterUrl} variant="primary" on="black" external>
                   Visit Extuter →
                 </Button>
@@ -116,7 +123,7 @@ export default function WorkPage() {
         <Section tone="white">
           <div className="flex flex-col gap-12">
             <div className="flex flex-col gap-3">
-              <span className="text-small font-medium tracking-wider text-ink-70 uppercase">
+              <span className="rounded-full bg-neutral-100 px-3.5 py-1 text-xs font-medium tracking-wider text-neutral-700 uppercase w-fit">
                 Client Results
               </span>
               <h2 className="text-h2 font-light tracking-tight">
@@ -126,25 +133,28 @@ export default function WorkPage() {
 
             <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
               {approvedCaseStudies.map((cs) => (
-                <div key={cs.slug} className="flex flex-col justify-between border border-ink p-8">
+                <div
+                  key={cs.slug}
+                  className="flex flex-col justify-between rounded-3xl border border-neutral-200/90 bg-paper p-8 md:p-10 shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:border-ink"
+                >
                   <div className="flex flex-col gap-6">
                     <div className="flex items-center justify-between text-small text-ink-70">
                       <span className="font-medium text-ink">{cs.client}</span>
-                      <span>{cs.industry}</span>
+                      <span className="rounded-full bg-neutral-100 px-3 py-0.5 text-xs">{cs.industry}</span>
                     </div>
 
                     <div className="flex flex-col gap-3">
-                      <span className="text-small font-medium text-ink-70">The Problem</span>
-                      <p className="text-small text-ink">{cs.problem}</p>
+                      <span className="text-xs uppercase tracking-wider font-medium text-ink-70">The Problem</span>
+                      <p className="text-small text-ink leading-relaxed">{cs.problem}</p>
                     </div>
 
                     <div className="flex flex-col gap-3">
-                      <span className="text-small font-medium text-ink-70">What We Built</span>
-                      <p className="text-small text-ink">{cs.built}</p>
+                      <span className="text-xs uppercase tracking-wider font-medium text-ink-70">What We Built</span>
+                      <p className="text-small text-ink leading-relaxed">{cs.built}</p>
                     </div>
 
-                    <div className="flex flex-col gap-3 border-t border-ink/10 pt-4">
-                      <span className="text-small font-medium text-ink-70">Measured Result</span>
+                    <div className="flex flex-col gap-2 rounded-2xl border border-neutral-100 bg-neutral-50/70 p-5">
+                      <span className="text-xs uppercase tracking-wider font-medium text-neutral-500">Measured Result</span>
                       <p className="text-h3 font-medium text-ink">{cs.result}</p>
                     </div>
 

@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { siteConfig } from "@/site.config";
-import { bookCallUrl, whatsappUrl, formatPrice } from "@/lib/config";
+import { bookCallUrl, whatsappUrl } from "@/lib/config";
 import { buildMetadata } from "@/lib/seo";
 import { Button } from "@/components/Button";
 import { Section } from "@/components/Section";
@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!service) return {};
 
   return buildMetadata({
-    title: `${service.name} — Fixed price and timeline`,
+    title: `${service.name} — Fixed scope and timeline`,
     description: service.sub,
     path: `/services/${slug}/`,
   });
@@ -30,7 +30,6 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
   if (!service) notFound();
 
   const waUrl = whatsappUrl();
-  const showPrices = siteConfig.showPrices;
 
   // Other related services
   const relatedServices = siteConfig.services.filter((s) => s.slug !== slug);
@@ -40,10 +39,14 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
       {/* 1. HERO (White) */}
       <Section tone="white" className="pt-20 pb-20 md:pt-24 md:pb-28">
         <div className="flex max-w-4xl flex-col items-start gap-8">
-          <Link href="/#services" className="text-small font-medium text-ink-70 underline hover:text-ink">
-            ← All services
+          <Link
+            href="/#services"
+            className="group inline-flex items-center gap-2 rounded-full border border-neutral-200 bg-neutral-50 px-4 py-1.5 text-small font-medium text-ink-70 transition-colors hover:border-ink hover:text-ink"
+          >
+            <span aria-hidden="true" className="transition-transform group-hover:-translate-x-1">←</span>
+            <span>All services</span>
           </Link>
-          <span className="text-small font-medium tracking-wider text-ink-70 uppercase">
+          <span className="rounded-full bg-neutral-100 px-3.5 py-1 text-xs font-medium tracking-wider text-neutral-700 uppercase">
             Service · {service.name}
           </span>
           <h1 className="text-display font-light tracking-tight text-ink">
@@ -73,7 +76,9 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
       <Section tone="black" id="packages">
         <div className="flex flex-col gap-12">
           <div className="flex flex-col gap-3">
-            <span className="text-small font-medium tracking-wider text-paper/70 uppercase">Packages</span>
+            <span className="rounded-full bg-white/10 px-3.5 py-1 text-xs font-medium tracking-wider text-white uppercase w-fit">
+              Scope Tiers
+            </span>
             <h2 className="text-h2 font-light tracking-tight text-paper">
               Transparent packages. Written deliverables.
             </h2>
@@ -86,44 +91,56 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
 
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
             {service.packages.map((pkg, idx) => (
-              <div key={idx} className="flex flex-col justify-between border border-paper/20 p-8">
+              <div
+                key={idx}
+                className="group flex flex-col justify-between rounded-3xl border border-white/10 bg-white/5 p-8 backdrop-blur-sm transition-all duration-300 ease-out hover:-translate-y-1.5 hover:border-white/30 hover:shadow-2xl"
+              >
                 <div className="flex flex-col gap-6">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-h3 font-medium text-paper">{pkg.name}</h3>
-                    <span className="text-small font-medium text-paper/70">{pkg.deliveryDays}</span>
+                  <div className="flex items-center justify-between gap-2">
+                    <h3 className="text-h3 font-medium text-paper tracking-tight">{pkg.name} Tier</h3>
+                    <span className="rounded-full bg-white/10 border border-white/20 px-3 py-1 text-xs font-medium text-white/90">
+                      {pkg.deliveryDays}
+                    </span>
                   </div>
 
-                  {showPrices && (
-                    <div className="text-display font-light text-paper">
-                      {formatPrice(pkg.priceInr, "INR", { from: pkg.from, monthly: service.monthly })}
-                    </div>
-                  )}
+                  <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                    <span className="text-xs uppercase font-medium tracking-wider text-paper/50 block mb-1">
+                      Delivery guarantee
+                    </span>
+                    <span className="text-body font-medium text-paper block">
+                      Fixed scope & timeline
+                    </span>
+                    <span className="text-xs text-paper/70 block mt-0.5">
+                      Agreed in writing before code begins. No hourly overages.
+                    </span>
+                  </div>
 
                   {pkg.supportDays > 0 && (
-                    <div className="text-small font-medium text-paper/70">
-                      {pkg.supportDays} days of included support
+                    <div className="flex items-center gap-2 text-small font-medium text-paper/80">
+                      <span className="h-2 w-2 rounded-full bg-paper/60" />
+                      <span>{pkg.supportDays} days included engineering support</span>
                     </div>
                   )}
 
-                  <ul className="flex flex-col gap-2.5 border-t border-paper/10 pt-6 text-small text-paper/70">
+                  <ul className="flex flex-col gap-2.5 border-t border-white/10 pt-6 text-small text-paper/70">
                     {pkg.includes.map((item, itemIdx) => (
-                      <li key={itemIdx} className="flex items-start gap-2">
-                        <span className="text-paper select-none font-mono" aria-hidden="true">—</span>
+                      <li key={itemIdx} className="flex items-start gap-2.5">
+                        <span className="text-paper font-bold text-xs mt-0.5" aria-hidden="true">✓</span>
                         <span>{item}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
 
-                <div className="mt-8 pt-6 border-t border-paper/10">
+                <div className="mt-8 pt-6 border-t border-white/10">
                   <Button
-                    href={bookCallUrl()}
+                    href={`/contact/?service=${encodeURIComponent(service.name)}&tier=${encodeURIComponent(pkg.name)}`}
                     variant="primary"
                     on="black"
                     className="w-full text-center"
-                    event="cta_book_call"
+                    event="cta_select_tier"
                   >
-                    Select {pkg.name}
+                    Select {pkg.name} →
                   </Button>
                 </div>
               </div>
@@ -136,7 +153,9 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
       <Section tone="white">
         <div className="flex flex-col gap-12">
           <div className="flex flex-col gap-3">
-            <span className="text-small font-medium tracking-wider text-ink-70 uppercase">Deliverables</span>
+            <span className="rounded-full bg-neutral-100 px-3.5 py-1 text-xs font-medium tracking-wider text-neutral-700 uppercase w-fit">
+              Deliverables
+            </span>
             <h2 className="text-h2 font-light tracking-tight">
               What we build. Plain words.
             </h2>
@@ -144,8 +163,13 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
 
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
             {service.whatWeBuild.map((item, idx) => (
-              <div key={idx} className="flex flex-col gap-3 border border-ink p-8">
-                <span className="text-small font-medium text-ink-70">0{idx + 1}</span>
+              <div
+                key={idx}
+                className="group flex flex-col gap-3 rounded-3xl border border-neutral-200/90 bg-paper p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-ink hover:shadow-xl"
+              >
+                <span className="rounded-full bg-neutral-100 px-3 py-1 text-xs font-medium text-neutral-600 w-fit">
+                  0{idx + 1}
+                </span>
                 <h3 className="text-body font-medium text-ink">{item.title}</h3>
                 <p className="text-small text-ink-70">{item.desc}</p>
               </div>
@@ -158,7 +182,9 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
       <Section tone="black">
         <div className="flex flex-col gap-12">
           <div className="flex flex-col gap-3">
-            <span className="text-small font-medium tracking-wider text-paper/70 uppercase">Process</span>
+            <span className="rounded-full bg-white/10 px-3.5 py-1 text-xs font-medium tracking-wider text-white uppercase w-fit">
+              Process
+            </span>
             <h2 className="text-h2 font-light tracking-tight text-paper">
               How it works. Five steps.
             </h2>
@@ -166,8 +192,11 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
 
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-5">
             {service.howItWorks.map((step, idx) => (
-              <div key={idx} className="flex flex-col gap-3 border border-paper/20 p-6">
-                <span className="text-small font-medium text-paper/70">{step.step}</span>
+              <div
+                key={idx}
+                className="group flex flex-col gap-3 rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm transition-all duration-300 hover:border-white/30 hover:-translate-y-1"
+              >
+                <span className="text-xs font-mono text-paper/60 uppercase">{step.step}</span>
                 <h3 className="text-body font-medium text-paper">{step.title}</h3>
                 <p className="text-small text-paper/70">{step.desc}</p>
               </div>
@@ -178,8 +207,10 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
 
       {/* 5. RUNNING COSTS (White) */}
       <Section tone="white">
-        <div className="flex flex-col gap-6 max-w-3xl">
-          <span className="text-small font-medium tracking-wider text-ink-70 uppercase">Transparency</span>
+        <div className="flex flex-col gap-6 max-w-3xl rounded-3xl border border-neutral-200/90 bg-neutral-50/50 p-8 md:p-10 shadow-sm">
+          <span className="rounded-full bg-neutral-200/70 px-3.5 py-1 text-xs font-medium tracking-wider text-neutral-700 uppercase w-fit">
+            Transparency
+          </span>
           <h2 className="text-h2 font-light tracking-tight">
             What it costs to run.
           </h2>
@@ -193,7 +224,9 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
       <Section tone="white" className="border-t border-ink/10">
         <div className="flex flex-col gap-12">
           <div className="flex flex-col gap-3">
-            <span className="text-small font-medium tracking-wider text-ink-70 uppercase">Questions</span>
+            <span className="rounded-full bg-neutral-100 px-3.5 py-1 text-xs font-medium tracking-wider text-neutral-700 uppercase w-fit">
+              Questions
+            </span>
             <h2 className="text-h2 font-light tracking-tight">
               Questions about {service.name.toLowerCase()}.
             </h2>
@@ -201,7 +234,10 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
 
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             {service.faq.map((item, idx) => (
-              <div key={idx} className="flex flex-col gap-2 border-t border-ink/20 pt-4">
+              <div
+                key={idx}
+                className="flex flex-col gap-2 rounded-2xl border border-neutral-200/80 bg-neutral-50/50 p-6 transition-all duration-200 hover:border-ink/40"
+              >
                 <h3 className="text-body font-medium text-ink">{item.q}</h3>
                 <p className="text-small text-ink-70">{item.a}</p>
               </div>
@@ -213,16 +249,18 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
       {/* 7. RELATED SERVICES (White) */}
       <Section tone="white" className="border-t border-ink/10">
         <div className="flex flex-col gap-8">
-          <span className="text-small font-medium tracking-wider text-ink-70 uppercase">Related Services</span>
+          <span className="rounded-full bg-neutral-100 px-3.5 py-1 text-xs font-medium tracking-wider text-neutral-700 uppercase w-fit">
+            Related Services
+          </span>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {relatedServices.map((rel) => (
               <Link
                 key={rel.slug}
                 href={`/services/${rel.slug}/`}
-                className="flex items-center justify-between border border-ink p-5 hover:bg-ink hover:text-paper"
+                className="group flex items-center justify-between rounded-2xl border border-neutral-200/90 p-5 shadow-sm transition-all duration-200 hover:border-ink hover:bg-neutral-50 hover:-translate-y-0.5 hover:shadow-md"
               >
-                <span className="text-small font-medium">{rel.name}</span>
-                <span aria-hidden="true">→</span>
+                <span className="text-small font-medium text-ink">{rel.name}</span>
+                <span aria-hidden="true" className="transition-transform group-hover:translate-x-1">→</span>
               </Link>
             ))}
           </div>

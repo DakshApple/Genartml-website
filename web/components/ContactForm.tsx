@@ -87,7 +87,7 @@ export function ContactForm() {
             required
             autoComplete="name"
             placeholder="Daksh Suthar"
-            className="min-h-11 border border-ink bg-paper px-4 text-small text-ink"
+            className="min-h-12 rounded-2xl border border-neutral-300 bg-paper px-4 text-small text-ink transition-all duration-200 outline-none focus:border-ink focus:ring-4 focus:ring-neutral-200/60 hover:border-neutral-400"
           />
         </div>
 
@@ -102,7 +102,7 @@ export function ContactForm() {
             required
             autoComplete="email"
             placeholder="you@company.com"
-            className="min-h-11 border border-ink bg-paper px-4 text-small text-ink"
+            className="min-h-12 rounded-2xl border border-neutral-300 bg-paper px-4 text-small text-ink transition-all duration-200 outline-none focus:border-ink focus:ring-4 focus:ring-neutral-200/60 hover:border-neutral-400"
           />
         </div>
       </div>
@@ -118,7 +118,7 @@ export function ContactForm() {
             type="tel"
             autoComplete="tel"
             placeholder="+91 98765 43210"
-            className="min-h-11 border border-ink bg-paper px-4 text-small text-ink"
+            className="min-h-12 rounded-2xl border border-neutral-300 bg-paper px-4 text-small text-ink transition-all duration-200 outline-none focus:border-ink focus:ring-4 focus:ring-neutral-200/60 hover:border-neutral-400"
           />
         </div>
 
@@ -132,7 +132,7 @@ export function ContactForm() {
             type="text"
             autoComplete="organization"
             placeholder="Acme Corp"
-            className="min-h-11 border border-ink bg-paper px-4 text-small text-ink"
+            className="min-h-12 rounded-2xl border border-neutral-300 bg-paper px-4 text-small text-ink transition-all duration-200 outline-none focus:border-ink focus:ring-4 focus:ring-neutral-200/60 hover:border-neutral-400"
           />
         </div>
       </div>
@@ -146,7 +146,7 @@ export function ContactForm() {
           name="service"
           required
           defaultValue=""
-          className="min-h-11 border border-ink bg-paper px-4 text-small text-ink"
+          className="min-h-12 rounded-2xl border border-neutral-300 bg-paper px-4 text-small text-ink transition-all duration-200 outline-none focus:border-ink focus:ring-4 focus:ring-neutral-200/60 hover:border-neutral-400"
         >
           <option value="" disabled>
             Select a service
@@ -170,7 +170,7 @@ export function ContactForm() {
           required
           rows={5}
           placeholder="Describe your current manual workflow, what you want to build, and any specific timelines."
-          className="border border-ink bg-paper p-4 text-small text-ink"
+          className="rounded-2xl border border-neutral-300 bg-paper p-4 text-small text-ink transition-all duration-200 outline-none focus:border-ink focus:ring-4 focus:ring-neutral-200/60 hover:border-neutral-400"
         />
       </div>
 
@@ -180,7 +180,7 @@ export function ContactForm() {
           name="consent"
           type="checkbox"
           required
-          className="mt-1 h-4 w-4 border border-ink"
+          className="mt-1 h-4 w-4 rounded border border-neutral-400 text-ink focus:ring-ink"
         />
         <label htmlFor="f-consent" className="text-small text-ink-70">
           I consent to Genartml handling my details to reply to this enquiry in accordance with the{" "}
@@ -192,7 +192,7 @@ export function ContactForm() {
       </div>
 
       {error && (
-        <div className="border border-ink bg-paper p-4 text-small font-medium text-ink">
+        <div className="rounded-2xl border border-red-500/30 bg-red-50 p-4 text-small font-medium text-red-900">
           {error}
         </div>
       )}
@@ -201,9 +201,10 @@ export function ContactForm() {
         <button
           type="submit"
           disabled={loading}
-          className="inline-flex min-h-11 items-center justify-center border border-ink bg-ink px-8 py-3 text-small font-medium text-paper transition-colors hover:bg-paper hover:text-ink disabled:opacity-50"
+          className="group inline-flex min-h-12 items-center justify-center gap-2.5 rounded-full border border-ink bg-ink px-8 py-3.5 text-small font-medium text-paper shadow-sm transition-all duration-300 ease-out hover:-translate-y-0.5 hover:bg-neutral-900 hover:shadow-xl hover:shadow-ink/10 active:translate-y-0 disabled:opacity-50"
         >
-          {loading ? "Sending..." : "Send message →"}
+          <span>{loading ? "Sending..." : "Send message"}</span>
+          <span aria-hidden="true" className="transition-transform group-hover:translate-x-1">→</span>
         </button>
       </div>
     </form>

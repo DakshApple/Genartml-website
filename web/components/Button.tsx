@@ -25,12 +25,12 @@ export function Button({
   className = "",
 }: Props) {
   const base =
-    "inline-flex min-h-11 items-center justify-center gap-2 border px-6 py-3 text-small font-medium transition-colors";
+    "group inline-flex min-h-11 items-center justify-center gap-2.5 rounded-full border px-7 py-3 text-small font-medium transition-all duration-300 ease-out hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98]";
   const styles = {
-    "white-primary": "border-ink bg-ink text-paper hover:bg-paper hover:text-ink",
-    "white-secondary": "border-ink bg-paper text-ink hover:bg-ink hover:text-paper",
-    "black-primary": "border-paper bg-paper text-ink hover:bg-ink hover:text-paper",
-    "black-secondary": "border-paper bg-ink text-paper hover:bg-paper hover:text-ink",
+    "white-primary": "border-ink bg-ink text-paper shadow-sm hover:bg-neutral-900 hover:shadow-xl hover:shadow-ink/10",
+    "white-secondary": "border-ink/30 bg-paper text-ink hover:border-ink hover:bg-neutral-50 hover:shadow-md",
+    "black-primary": "border-paper bg-paper text-ink shadow-sm hover:bg-neutral-100 hover:shadow-xl hover:shadow-paper/10",
+    "black-secondary": "border-paper/40 bg-transparent text-paper hover:border-paper hover:bg-white/10 hover:shadow-md",
   }[`${on}-${variant}`];
   const cls = `${base} ${styles} ${className}`;
   const onClick = event ? () => track(event, { href }) : undefined;
