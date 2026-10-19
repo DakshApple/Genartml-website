@@ -76,12 +76,18 @@ def main():
         safe_title = title.replace('"', '\\"')
         safe_dek = dek.replace('"', '\\"')
 
+        raw_cover = b.get("cover_image") or ""
+        if raw_cover and not raw_cover.startswith("http") and not raw_cover.startswith("/"):
+            cover_img = "/" + raw_cover
+        else:
+            cover_img = raw_cover
+
         articles_code += f'''dict(
 slug="{slug}",
 cat="{cat}",
 title="{safe_title}",
 dek="{safe_dek}",
-date="{date_iso}", date_h="{date_h}", read={read_time}, cover="{cover}",
+date="{date_iso}", date_h="{date_h}", read={read_time}, cover="{cover}", cover_image="{cover_img}",
 body="""
 {safe_body}
 """),

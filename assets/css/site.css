@@ -729,8 +729,8 @@ a.channel:hover b{text-decoration:underline;text-underline-offset:4px}
 .post-card{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;transition:border-color .3s,transform .4s var(--ease);background:var(--paper);min-width:0}
 .post-card:hover{border-color:var(--ink);transform:translateY(-3px)}
 .post-cover{aspect-ratio:16/10;background:var(--ink);color:var(--paper);position:relative;overflow:hidden;max-width:100%}
-.post-cover svg{position:absolute;inset:0;width:100%;height:100%}
-.post-cover .cat{position:absolute;left:18px;top:18px}
+.post-cover svg, .post-cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.post-cover .cat{position:absolute;left:18px;top:18px;z-index:2}
 .post-body{padding:24px;display:flex;flex-direction:column;gap:12px;flex:1}
 .post-meta{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--ink-60)}
 .post-body h3{font-size:22px;line-height:1.3;font-weight:var(--w-reg);letter-spacing:-.015em}

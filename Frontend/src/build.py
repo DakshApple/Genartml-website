@@ -132,6 +132,13 @@ def cover_svg(kind):
     rows = "".join(f'<rect x="250" y="{70+i*34}" width="16" height="16" rx="3" fill="{"#fff" if i<3 else "none"}" stroke="#fff" stroke-width="1.5"/><rect x="280" y="{75+i*34}" width="{[150,120,170,110,140][i]}" height="6" rx="3" fill="#fff" opacity="{0.8 if i<3 else 0.3}"/>' for i in range(5))
     return f'<svg viewBox="0 0 640 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="640" height="300" fill="#0A0A0A"/><rect x="220" y="40" width="240" height="240" rx="10" fill="none" stroke="#fff" stroke-opacity=".5"/>{rows}</svg>'
 
+def post_cover_media(a):
+    img = a.get("cover_image")
+    if img:
+        src = img if img.startswith("http") or img.startswith("/") else "/" + img
+        return f'<img src="{e(src)}" alt="{e(a["title"])}" loading="lazy">'
+    return cover_svg(a.get("cover", "agents"))
+
 # ---------------------------------------------------------------- chrome
 def svc(slug): return next(s for s in SERVICES if s["slug"] == slug)
 
@@ -489,7 +496,7 @@ def blog_index():
     cards = ""
     for i, a in enumerate(ARTICLES):
         feat = " feature" if i == 0 else ""
-        cards += f'''<article class="post-card{feat} reveal" data-post-cat="{e(a["cat"])}"><a class="post-cover" href="/blog/{a["slug"]}/" tabindex="-1" aria-hidden="true">{cover_svg(a["cover"])}<span class="cat"><span class="cat-pill">{e(a["cat"])}</span></span></a>
+        cards += f'''<article class="post-card{feat} reveal" data-post-cat="{e(a["cat"])}"><a class="post-cover" href="/blog/{a["slug"]}/" tabindex="-1" aria-hidden="true">{post_cover_media(a)}<span class="cat"><span class="cat-pill">{e(a["cat"])}</span></span></a>
 <div class="post-body"><div class="post-meta"><time datetime="{a["date"]}">{a["date_h"]}</time><span>{a["read"]} min read</span></div><h3><a href="/blog/{a["slug"]}/">{e(a["title"])}</a></h3><p>{e(a["dek"])}</p><a class="link-arrow" href="/blog/{a["slug"]}/">Read the article {ARROW}</a></div></article>'''
     main = f'''<section class="page-head"><div class="wrap"><span class="label muted">Blog</span><h1 class="h1" style="margin-top:20px">Engineering notes from building AI systems.</h1><p class="lead">Practical write-ups on voice agents, AI workflows and how we scope and ship software. Written by the team that builds it.</p></div></section>
 <section class="band" style="padding-top:0"><div class="wrap"><div class="filter-row" role="tablist" aria-label="Filter by category" data-blog>{cats}</div><div class="blog-grid">{cards}</div></div></section>{cta_band()}'''
@@ -500,12 +507,17 @@ def blog_index():
 def article(a):
     toc = "".join(f'<li><a href="#{i}">{re.sub(r"<.*?>", "", t)}</a></li>' for i, t in re.findall(r'<h2 id="([^"]+)">(.*?)</h2>', a["body"]))
     url = f'{SITE_URL}/blog/{a["slug"]}/'
-    rel = "".join(f'''<article class="post-card reveal"><a class="post-cover" href="/blog/{r["slug"]}/" tabindex="-1" aria-hidden="true">{cover_svg(r["cover"])}<span class="cat"><span class="cat-pill">{e(r["cat"])}</span></span></a><div class="post-body"><div class="post-meta"><span>{r["read"]} min read</span></div><h3><a href="/blog/{r["slug"]}/">{e(r["title"])}</a></h3><a class="link-arrow" href="/blog/{r["slug"]}/">Read the article {ARROW}</a></div></article>''' for r in ARTICLES if r["slug"] != a["slug"])
+    rel_posts = [r for r in ARTICLES if r["slug"] != a["slug"]][:2]
+    rel = "".join(f'''<article class="post-card reveal"><a class="post-cover" href="/blog/{r["slug"]}/" tabindex="-1" aria-hidden="true">{post_cover_media(r)}<span class="cat"><span class="cat-pill">{e(r["cat"])}</span></span></a><div class="post-body"><div class="post-meta"><span>{r["read"]} min read</span></div><h3><a href="/blog/{r["slug"]}/">{e(r["title"])}</a></h3><a class="link-arrow" href="/blog/{r["slug"]}/">Read the article {ARROW}</a></div></article>''' for r in rel_posts)
+    cover_lead = ""
+    if a.get("cover_image"):
+        img_src = a["cover_image"] if a["cover_image"].startswith("http") or a["cover_image"].startswith("/") else "/" + a["cover_image"]
+        cover_lead = f'<div style="margin:var(--s4) 0 var(--s6);border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);max-height:480px;background:var(--ink)"><img src="{e(img_src)}" alt="{e(a["title"])}" style="width:100%;height:100%;object-fit:cover;display:block"></div>'
     main = f'''<article><header class="article-head"><div class="wrap"><a class="crumb" href="/blog/">{ARROW} All articles</a><div><span class="cat-pill">{e(a["cat"])}</span></div>
 <h1 class="h1">{e(a["title"])}</h1><p class="dek">{e(a["dek"])}</p>
 <div class="byline"><div class="who"><span class="av"><img src="/assets/img/genartml-icon-white.png" alt=""></span><span><b>Team Genartml</b><span><time datetime="{a["date"]}">{a["date_h"]}</time> · {a["read"]} min read</span></span></div>
 <div class="share" aria-label="Share"><a href="#" data-share="linkedin" data-url="{url}" data-title="{e(a["title"])}" target="_blank" rel="noopener">{SOC["linkedin"]}LinkedIn</a><a href="#" data-share="x" data-url="{url}" data-title="{e(a["title"])}" target="_blank" rel="noopener">{SOC["x"]}X</a><button type="button" data-copy="{url}">{LINK}<span>Copy link</span></button></div></div></div></header>
-<div class="wrap"><div class="article-layout"><nav class="toc" aria-label="In this article"><span class="label">In this article</span><ol>{toc}</ol></nav><div class="prose">{a["body"]}</div></div></div></article>
+<div class="wrap">{cover_lead}<div class="article-layout"><nav class="toc" aria-label="In this article"><span class="label">In this article</span><ol>{toc}</ol></nav><div class="prose">{a["body"]}</div></div></div></article>
 <section class="band" style="margin-top:var(--s7)"><div class="wrap">{eyebrow("", "Related articles")}<div class="blog-grid" style="grid-template-columns:repeat(2,minmax(0,1fr))">{rel}</div></div></section>
 {cta_band("Want a system like this built for you?", "Tell us what your team does by hand today. Fixed scope, fixed price, fixed timeline.")}'''
     ld = [{"@context": "https://schema.org", "@type": "Article", "headline": a["title"], "description": a["dek"], "datePublished": a["date"], "dateModified": a["date"],
