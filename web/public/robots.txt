@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://genartml.com/sitemap.xml

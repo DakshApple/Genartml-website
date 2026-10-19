@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Genartml Blog</title>
+    <link>https://genartml.com/blog/</link>
+    <description>Engineering insights, architecture guides, and practical playbooks on software development and AI systems for business.</description>
+    <language>en-in</language>
+    <atom:link href="https://genartml.com/rss.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title><![CDATA[AI agents explained: what they can actually do for an Indian business in 2026]]></title>
+      <link>https://genartml.com/blog/ai-agents-explained-what-they-can-actually-do-for-an-indian-business-in-2026/</link>
+      <guid>https://genartml.com/blog/ai-agents-explained-what-they-can-actually-do-for-an-indian-business-in-2026/</guid>
+      <pubDate>Mon, 19 Oct 2026 05:17:48 GMT</pubDate>
+      <description><![CDATA[A founder who builds AI agents explains what they are, five jobs they can do for Indian businesses today, and where they still fall short.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[What Actually Happens When an AI Voice Agent Answers Your Business Phone]]></title>
+      <link>https://genartml.com/blog/ai-voice-agent-call-breakdown-india/</link>
+      <guid>https://genartml.com/blog/ai-voice-agent-call-breakdown-india/</guid>
+      <pubDate>Sun, 18 Oct 2026 09:15:03 GMT</pubDate>
+      <description><![CDATA[A second-by-second breakdown of how an AI voice agent handles one real inbound call to a clinic in Ahmedabad — the interruptions, the code-switching, the pricing question it shouldn’t answer — and the five places these systems actually break.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[The AI Doesn't Teach You. It Studies You.]]></title>
+      <link>https://genartml.com/blog/the-ai-doesn-t-teach-you-it-studies-you/</link>
+      <guid>https://genartml.com/blog/the-ai-doesn-t-teach-you-it-studies-you/</guid>
+      <pubDate>Wed, 02 Sep 2026 11:06:10 GMT</pubDate>
+      <description><![CDATA[Extuter, built by the Genartml team, goes live on October 3, 2026.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[n8n vs Make vs Zapier: Which Automation Tool Is Best in 2026?]]></title>
+      <link>https://genartml.com/blog/n8n-vs-make-vs-zapier-automation-comparison-2026/</link>
+      <guid>https://genartml.com/blog/n8n-vs-make-vs-zapier-automation-comparison-2026/</guid>
+      <pubDate>Tue, 25 Aug 2026 07:56:11 GMT</pubDate>
+      <description><![CDATA[Zapier, Make, and n8n are the three biggest automation platforms. We've used all three extensively — here's an honest comparison to help you choose the right one for your business.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Building an EdTech Platform: Lessons from Developing Evoluter]]></title>
+      <link>https://genartml.com/blog/building-edtech-platform-lessons-evoluter/</link>
+      <guid>https://genartml.com/blog/building-edtech-platform-lessons-evoluter/</guid>
+      <pubDate>Tue, 25 Aug 2026 07:56:11 GMT</pubDate>
+      <description><![CDATA[We built Evoluter — an AI-powered UPSC preparation platform — from scratch. Here are the hard-won technical and product lessons from building an EdTech platform for the Indian market.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[The Real Cost of Not Automating Your Business in 2026]]></title>
+      <link>https://genartml.com/blog/real-cost-not-automating-business-2026/</link>
+      <guid>https://genartml.com/blog/real-cost-not-automating-business-2026/</guid>
+      <pubDate>Tue, 25 Aug 2026 07:56:11 GMT</pubDate>
+      <description><![CDATA[You think automation is expensive? Calculate what manual processes actually cost you — in wasted hours, missed opportunities, and employee burnout. The numbers will surprise you.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[CRM Automation: How AI Manages Your Customer Relationships in 2026]]></title>
+      <link>https://genartml.com/blog/crm-automation-ai-customer-relationships-2026/</link>
+      <guid>https://genartml.com/blog/crm-automation-ai-customer-relationships-2026/</guid>
+      <pubDate>Tue, 25 Aug 2026 07:56:10 GMT</pubDate>
+      <description><![CDATA[Your CRM is only as good as the data in it — and your team hates updating it. Learn how AI automation keeps your CRM accurate, predicts customer behavior, and automates the entire relationship lifecycle.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[How to Choose the Right Tech Stack for Your Startup in 2026]]></title>
+      <link>https://genartml.com/blog/choose-right-tech-stack-startup-2026/</link>
+      <guid>https://genartml.com/blog/choose-right-tech-stack-startup-2026/</guid>
+      <pubDate>Tue, 25 Aug 2026 07:56:10 GMT</pubDate>
+      <description><![CDATA[React or Next.js? PostgreSQL or MongoDB? AWS or Vercel? A practical guide to choosing your startup's tech stack based on your actual needs — not hype cycles.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[AI-Powered Customer Support: Handle 10x More Queries Without Hiring]]></title>
+      <link>https://genartml.com/blog/ai-powered-customer-support-10x-queries/</link>
+      <guid>https://genartml.com/blog/ai-powered-customer-support-10x-queries/</guid>
+      <pubDate>Tue, 25 Aug 2026 07:56:10 GMT</pubDate>
+      <description><![CDATA[Your support team is overwhelmed. AI can handle 80% of customer queries instantly — FAQs, order tracking, returns, and more. Here's exactly how to implement it without destroying your customer experience.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Digital Transformation for Indian SMBs: A Practical Guide]]></title>
+      <link>https://genartml.com/blog/digital-transformation-indian-smbs-practical-guide/</link>
+      <guid>https://genartml.com/blog/digital-transformation-indian-smbs-practical-guide/</guid>
+      <pubDate>Tue, 25 Aug 2026 07:56:09 GMT</pubDate>
+      <description><![CDATA[India's SMBs are at a tipping point. Learn how to move from spreadsheets and manual processes to automated digital operations — without breaking the bank or disrupting your business.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[How to Automate Your Sales Pipeline with AI in 2026]]></title>
+      <link>https://genartml.com/blog/automate-sales-pipeline-with-ai-2026/</link>
+      <guid>https://genartml.com/blog/automate-sales-pipeline-with-ai-2026/</guid>
+      <pubDate>Tue, 25 Aug 2026 07:56:09 GMT</pubDate>
+      <description><![CDATA[Your sales team is spending 65% of their time on non-selling activities. Learn how AI automation can handle lead scoring, follow-ups, proposals, and CRM updates — so your team focuses on closing.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Custom Software vs SaaS: Which Is Right for Your Business?]]></title>
+      <link>https://genartml.com/blog/custom-software-vs-saas-which-is-right/</link>
+      <guid>https://genartml.com/blog/custom-software-vs-saas-which-is-right/</guid>
+      <pubDate>Tue, 25 Aug 2026 07:56:08 GMT</pubDate>
+      <description><![CDATA[Should you build custom software or buy a SaaS subscription? A practical decision framework with real cost comparisons, pros, cons, and when each option makes sense.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[WhatsApp Business Automation: The Complete Guide for 2026]]></title>
+      <link>https://genartml.com/blog/whatsapp-business-automation-guide-2026/</link>
+      <guid>https://genartml.com/blog/whatsapp-business-automation-guide-2026/</guid>
+      <pubDate>Tue, 25 Aug 2026 07:56:08 GMT</pubDate>
+      <description><![CDATA[Over 500 million Indians use WhatsApp daily. Learn how businesses are using AI-powered WhatsApp automation to qualify leads, handle support, and close sales — without hiring more staff.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[AI Automation for Businesses: How to Automate Your Business in 2026]]></title>
+      <link>https://genartml.com/blog/ai-automation-for-businesses-how-to-automate-your-business-in-2026/</link>
+      <guid>https://genartml.com/blog/ai-automation-for-businesses-how-to-automate-your-business-in-2026/</guid>
+      <pubDate>Mon, 24 Aug 2026 15:51:17 GMT</pubDate>
+      <description><![CDATA[AI automation is moving from experimentation to real business operations. Learn how businesses can identify repetitive workflows, deploy AI agents, automate customer communication, reduce operational costs, and build scalable AI-powered systems in 2026.]]></description>
+    </item>
+  </channel>
+</rss>
