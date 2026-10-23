@@ -99,6 +99,12 @@
   </url>
   <!-- Blog Posts -->
   <url>
+    <loc>https://genartml.com/blog/where-ai-is-real-and-where-it-is-hype/</loc>
+    <lastmod>2026-10-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://genartml.com/blog/ai-agents-explained-what-they-can-actually-do-for-an-indian-business-in-2026/</loc>
     <lastmod>2026-10-19</lastmod>
     <changefreq>monthly</changefreq>
