@@ -476,6 +476,172 @@
     if (a) track(a.getAttribute("data-track"), { label: (a.textContent || "").trim().slice(0, 60) });
   });
 
+  /* ---------- 🪔 Diwali Offer Engine (Scheduled / Single-Switch) ---------- */
+  function isDiwaliActive() {
+    var O = C.diwaliOffer;
+    if (!O || !O.enabled) return false;
+
+    // Local / Session override switch
+    var sessOverride = sess("gm_diwali_toggle");
+    if (sessOverride === "0") return false;
+    if (sessOverride === "1") return true;
+
+    // URL preview parameter check (?offer=preview, ?diwali=1, etc.)
+    var q = location.search;
+    if (BUNDLE && Router && Router.query) q = Router.query;
+    if (/[?&](offer=preview|diwali=1|previewOffer=true)/i.test(q)) return true;
+
+    // Local forcePreview config
+    if (O.forcePreview) return true;
+
+    // Automatic Schedule: checks if current date/time is between start & end
+    if (O.autoSchedule && O.startDate && O.endDate) {
+      var now = new Date();
+      var start = new Date(O.startDate);
+      var end = new Date(O.endDate);
+      return now >= start && now <= end;
+    }
+    return !!O.enabled;
+  }
+
+  function renderPreviewSwitch(isActive) {
+    var isDevOrPreview = BUNDLE || location.hostname === "localhost" || location.hostname === "127.0.0.1" || location.protocol === "file:";
+    if (!isDevOrPreview) return;
+
+    var existingSwitch = $("#diwali-preview-switch");
+    if (!existingSwitch) {
+      existingSwitch = document.createElement("button");
+      existingSwitch.id = "diwali-preview-switch";
+      existingSwitch.type = "button";
+      document.body.appendChild(existingSwitch);
+      existingSwitch.addEventListener("click", function () {
+        var nowActive = isDiwaliActive();
+        sess("gm_diwali_toggle", nowActive ? "0" : "1");
+        initDiwaliOffer(document);
+      });
+    }
+
+    var diyaIconSvg = '<svg style="width:14px;height:14px;display:inline-block;vertical-align:-2px;margin-right:4px" viewBox="0 0 24 24"><path fill="#FFA500" d="M12 2C11 5 9 7 9 9.5a3 3 0 0 0 6 0C15 7 13 5 12 2z"/><path fill="#CA9D35" d="M4 14c0 4.4 3.6 7 8 7s8-2.6 8-7H4z"/></svg>';
+
+    if (isActive) {
+      existingSwitch.className = "diwali-preview-switch";
+      existingSwitch.innerHTML = '<span class="dot"></span><b>' + diyaIconSvg + 'Diwali Offer: ACTIVE</b> <span style="opacity:0.7">(Click to preview OFF)</span>';
+      existingSwitch.title = "Click to preview website without Diwali offer";
+    } else {
+      existingSwitch.className = "diwali-preview-switch is-off";
+      existingSwitch.innerHTML = '<span class="dot"></span><b>' + diyaIconSvg + 'Diwali Offer: OFF</b> <span style="opacity:0.7">(Click to preview ON)</span>';
+      existingSwitch.title = "Click to preview website with Diwali offer";
+    }
+  }
+
+  function initDiwaliOffer(root) {
+    var active = isDiwaliActive();
+    var O = C.diwaliOffer || {};
+    var diyaIconSvg = '<svg style="width:14px;height:14px;display:inline-block;vertical-align:-2px;margin-right:4px" viewBox="0 0 24 24"><path fill="#FFA500" d="M12 2C11 5 9 7 9 9.5a3 3 0 0 0 6 0C15 7 13 5 12 2z"/><path fill="#CA9D35" d="M4 14c0 4.4 3.6 7 8 7s8-2.6 8-7H4z"/></svg>';
+
+    // 1. Cleanup old offer elements if not active (or if toggled off)
+    var existingBanner = $("#diwali-banner");
+    if (!active) {
+      if (existingBanner) existingBanner.remove();
+      $$(".diwali-badge, .diwali-offer-note, .tier-diwali-header, .svc-diwali-header", document).forEach(function (el) { el.remove(); });
+      $$(".diwali-card-highlight", document).forEach(function (el) { el.classList.remove("diwali-card-highlight"); });
+      renderPreviewSwitch(false);
+      return;
+    }
+
+    // 2. Inject or Update Top Festive Banner
+    if (existingBanner) existingBanner.remove();
+    var banner = document.createElement("div");
+      banner.id = "diwali-banner";
+      banner.className = "diwali-banner";
+      banner.innerHTML = '<div class="wrap diwali-wrap">' +
+        '<div class="diwali-left">' +
+          '<span class="diwali-diya" aria-hidden="true">' +
+            '<svg viewBox="0 0 24 24">' +
+              '<path class="diya-flame" d="M12 2C11 5 9 7 9 9.5a3 3 0 0 0 6 0C15 7 13 5 12 2z"/>' +
+              '<path class="diya-base" d="M4 14c0 4.4 3.6 7 8 7s8-2.6 8-7H4z"/>' +
+              '<ellipse class="diya-rim" cx="12" cy="14" rx="8" ry="2"/>' +
+            '</svg>' +
+          '</span>' +
+          '<span class="diwali-pill">' + diyaIconSvg + esc(O.bannerTag || "DIWALI SPECIAL") + '</span>' +
+          '<span class="diwali-text"><b>Flat ' + (O.discountPercent || 20) + '% OFF</b> on all Website & Custom Software packages</span>' +
+          (O.urgencyText ? '<span class="diwali-urgency">' + esc(O.urgencyText) + '</span>' : '') +
+        '</div>' +
+        '<div class="diwali-right">' +
+          '<a class="diwali-cta" href="/packages/#matrix" data-track="diwali_topbar_cta">' +
+            'Claim ' + (O.discountPercent || 20) + '% Festive Offer' +
+            '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>' +
+          '</a>' +
+        '</div>' +
+      '</div>';
+
+      var topbar = $(".topbar");
+      if (topbar && topbar.parentNode) {
+        topbar.parentNode.insertBefore(banner, topbar);
+      } else {
+        document.body.insertBefore(banner, document.body.firstChild);
+      }
+
+    // 3. Highlight Eligible Service Cards & Packages
+    var eligible = O.services || ["websites", "software-development"];
+
+    // A) On Packages Page (matrix-groups)
+    eligible.forEach(function (cat) {
+      var group = $('[data-group="' + cat + '"]', root || document);
+      if (group) {
+        $$(".tier", group).forEach(function (tier) {
+          if (!tier.classList.contains("diwali-card-highlight")) {
+            tier.classList.add("diwali-card-highlight");
+
+            // Add dedicated festive header row at the very top of the card
+            if (!$(".tier-diwali-header", tier)) {
+              var dHead = document.createElement("div");
+              dHead.className = "tier-diwali-header";
+              dHead.innerHTML = '<span class="diwali-badge">' + diyaIconSvg + (O.discountPercent || 20) + '% OFF · DIWALI SPECIAL</span>' +
+                '<span class="diwali-code-tag">Code: ' + esc(O.couponCode || "DIWALI20") + '</span>';
+              tier.insertBefore(dHead, tier.firstChild);
+            }
+
+            // Add Offer Note above CTA button
+            var btn = $(".btn", tier);
+            if (btn && !$(".diwali-offer-note", tier)) {
+              var note = document.createElement("div");
+              note.className = "diwali-offer-note";
+              note.innerHTML = '<span style="color:#D4AF37">✦</span><span><b>' + (O.discountPercent || 20) + '% Festive Savings</b> applied with code <code>' + esc(O.couponCode || "DIWALI20") + '</code></span>';
+              btn.parentNode.insertBefore(note, btn);
+
+              // Attach offer param to CTA URL
+              var href = btn.getAttribute("href");
+              if (href && href.indexOf("offer=") === -1) {
+                var sep = href.indexOf("?") === -1 ? "?" : "&";
+                btn.setAttribute("href", href + sep + "offer=" + encodeURIComponent(O.couponCode || "DIWALI20"));
+              }
+            }
+          }
+        });
+      }
+    });
+
+    // B) On Home / Services Page (svc-cards)
+    $$(".svc-card", root || document).forEach(function (card) {
+      var link = $("a.stretched", card);
+      if (link) {
+        var href = link.getAttribute("href") || "";
+        var isMatch = eligible.some(function (cat) { return href.indexOf(cat) !== -1; });
+        if (isMatch && !$(".svc-diwali-header", card)) {
+          card.classList.add("diwali-card-highlight");
+          var sHead = document.createElement("div");
+          sHead.className = "svc-diwali-header";
+          sHead.innerHTML = '<span class="diwali-badge">' + diyaIconSvg + (O.discountPercent || 20) + '% OFF · DIWALI SPECIAL</span>';
+          card.insertBefore(sHead, card.firstChild);
+        }
+      }
+    });
+
+    // 4. Render interactive toggle switch
+    renderPreviewSwitch(true);
+  }
+
   /* ---------- Page init (runs on load, and after each preview navigation) ---------- */
   function initPage(root) {
     applyConfig(root);
@@ -488,14 +654,16 @@
     initThanks(root);
     initShare(root);
     initToc(root);
+    initDiwaliOffer(root);
     markActive();
   }
-  window.GENARTML = { initPage: initPage, setRouter: function (r) { Router = r; }, applyConfig: applyConfig };
+  window.GENARTML = { initPage: initPage, setRouter: function (r) { Router = r; }, applyConfig: applyConfig, initDiwaliOffer: initDiwaliOffer };
 
   function boot() {
     applyConfig(document);
     initHeader();
     initCookies();
+    initDiwaliOffer(document);
     if (!BUNDLE) initPage($("main") || document);
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot); else boot();

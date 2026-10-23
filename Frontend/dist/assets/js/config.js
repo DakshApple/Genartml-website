@@ -48,5 +48,21 @@ window.GENARTML_CONFIG = {
 
   // Client case studies on the work page and home page. Add only after the client signs off on public disclosure.
   // { industry: "", client: "", bottleneck: "", built: "", outcome: "", quote: "", quoteBy: "" }
-  caseStudies: []
+  caseStudies: [],
+
+  // 🪔 Diwali Special Offer & Festive Campaign
+  // To remove in one go: simply set `enabled: false`!
+  diwaliOffer: {
+    enabled: true,                          // Master Switch: false turns off everything across the site
+    autoSchedule: true,                     // Automatically goes live Nov 1, expires Nov 15 (IST)
+    startDate: "2026-11-01T00:00:00+05:30", // November 1st, 2026 at midnight IST
+    endDate: "2026-11-15T23:59:59+05:30",   // November 15th, 2026 at 23:59 IST
+    forcePreview: true,                     // Set to true to view locally right now before Nov 1
+    discountPercent: 20,                    // 20% OFF
+    couponCode: "DIWALI20",                 // Coupon / tracking code attached to proposals
+    services: ["websites", "software-development"], // Eligible categories
+    bannerTag: "DIWALI SPECIAL",
+    bannerText: "Flat 20% OFF on all Website & Custom Software packages",
+    urgencyText: "Limited to first 5 November project bookings"
+  }
 };

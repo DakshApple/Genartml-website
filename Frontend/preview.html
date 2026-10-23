@@ -1,4 +1,9 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
 <title>Genartml Website Preview</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap">
@@ -845,6 +850,271 @@ a.channel:hover b{text-decoration:underline;text-underline-offset:4px}
 .browser-bar .lights i:nth-child(3){background:#28C840}
 .member .ph{display:flex;align-items:center;justify-content:center}
 .member .ph .ini{color:var(--paper);font-size:clamp(40px,4vw,56px);font-weight:var(--w-light);letter-spacing:.04em}
+
+/* ---------- 🪔 Diwali Festive Campaign & Offer Showcase ---------- */
+:root {
+  --gold-1: #FFE89E;
+  --gold-2: #E5BE59;
+  --gold-3: #CA9D35;
+  --gold-border: rgba(212, 175, 55, 0.45);
+  --gold-glow: rgba(212, 175, 55, 0.25);
+}
+
+/* Top Festive Banner */
+.diwali-banner {
+  background: linear-gradient(90deg, #0e0c08 0%, #1c170d 50%, #0e0c08 100%);
+  color: #FFFFFF;
+  border-bottom: 1px solid var(--gold-border);
+  position: relative;
+  overflow: hidden;
+  z-index: 50;
+  font-size: 13px;
+}
+.diwali-banner::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -50%;
+  width: 200%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #FFE89E, #CA9D35, transparent);
+  animation: diwaliShimmer 5s ease-in-out infinite;
+}
+@keyframes diwaliShimmer {
+  0% { transform: translateX(-30%); }
+  50% { transform: translateX(30%); }
+  100% { transform: translateX(-30%); }
+}
+.diwali-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 44px;
+  padding-block: 8px;
+}
+.diwali-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.diwali-diya {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+.diwali-diya svg {
+  width: 20px;
+  height: 20px;
+}
+.diya-flame {
+  fill: #FFA500;
+  transform-origin: 12px 10px;
+  animation: diyaFlicker 1.8s ease-in-out infinite alternate;
+  filter: drop-shadow(0 0 4px #FFD700);
+}
+@keyframes diyaFlicker {
+  0% { transform: scale(0.92) rotate(-2deg); fill: #FF8C00; filter: drop-shadow(0 0 3px #FFA500); }
+  50% { transform: scale(1.08) rotate(3deg); fill: #FFD700; filter: drop-shadow(0 0 6px #FFD700); }
+  100% { transform: scale(0.96) rotate(-1deg); fill: #FFA500; filter: drop-shadow(0 0 4px #FFA500); }
+}
+.diya-base { fill: #CA9D35; }
+.diya-rim { fill: #FFE89E; }
+
+.diwali-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(212, 175, 55, 0.18);
+  border: 1px solid var(--gold-border);
+  color: var(--gold-1);
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: var(--w-med);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.diwali-text {
+  color: rgba(255, 255, 255, 0.92);
+}
+.diwali-text b {
+  color: var(--gold-1);
+  font-weight: var(--w-bold);
+}
+.diwali-urgency {
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+  padding-left: 12px;
+}
+.diwali-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+.diwali-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #FFE89E 0%, #E5BE59 100%);
+  color: #0A0A0A;
+  font-weight: var(--w-med);
+  font-size: 12px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
+}
+.diwali-cta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(212, 175, 55, 0.4);
+}
+.diwali-cta svg {
+  width: 12px;
+  height: 12px;
+  transition: transform 0.2s var(--ease);
+}
+.diwali-cta:hover svg {
+  transform: translateX(3px);
+}
+
+/* Card Festive Highlights */
+.tier.diwali-card-highlight {
+  border: 1.5px solid #D4AF37 !important;
+  box-shadow: 0 4px 24px rgba(212, 175, 55, 0.12) !important;
+}
+.tier.featured.diwali-card-highlight {
+  border: 1.5px solid #E5BE59 !important;
+  box-shadow: 0 8px 32px rgba(212, 175, 55, 0.22) !important;
+}
+.svc-card.diwali-card-highlight {
+  border: 1.5px solid #D4AF37 !important;
+}
+
+/* Dedicated Festive Header in Cards (avoids jamming t-head) */
+.tier-diwali-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed rgba(212, 175, 55, 0.25);
+}
+.svc-diwali-header {
+  margin-bottom: 14px;
+}
+
+/* Offer Badges - High Contrast & No Wrapping */
+.diwali-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #FFF6D6 0%, #FFE8A3 100%);
+  border: 1px solid #D4AF37;
+  color: #5C4104;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: var(--w-bold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  box-shadow: 0 2px 6px rgba(212, 175, 55, 0.15);
+}
+.tier.featured .diwali-badge, .band-black .diwali-badge {
+  background: linear-gradient(135deg, #2A210D 0%, #1A1406 100%);
+  border: 1px solid #E5BE59;
+  color: #FFE58F;
+  box-shadow: 0 0 12px rgba(229, 190, 89, 0.25);
+}
+.diwali-code-tag {
+  font-size: 11px;
+  font-weight: var(--w-med);
+  color: #8C6B1B;
+  letter-spacing: 0.05em;
+}
+.tier.featured .diwali-code-tag {
+  color: var(--gold-1);
+}
+
+/* Offer Note on Tier */
+.diwali-offer-note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #FFFDF5;
+  border: 1px solid #E5CE85;
+  border-radius: var(--radius-s);
+  padding: 10px 14px;
+  font-size: 13px;
+  color: #5C4104;
+  margin-top: 16px;
+}
+.tier.featured .diwali-offer-note {
+  background: rgba(229, 190, 89, 0.1);
+  border-color: rgba(229, 190, 89, 0.35);
+  color: #FFE58F;
+}
+.diwali-offer-note b {
+  font-weight: var(--w-bold);
+}
+.diwali-offer-note code {
+  background: rgba(212, 175, 55, 0.22);
+  color: inherit;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: var(--w-bold);
+  font-size: 12px;
+  letter-spacing: 0.05em;
+}
+
+/* Local Preview Switcher */
+.diwali-preview-switch {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #0A0A0A;
+  border: 1px solid var(--gold-border);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), 0 0 15px var(--gold-glow);
+  padding: 8px 14px;
+  border-radius: 999px;
+  color: #FFFFFF;
+  font-size: 12px;
+  cursor: pointer;
+  transition: transform 0.2s var(--ease);
+}
+.diwali-preview-switch:hover {
+  transform: translateY(-2px);
+}
+.diwali-preview-switch .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #28C840;
+}
+.diwali-preview-switch.is-off .dot {
+  background: #FF5F57;
+}
+
+@media (max-width: 800px) {
+  .diwali-wrap { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .diwali-urgency { display: none; }
+  .diwali-right { width: 100%; justify-content: flex-end; }
+  .diwali-cta { width: 100%; justify-content: center; }
+  .diwali-preview-switch { bottom: 16px; right: 16px; font-size: 11px; padding: 6px 12px; }
+}
 
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:#FFFFFF}</style>
 <div style="background:#F4F4F4;border-bottom:1px solid #E6E6E6;font-size:12px;color:#545454;padding-block:6px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;gap:12px;justify-content:space-between;flex-wrap:wrap"><span>Preview of <b id="pv-path" style="font-weight:500;color:#0A0A0A">genartml.com/</b></span><span>Every link and form works here. Form submissions are not sent in the preview.</span></div>
@@ -2500,7 +2770,23 @@ window.GENARTML_CONFIG = {
 
   // Client case studies on the work page and home page. Add only after the client signs off on public disclosure.
   // { industry: "", client: "", bottleneck: "", built: "", outcome: "", quote: "", quoteBy: "" }
-  caseStudies: []
+  caseStudies: [],
+
+  // 🪔 Diwali Special Offer & Festive Campaign
+  // To remove in one go: simply set `enabled: false`!
+  diwaliOffer: {
+    enabled: true,                          // Master Switch: false turns off everything across the site
+    autoSchedule: true,                     // Automatically goes live Nov 1, expires Nov 15 (IST)
+    startDate: "2026-11-01T00:00:00+05:30", // November 1st, 2026 at midnight IST
+    endDate: "2026-11-15T23:59:59+05:30",   // November 15th, 2026 at 23:59 IST
+    forcePreview: true,                     // Set to true to view locally right now before Nov 1
+    discountPercent: 20,                    // 20% OFF
+    couponCode: "DIWALI20",                 // Coupon / tracking code attached to proposals
+    services: ["websites", "software-development"], // Eligible categories
+    bannerTag: "DIWALI SPECIAL",
+    bannerText: "Flat 20% OFF on all Website & Custom Software packages",
+    urgencyText: "Limited to first 5 November project bookings"
+  }
 };
 </script>
 <script>window.GENARTML_PACKAGES = {"services": [{"slug": "ai-workflows", "name": "AI Workflows", "tiers": [{"id": "starter", "name": "Starter", "deliveryShort": "7 working days delivery"}, {"id": "growth", "name": "Growth", "deliveryShort": "20 working days delivery"}, {"id": "enterprise", "name": "Enterprise", "deliveryShort": "35 to 45 working days delivery"}]}, {"slug": "voice-ai-agents", "name": "Voice AI Agents", "tiers": [{"id": "starter", "name": "Starter", "deliveryShort": "10 working days delivery"}, {"id": "growth", "name": "Growth", "deliveryShort": "20 working days delivery"}, {"id": "enterprise", "name": "Enterprise", "deliveryShort": "35 working days delivery"}]}, {"slug": "websites", "name": "Websites", "tiers": [{"id": "launch", "name": "Launch", "deliveryShort": "10 working days delivery"}, {"id": "business", "name": "Business", "deliveryShort": "20 working days delivery"}, {"id": "commerce", "name": "Commerce or corporate", "deliveryShort": "35 working days delivery"}]}, {"slug": "software-development", "name": "Software Development", "tiers": [{"id": "prototype", "name": "Prototype", "deliveryShort": "30 working days delivery"}, {"id": "standard", "name": "Standard", "deliveryShort": "60 working days delivery"}, {"id": "enterprise", "name": "Enterprise", "deliveryShort": "90 to 120 working days delivery"}]}, {"slug": "care-plans", "name": "Care Plans", "tiers": [{"id": "care", "name": "Care", "deliveryShort": "Monthly plan, 48 hours first response"}, {"id": "growth", "name": "Growth", "deliveryShort": "Monthly plan, 24 hours first response"}, {"id": "dedicated", "name": "Dedicated", "deliveryShort": "Monthly plan, 4 working hours first response"}]}]};
@@ -2983,6 +3269,172 @@ window.GENARTML_CONFIG = {
     if (a) track(a.getAttribute("data-track"), { label: (a.textContent || "").trim().slice(0, 60) });
   });
 
+  /* ---------- 🪔 Diwali Offer Engine (Scheduled / Single-Switch) ---------- */
+  function isDiwaliActive() {
+    var O = C.diwaliOffer;
+    if (!O || !O.enabled) return false;
+
+    // Local / Session override switch
+    var sessOverride = sess("gm_diwali_toggle");
+    if (sessOverride === "0") return false;
+    if (sessOverride === "1") return true;
+
+    // URL preview parameter check (?offer=preview, ?diwali=1, etc.)
+    var q = location.search;
+    if (BUNDLE && Router && Router.query) q = Router.query;
+    if (/[?&](offer=preview|diwali=1|previewOffer=true)/i.test(q)) return true;
+
+    // Local forcePreview config
+    if (O.forcePreview) return true;
+
+    // Automatic Schedule: checks if current date/time is between start & end
+    if (O.autoSchedule && O.startDate && O.endDate) {
+      var now = new Date();
+      var start = new Date(O.startDate);
+      var end = new Date(O.endDate);
+      return now >= start && now <= end;
+    }
+    return !!O.enabled;
+  }
+
+  function renderPreviewSwitch(isActive) {
+    var isDevOrPreview = BUNDLE || location.hostname === "localhost" || location.hostname === "127.0.0.1" || location.protocol === "file:";
+    if (!isDevOrPreview) return;
+
+    var existingSwitch = $("#diwali-preview-switch");
+    if (!existingSwitch) {
+      existingSwitch = document.createElement("button");
+      existingSwitch.id = "diwali-preview-switch";
+      existingSwitch.type = "button";
+      document.body.appendChild(existingSwitch);
+      existingSwitch.addEventListener("click", function () {
+        var nowActive = isDiwaliActive();
+        sess("gm_diwali_toggle", nowActive ? "0" : "1");
+        initDiwaliOffer(document);
+      });
+    }
+
+    var diyaIconSvg = '<svg style="width:14px;height:14px;display:inline-block;vertical-align:-2px;margin-right:4px" viewBox="0 0 24 24"><path fill="#FFA500" d="M12 2C11 5 9 7 9 9.5a3 3 0 0 0 6 0C15 7 13 5 12 2z"/><path fill="#CA9D35" d="M4 14c0 4.4 3.6 7 8 7s8-2.6 8-7H4z"/></svg>';
+
+    if (isActive) {
+      existingSwitch.className = "diwali-preview-switch";
+      existingSwitch.innerHTML = '<span class="dot"></span><b>' + diyaIconSvg + 'Diwali Offer: ACTIVE</b> <span style="opacity:0.7">(Click to preview OFF)</span>';
+      existingSwitch.title = "Click to preview website without Diwali offer";
+    } else {
+      existingSwitch.className = "diwali-preview-switch is-off";
+      existingSwitch.innerHTML = '<span class="dot"></span><b>' + diyaIconSvg + 'Diwali Offer: OFF</b> <span style="opacity:0.7">(Click to preview ON)</span>';
+      existingSwitch.title = "Click to preview website with Diwali offer";
+    }
+  }
+
+  function initDiwaliOffer(root) {
+    var active = isDiwaliActive();
+    var O = C.diwaliOffer || {};
+    var diyaIconSvg = '<svg style="width:14px;height:14px;display:inline-block;vertical-align:-2px;margin-right:4px" viewBox="0 0 24 24"><path fill="#FFA500" d="M12 2C11 5 9 7 9 9.5a3 3 0 0 0 6 0C15 7 13 5 12 2z"/><path fill="#CA9D35" d="M4 14c0 4.4 3.6 7 8 7s8-2.6 8-7H4z"/></svg>';
+
+    // 1. Cleanup old offer elements if not active (or if toggled off)
+    var existingBanner = $("#diwali-banner");
+    if (!active) {
+      if (existingBanner) existingBanner.remove();
+      $$(".diwali-badge, .diwali-offer-note, .tier-diwali-header, .svc-diwali-header", document).forEach(function (el) { el.remove(); });
+      $$(".diwali-card-highlight", document).forEach(function (el) { el.classList.remove("diwali-card-highlight"); });
+      renderPreviewSwitch(false);
+      return;
+    }
+
+    // 2. Inject or Update Top Festive Banner
+    if (existingBanner) existingBanner.remove();
+    var banner = document.createElement("div");
+      banner.id = "diwali-banner";
+      banner.className = "diwali-banner";
+      banner.innerHTML = '<div class="wrap diwali-wrap">' +
+        '<div class="diwali-left">' +
+          '<span class="diwali-diya" aria-hidden="true">' +
+            '<svg viewBox="0 0 24 24">' +
+              '<path class="diya-flame" d="M12 2C11 5 9 7 9 9.5a3 3 0 0 0 6 0C15 7 13 5 12 2z"/>' +
+              '<path class="diya-base" d="M4 14c0 4.4 3.6 7 8 7s8-2.6 8-7H4z"/>' +
+              '<ellipse class="diya-rim" cx="12" cy="14" rx="8" ry="2"/>' +
+            '</svg>' +
+          '</span>' +
+          '<span class="diwali-pill">' + diyaIconSvg + esc(O.bannerTag || "DIWALI SPECIAL") + '</span>' +
+          '<span class="diwali-text"><b>Flat ' + (O.discountPercent || 20) + '% OFF</b> on all Website & Custom Software packages</span>' +
+          (O.urgencyText ? '<span class="diwali-urgency">' + esc(O.urgencyText) + '</span>' : '') +
+        '</div>' +
+        '<div class="diwali-right">' +
+          '<a class="diwali-cta" href="/packages/#matrix" data-track="diwali_topbar_cta">' +
+            'Claim ' + (O.discountPercent || 20) + '% Festive Offer' +
+            '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>' +
+          '</a>' +
+        '</div>' +
+      '</div>';
+
+      var topbar = $(".topbar");
+      if (topbar && topbar.parentNode) {
+        topbar.parentNode.insertBefore(banner, topbar);
+      } else {
+        document.body.insertBefore(banner, document.body.firstChild);
+      }
+
+    // 3. Highlight Eligible Service Cards & Packages
+    var eligible = O.services || ["websites", "software-development"];
+
+    // A) On Packages Page (matrix-groups)
+    eligible.forEach(function (cat) {
+      var group = $('[data-group="' + cat + '"]', root || document);
+      if (group) {
+        $$(".tier", group).forEach(function (tier) {
+          if (!tier.classList.contains("diwali-card-highlight")) {
+            tier.classList.add("diwali-card-highlight");
+
+            // Add dedicated festive header row at the very top of the card
+            if (!$(".tier-diwali-header", tier)) {
+              var dHead = document.createElement("div");
+              dHead.className = "tier-diwali-header";
+              dHead.innerHTML = '<span class="diwali-badge">' + diyaIconSvg + (O.discountPercent || 20) + '% OFF · DIWALI SPECIAL</span>' +
+                '<span class="diwali-code-tag">Code: ' + esc(O.couponCode || "DIWALI20") + '</span>';
+              tier.insertBefore(dHead, tier.firstChild);
+            }
+
+            // Add Offer Note above CTA button
+            var btn = $(".btn", tier);
+            if (btn && !$(".diwali-offer-note", tier)) {
+              var note = document.createElement("div");
+              note.className = "diwali-offer-note";
+              note.innerHTML = '<span style="color:#D4AF37">✦</span><span><b>' + (O.discountPercent || 20) + '% Festive Savings</b> applied with code <code>' + esc(O.couponCode || "DIWALI20") + '</code></span>';
+              btn.parentNode.insertBefore(note, btn);
+
+              // Attach offer param to CTA URL
+              var href = btn.getAttribute("href");
+              if (href && href.indexOf("offer=") === -1) {
+                var sep = href.indexOf("?") === -1 ? "?" : "&";
+                btn.setAttribute("href", href + sep + "offer=" + encodeURIComponent(O.couponCode || "DIWALI20"));
+              }
+            }
+          }
+        });
+      }
+    });
+
+    // B) On Home / Services Page (svc-cards)
+    $$(".svc-card", root || document).forEach(function (card) {
+      var link = $("a.stretched", card);
+      if (link) {
+        var href = link.getAttribute("href") || "";
+        var isMatch = eligible.some(function (cat) { return href.indexOf(cat) !== -1; });
+        if (isMatch && !$(".svc-diwali-header", card)) {
+          card.classList.add("diwali-card-highlight");
+          var sHead = document.createElement("div");
+          sHead.className = "svc-diwali-header";
+          sHead.innerHTML = '<span class="diwali-badge">' + diyaIconSvg + (O.discountPercent || 20) + '% OFF · DIWALI SPECIAL</span>';
+          card.insertBefore(sHead, card.firstChild);
+        }
+      }
+    });
+
+    // 4. Render interactive toggle switch
+    renderPreviewSwitch(true);
+  }
+
   /* ---------- Page init (runs on load, and after each preview navigation) ---------- */
   function initPage(root) {
     applyConfig(root);
@@ -2995,14 +3447,16 @@ window.GENARTML_CONFIG = {
     initThanks(root);
     initShare(root);
     initToc(root);
+    initDiwaliOffer(root);
     markActive();
   }
-  window.GENARTML = { initPage: initPage, setRouter: function (r) { Router = r; }, applyConfig: applyConfig };
+  window.GENARTML = { initPage: initPage, setRouter: function (r) { Router = r; }, applyConfig: applyConfig, initDiwaliOffer: initDiwaliOffer };
 
   function boot() {
     applyConfig(document);
     initHeader();
     initCookies();
+    initDiwaliOffer(document);
     if (!BUNDLE) initPage($("main") || document);
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot); else boot();

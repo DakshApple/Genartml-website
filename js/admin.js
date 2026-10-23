@@ -97,7 +97,7 @@ menuItems.forEach(item => {
 
 // --- Dashboard Data Loading ---
 async function initDashboard() {
-  await Promise.all([
+  await Promise.allSettled([
     loadBlogs(),
     loadSubscribers(),
     loadMessages(),
@@ -115,29 +115,31 @@ async function loadSubscribers() {
     if (!res.ok) throw new Error('Failed');
     const data = await res.json();
     
-    statSubscribers.textContent = data.length;
+    if (statSubscribers) statSubscribers.textContent = data.length;
     
-    if (data.length === 0) {
-      subscribersTable.innerHTML = '<tr><td colspan="3" style="text-align: center; color: var(--muted);">No subscribers yet.</td></tr>';
-      return;
+    if (subscribersTable) {
+      if (data.length === 0) {
+        subscribersTable.innerHTML = '<tr><td colspan="3" style="text-align: center; color: var(--muted);">No subscribers yet.</td></tr>';
+        return;
+      }
+      
+      let html = '';
+      data.forEach(sub => {
+        const date = new Date(sub.created_at).toLocaleDateString();
+        const statusClass = sub.status === 'active' ? 'active' : '';
+        html += `
+          <tr>
+            <td style="font-weight: 500;">${sub.email}</td>
+            <td><span class="badge ${statusClass}">${sub.status}</span></td>
+            <td style="color: var(--muted);">${date}</td>
+          </tr>
+        `;
+      });
+      subscribersTable.innerHTML = html;
     }
-    
-    let html = '';
-    data.forEach(sub => {
-      const date = new Date(sub.created_at).toLocaleDateString();
-      const statusClass = sub.status === 'active' ? 'active' : '';
-      html += `
-        <tr>
-          <td style="font-weight: 500;">${sub.email}</td>
-          <td><span class="badge ${statusClass}">${sub.status}</span></td>
-          <td style="color: var(--muted);">${date}</td>
-        </tr>
-      `;
-    });
-    subscribersTable.innerHTML = html;
   } catch (e) {
     console.error(e);
-    statSubscribers.textContent = '-';
+    if (statSubscribers) statSubscribers.textContent = '-';
   }
 }
 
@@ -179,7 +181,7 @@ async function loadPageviews() {
     if (!res.ok) throw new Error('Failed');
     const data = await res.json();
     
-    statPageviews.textContent = data.length;
+    if (statPageviews) statPageviews.textContent = data.length;
     
     // Unique Visitors
     const uniqueSessions = new Set(data.map(pv => pv.session_id).filter(Boolean));
@@ -221,13 +223,15 @@ async function loadPageviews() {
     
   } catch (e) {
     console.error(e);
-    statPageviews.textContent = '-';
+    if (statPageviews) statPageviews.textContent = '-';
     if (statUniqueVisitors) statUniqueVisitors.textContent = '-';
   }
 }
 
 function renderChart(labels, data) {
-  const ctx = document.getElementById('trafficChart').getContext('2d');
+  const chartCanvas = document.getElementById('trafficChart');
+  if (!chartCanvas) return;
+  const ctx = chartCanvas.getContext('2d');
   
   if (trafficChart) {
     trafficChart.destroy();
@@ -278,7 +282,7 @@ async function loadBlogs() {
     if (!res.ok) throw new Error('Failed to fetch');
     const data = await res.json();
     currentBlogs = data || [];
-    statArticles.textContent = currentBlogs.filter(b => b.is_published).length;
+    if (statArticles) statArticles.textContent = currentBlogs.filter(b => b.is_published).length;
     renderBlogList();
   } catch (error) {
     blogList.innerHTML = `<div class="status-msg error">Error loading blogs</div>`;
@@ -568,7 +572,11 @@ blogForm.addEventListener('submit', async (e) => {
     formStatus.textContent = 'Post saved successfully!';
     formStatus.className = 'status-msg success';
     RichEditor.markSaved();
-    await initDashboard(); // Reload all data
+    try {
+      await initDashboard(); // Reload all data
+    } catch (refreshErr) {
+      console.warn('Dashboard refresh non-fatal error:', refreshErr);
+    }
     
     if (!id) {
       resetForm(); // Clear if it was new
@@ -605,7 +613,11 @@ deleteBtn.addEventListener('click', async () => {
     resetForm();
     formStatus.textContent = 'Post deleted successfully.';
     formStatus.className = 'status-msg success';
-    await initDashboard();
+    try {
+      await initDashboard();
+    } catch (refreshErr) {
+      console.warn('Dashboard refresh non-fatal error:', refreshErr);
+    }
   } catch (error) {
     formStatus.textContent = 'Error: ' + error.message;
     formStatus.className = 'status-msg error';

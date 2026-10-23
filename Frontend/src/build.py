@@ -663,10 +663,10 @@ def build_bundle():
         for k, v in imgs.items(): h = h.replace(f'src="{k}"', f'src="{v}"')
         return h
     tpls = "".join(f'<template data-path="{p["path"]}" data-title="{e(p["title"])}">{fix(p["main"])}</template>' for p in PAGES)
-    js_cfg = open(os.path.join(STATIC, "assets/js/config.js")).read()
+    js_cfg = open(os.path.join(STATIC, "assets/js/config.js"), encoding="utf-8").read()
     fp = os.path.join(DIST, "assets/img/team/daksh-suthar.jpg")
     if os.path.exists(fp): js_cfg = js_cfg.replace('"/assets/img/team/daksh-suthar.jpg"', '"data:image/jpeg;base64,' + base64.b64encode(open(fp, "rb").read()).decode() + '"')
-    js_site = open(os.path.join(STATIC, "assets/js/site.js")).read()
+    js_site = open(os.path.join(STATIC, "assets/js/site.js"), encoding="utf-8").read()
     router = r'''
 (function(){
   var main = document.getElementById("main");
@@ -702,7 +702,12 @@ def build_bundle():
     pv_bar = '''<div id="pv-bar" style="position:fixed;left:50%;top:calc(8px + env(safe-area-inset-top,0px));transform:translateX(-50%);z-index:120;display:none"></div>
 <div id="pv-toast" hidden style="position:fixed;left:50%;bottom:96px;transform:translateX(-50%);z-index:130;background:#0A0A0A;color:#fff;border:1px solid rgba(255,255,255,.2);padding:10px 18px;border-radius:999px;font-size:13px"></div>'''
     preview_note = '<div style="background:#F4F4F4;border-bottom:1px solid #E6E6E6;font-size:12px;color:#545454;padding-block:6px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;gap:12px;justify-content:space-between;flex-wrap:wrap"><span>Preview of <b id="pv-path" style="font-weight:500;color:#0A0A0A">genartml.com/</b></span><span>Every link and form works here. Form submissions are not sent in the preview.</span></div>'
-    out = f'''<title>Genartml Website Preview</title>
+    out = f'''<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Genartml Website Preview</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap">
@@ -719,7 +724,7 @@ body::before{{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inse
 <script>{packages_js()}</script>
 <script>{js_site}</script>
 <script>{router}</script>'''
-    with open(os.path.join(HERE, "..", "preview.html"), "w") as f: f.write(out)
+    with open(os.path.join(HERE, "..", "preview.html"), "w", encoding="utf-8") as f: f.write(out)
 
 if __name__ == "__main__":
     build()
