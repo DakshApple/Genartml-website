@@ -254,8 +254,9 @@
           if (m && m[1]) existingSlugs[m[1]] = true;
         });
 
-        posts.forEach(function (p) {
-          if (existingSlugs[p.slug]) return; // already rendered
+        // Filter for new posts and reverse so prepending keeps chronological descending order
+        var newPosts = posts.filter(function (p) { return !existingSlugs[p.slug]; });
+        newPosts.reverse().forEach(function (p) {
           var cat = p.category || "AI Systems";
           // Check if category button exists
           if (!row.querySelector("button[data-cat='" + cat.replace(/'/g, "\\'") + "']")) {
@@ -268,23 +269,37 @@
           }
 
           var card = document.createElement("article");
-          card.className = "post-card reveal";
+          card.className = "post-card reveal in";
           card.setAttribute("data-post-cat", cat);
           var dt = p.created_at ? new Date(p.created_at).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }) : "";
           var rt = p.read_time || "7 min read";
           var link = "/blog/" + p.slug + "/";
           var excerpt = p.excerpt || "";
 
+          var coverHtml = p.cover_image
+            ? '<img src="' + esc(p.cover_image) + '" alt="' + esc(p.title || "") + '" loading="lazy">'
+            : '<svg viewBox="0 0 640 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="640" height="300" fill="#0A0A0A"/><path d="M0 150H640" stroke="#fff" stroke-opacity=".12"/></svg>';
+
           card.innerHTML = '<a class="post-cover" href="' + link + '" tabindex="-1" aria-hidden="true">' +
-            '<svg viewBox="0 0 640 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="640" height="300" fill="#0A0A0A"/><path d="M0 150H640" stroke="#fff" stroke-opacity=".12"/></svg>' +
-            '<span class="cat"><span class="cat-pill">' + cat + '</span></span></a>' +
-            '<div class="post-body"><div class="post-meta"><time>' + dt + '</time><span>' + rt + '</span></div>' +
-            '<h3><a href="' + link + '">' + (p.title || "") + '</a></h3>' +
-            '<p>' + excerpt + '</p>' +
+            coverHtml +
+            '<span class="cat"><span class="cat-pill">' + esc(cat) + '</span></span></a>' +
+            '<div class="post-body"><div class="post-meta"><time>' + dt + '</time><span>' + esc(rt) + '</span></div>' +
+            '<h3><a href="' + link + '">' + esc(p.title || "") + '</a></h3>' +
+            '<p>' + esc(excerpt) + '</p>' +
             '<a class="link-arrow" href="' + link + '">Read the article <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a></div>';
 
-          grid.appendChild(card);
+          // Prepend so latest post appears at the top
+          grid.insertBefore(card, grid.firstChild);
         });
+
+        // Respect active filter if not 'all'
+        var activeBtn = row.querySelector("button[aria-selected='true']");
+        var activeCat = activeBtn ? activeBtn.getAttribute("data-cat") : "all";
+        if (activeCat && activeCat !== "all") {
+          $$("[data-post-cat]", root).forEach(function (p) {
+            p.hidden = !(p.getAttribute("data-post-cat") === activeCat);
+          });
+        }
       })
       .catch(function (err) { console.warn("Supabase blog load error:", err); });
     }
