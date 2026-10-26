@@ -674,7 +674,7 @@ def build_bundle():
   var R = { path: "/", query: "", go: function(url){ render(url, true); } };
   var toast = document.getElementById("pv-toast"), tt;
   function say(m){ toast.textContent = m; toast.hidden = false; clearTimeout(tt); tt = setTimeout(function(){ toast.hidden = true; }, 2600); }
-  function render(url, scrollTop){
+  function render(url, pushHistory){
     var u = url.split("#"), hash = u[1] || "", pq = u[0].split("?"), path = pq[0] || R.path, q = pq[1] ? "?" + pq[1] : "";
     if (!/\/$/.test(path) && !/\.html$/.test(path)) path += "/";
     if (!tpls[path]) { if (/\.pdf$/.test(url)) { say("This file opens on the live site."); return; } path = "/404.html"; }
@@ -686,7 +686,12 @@ def build_bundle():
     var t = hash && document.getElementById(hash);
     if (t) setTimeout(function(){ t.scrollIntoView(); }, 30); else window.scrollTo(0, 0);
     window.GENARTML.initPage(main);
-    document.getElementById("pv-path").textContent = "genartml.com" + path.replace("/404.html","/not-found") + q;
+    var pv = document.getElementById("pv-path");
+    if (pv) pv.textContent = "genartml.com" + path.replace("/404.html","/not-found") + q;
+    if (pushHistory && window.history && window.history.pushState) {
+      var targetUrl = (location.protocol === "file:") ? "#" + path + q : path + q + (hash ? "#" + hash : "");
+      try { window.history.pushState(null, "", targetUrl); } catch(e) {}
+    }
   }
   document.addEventListener("click", function(e){
     var a = e.target.closest("a[href]"); if (!a) return;
@@ -696,8 +701,13 @@ def build_bundle():
     if (h.charAt(0) === "/") { e.preventDefault(); render(h, true); }
     if (/^mailto:|^tel:/.test(h)) { say("Opens your email app on the live site."); }
   });
+  window.addEventListener("popstate", function(){
+    var p = location.protocol === "file:" && location.hash ? location.hash.slice(1) : location.pathname;
+    render(p + location.search, false);
+  });
   window.GENARTML.setRouter(R);
-  render("/", true);
+  var init = location.protocol === "file:" && location.hash ? location.hash.slice(1) : (location.pathname && location.pathname !== "/" && location.pathname !== "/index.html" ? location.pathname + location.search : "/");
+  render(init, false);
 })();'''
     pv_bar = '''<div id="pv-bar" style="position:fixed;left:50%;top:calc(8px + env(safe-area-inset-top,0px));transform:translateX(-50%);z-index:120;display:none"></div>
 <div id="pv-toast" hidden style="position:fixed;left:50%;bottom:96px;transform:translateX(-50%);z-index:130;background:#0A0A0A;color:#fff;border:1px solid rgba(255,255,255,.2);padding:10px 18px;border-radius:999px;font-size:13px"></div>'''
