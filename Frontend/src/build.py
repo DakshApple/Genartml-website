@@ -273,6 +273,194 @@ def home():
 <div class="prod-body"><div class="row"><span class="label muted">{e(p["tag"])}</span><span class="pill"><span class="dot dot-live"></span>Live in production</span></div><h3>{e(p["name"])}</h3><p>{e(p["line"])}</p>
 <div class="btn-row"><a class="btn btn-ghost" href="{p["url"]}" target="_blank" rel="noopener" data-track="visit_{p["name"].lower()}">Visit {e(p["domain"])}{EXT.replace("<svg", "<svg style=\'width:14px;height:14px\'")}</a><a class="link-arrow" href="/work/">How we built it {ARROW}</a></div></div></article>''' for i, p in enumerate(PRODUCTS))
     steps = "".join(f'<div class="step reveal d{min(i,4)}"><span class="n">0{i+1}</span><h3>{e(a)}</h3><p>{e(b)}</p>{"<div class=fridays aria-hidden=true><span>FRI</span><span>FRI</span><span>FRI</span><span class=l>FRI</span></div>" if i==3 else ""}</div>' for i, (a, b) in enumerate(STEPS_HOME))
+
+    why_ai = f'''<section class="band band-black" id="why-us"><div class="wrap">{eyebrow("02", "Why Genartml for AI")}
+<div class="sec-head reveal">
+  <h2 class="h2">Engineered for production. Not prompt experiments.</h2>
+  <p class="lead">Most agencies wrap an OpenAI prompt into a chatbot and bill on an open-ended hourly meter. We engineer deterministic AI systems, autonomous voice agents, and workflows with fixed pricing, enterprise guardrails, and complete IP ownership.</p>
+</div>
+
+<div class="why-grid">
+  <article class="why-card reveal d1">
+    <div class="top"><span class="code">WHY / 01</span><span class="pill">Enterprise Grade</span></div>
+    <div class="why-art">
+      <svg viewBox="0 0 220 80" aria-hidden="true">
+        <path d="M20 40 H75" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/>
+        <path d="M125 40 H160" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/>
+        <path d="M160 40 C175 40 175 22 195 22" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/>
+        <path d="M160 40 C175 40 175 58 195 58" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/>
+        <rect x="15" y="28" width="55" height="24" rx="6" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.3)" stroke-width="1.2"/>
+        <text x="42" y="44" fill="#fff" font-size="9" font-family="Poppins" font-weight="500" text-anchor="middle">EVENT</text>
+        <rect x="75" y="20" width="50" height="40" rx="8" fill="#fff"/>
+        <text x="100" y="44" fill="#0A0A0A" font-size="10" font-family="Poppins" font-weight="700" text-anchor="middle">AI CORE</text>
+        <circle cx="198" cy="22" r="8" fill="rgba(255,255,255,0.1)" stroke="#fff" stroke-width="1.2"/>
+        <circle cx="198" cy="58" r="8" fill="rgba(255,255,255,0.1)" stroke="#fff" stroke-width="1.2"/>
+        <circle cx="68" cy="40" r="2.5" fill="#28C840"/>
+        <circle cx="150" cy="40" r="2.5" fill="#28C840"/>
+      </svg>
+    </div>
+    <h3>Production Pipelines, Not Chatbot Toys</h3>
+    <p>We don't build generic ChatGPT wrappers. We architect event-driven, full-stack AI pipelines connected directly to your PostgreSQL, Supabase, Salesforce, HubSpot, WhatsApp Business API, and internal ERPs.</p>
+    <div class="why-foot"><span class="dot dot-live"></span><span>Direct CRM &amp; database integrations</span></div>
+  </article>
+
+  <article class="why-card reveal d2">
+    <div class="top"><span class="code">WHY / 02</span><span class="pill">Reliability</span></div>
+    <div class="why-art">
+      <svg viewBox="0 0 220 80" aria-hidden="true">
+        <path d="M30 40 H82" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/>
+        <path d="M138 40 H190" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/>
+        <path d="M110 14 L138 25 V45 C138 60 124 70 110 74 C96 70 82 60 82 45 V25 Z" fill="rgba(255,255,255,0.06)" stroke="#fff" stroke-width="1.5"/>
+        <path d="M98 43 L107 51 L124 34" fill="none" stroke="#28C840" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="30" cy="40" r="3.5" fill="rgba(255,255,255,0.4)"/>
+        <circle cx="190" cy="40" r="3.5" fill="#28C840"/>
+      </svg>
+    </div>
+    <h3>Zero-Hallucination Guardrails &amp; Fallbacks</h3>
+    <p>Business operations cannot tolerate hallucinations. We enforce strict typed schema outputs (Pydantic/Zod), semantic safety rails, deterministic state checks, and automated human-in-the-loop escalation paths.</p>
+    <div class="why-foot"><span class="dot dot-live"></span><span>Strict structured outputs &amp; human fallback</span></div>
+  </article>
+
+  <article class="why-card reveal d3">
+    <div class="top"><span class="code">WHY / 03</span><span class="pill">Live in Production</span></div>
+    <div class="why-art">
+      <svg viewBox="0 0 220 80" aria-hidden="true">
+        <rect x="25" y="15" width="80" height="50" rx="6" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.25)" stroke-width="1.2"/>
+        <path d="M25 27 H105" stroke="rgba(255,255,255,0.2)"/>
+        <circle cx="33" cy="21" r="2" fill="#28C840"/>
+        <rect x="35" y="34" width="40" height="4" rx="2" fill="rgba(255,255,255,0.7)"/>
+        <rect x="35" y="44" width="55" height="4" rx="2" fill="rgba(255,255,255,0.3)"/>
+        <rect x="35" y="54" width="30" height="4" rx="2" fill="rgba(255,255,255,0.3)"/>
+        <rect x="115" y="15" width="80" height="50" rx="6" fill="#fff"/>
+        <path d="M115 27 H195" stroke="rgba(10,10,10,0.1)"/>
+        <circle cx="123" cy="21" r="2" fill="#28C840"/>
+        <rect x="125" y="34" width="45" height="4" rx="2" fill="#0A0A0A"/>
+        <rect x="125" y="44" width="55" height="4" rx="2" fill="rgba(10,10,10,0.4)"/>
+        <rect x="125" y="54" width="35" height="4" rx="2" fill="rgba(10,10,10,0.4)"/>
+      </svg>
+    </div>
+    <h3>We Run Our Own AI in Production</h3>
+    <p>We don't just consult—we build and operate live AI products (Evoluter for UPSC evaluation and Extuter for STEM doubt solving). We battle-test model routing, latency, token caching, and cost on our own servers daily.</p>
+    <div class="why-foot"><span class="dot dot-live"></span><span>Battle-tested at scale on our own dime</span></div>
+  </article>
+
+  <article class="why-card reveal d1">
+    <div class="top"><span class="code">WHY / 04</span><span class="pill">Full Ownership</span></div>
+    <div class="why-art">
+      <svg viewBox="0 0 220 80" aria-hidden="true">
+        <rect x="70" y="28" width="80" height="42" rx="8" fill="rgba(255,255,255,0.06)" stroke="#fff" stroke-width="1.5"/>
+        <path d="M92 28 V20 C92 11 100 7 110 7 C120 7 128 11 128 20 V28" fill="none" stroke="#fff" stroke-width="1.6"/>
+        <circle cx="110" cy="46" r="4" fill="#fff"/>
+        <path d="M110 50 V58" stroke="#fff" stroke-width="2"/>
+        <path d="M25 49 H70" stroke="rgba(255,255,255,0.25)" stroke-dasharray="2 3"/>
+        <path d="M150 49 H195" stroke="rgba(255,255,255,0.25)" stroke-dasharray="2 3"/>
+        <circle cx="25" cy="49" r="3" fill="#fff"/>
+        <circle cx="195" cy="49" r="3" fill="#28C840"/>
+      </svg>
+    </div>
+    <h3>100% IP, Code &amp; Data Sovereignty</h3>
+    <p>You own every line of code, prompt pipeline, embedding database, and fine-tuning recipe. Everything runs in cloud accounts in your corporate name. Your proprietary company data is never used to train public models.</p>
+    <div class="why-foot"><span class="dot dot-live"></span><span>Zero vendor lock-in · Full IP handover</span></div>
+  </article>
+
+  <article class="why-card reveal d2">
+    <div class="top"><span class="code">WHY / 05</span><span class="pill">Transparent Pricing</span></div>
+    <div class="why-art">
+      <svg viewBox="0 0 220 80" aria-hidden="true">
+        <rect x="25" y="24" width="170" height="32" rx="16" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.2)" stroke-width="1.2"/>
+        <rect x="29" y="28" width="98" height="24" rx="12" fill="#fff"/>
+        <text x="78" y="44" fill="#0A0A0A" font-size="10" font-family="Poppins" font-weight="700" text-anchor="middle">AT COST (1.0x)</text>
+        <text x="158" y="44" fill="rgba(255,255,255,0.6)" font-size="9" font-family="Poppins" font-weight="500" text-anchor="middle">0% MARKUP</text>
+        <path d="M110 10 V20" stroke="rgba(255,255,255,0.3)"/>
+        <path d="M110 60 V70" stroke="rgba(255,255,255,0.3)"/>
+      </svg>
+    </div>
+    <h3>0% Agency Markup on AI Compute</h3>
+    <p>Most AI consultancies mark up token usage and model API costs by 2x to 5x. With Genartml, all API keys (OpenAI, Anthropic, ElevenLabs, Deepgram, Twilio) run directly on your own billing accounts at exact provider cost.</p>
+    <div class="why-foot"><span class="dot dot-live"></span><span>Billed at direct platform cost</span></div>
+  </article>
+
+  <article class="why-card reveal d3">
+    <div class="top"><span class="code">WHY / 06</span><span class="pill">Founder Sign-off</span></div>
+    <div class="why-art">
+      <svg viewBox="0 0 220 80" aria-hidden="true">
+        <g class="a-stroke" stroke="rgba(255,255,255,0.3)" stroke-width="1.2">
+          <rect x="30" y="22" width="32" height="36" rx="6" fill="rgba(255,255,255,0.06)"/>
+          <rect x="72" y="22" width="32" height="36" rx="6" fill="rgba(255,255,255,0.06)"/>
+          <rect x="114" y="22" width="32" height="36" rx="6" fill="rgba(255,255,255,0.06)"/>
+          <rect x="156" y="18" width="36" height="44" rx="8" fill="#fff" stroke="#fff"/>
+        </g>
+        <text x="46" y="43" fill="rgba(255,255,255,0.5)" font-size="9" font-family="Poppins" font-weight="500" text-anchor="middle">FRI 1</text>
+        <text x="88" y="43" fill="rgba(255,255,255,0.5)" font-size="9" font-family="Poppins" font-weight="500" text-anchor="middle">FRI 2</text>
+        <text x="130" y="43" fill="rgba(255,255,255,0.5)" font-size="9" font-family="Poppins" font-weight="500" text-anchor="middle">FRI 3</text>
+        <text x="174" y="42" fill="#0A0A0A" font-size="9" font-family="Poppins" font-weight="700" text-anchor="middle">DEPLOY</text>
+        <circle cx="174" cy="51" r="2.5" fill="#28C840"/>
+      </svg>
+    </div>
+    <h3>Founder Review &amp; Friday Test Links</h3>
+    <p>Your systems are never passed to junior offshore contractors. Founder Daksh Suthar personally architect-reviews every deploy, and your team gets a live working test link every single Friday throughout the build.</p>
+    <div class="why-foot"><span class="dot dot-live"></span><span>Personal founder sign-off on every deploy</span></div>
+  </article>
+</div>
+
+<div class="why-compare reveal">
+  <div class="why-compare-head">
+    <div>
+      <span class="label">The difference</span>
+      <h3 class="h3" style="margin-top:8px">Why businesses choose Genartml over conventional dev shops.</h3>
+    </div>
+    <span class="pill pill-solid"><span class="dot dot-live"></span>Built for ROI</span>
+  </div>
+  <div class="diff-table">
+    <div class="diff-row diff-head">
+      <div class="diff-cell diff-feature">Capability</div>
+      <div class="diff-cell diff-other">Typical Dev Agencies</div>
+      <div class="diff-cell diff-us">Genartml Studio</div>
+    </div>
+    <div class="diff-row">
+      <div class="diff-cell diff-feature"><b>AI Engineering</b></div>
+      <div class="diff-cell diff-other"><span class="diff-icon bad">✕</span> Surface-level prompt wrappers &amp; chat widgets</div>
+      <div class="diff-cell diff-us"><span class="diff-icon good">✓</span> <b>Production pipelines</b> with voice agents, workflows &amp; CRM integration</div>
+    </div>
+    <div class="diff-row">
+      <div class="diff-cell diff-feature"><b>Accuracy &amp; Safety</b></div>
+      <div class="diff-cell diff-other"><span class="diff-icon bad">✕</span> Unvalidated prompts prone to hallucination</div>
+      <div class="diff-cell diff-us"><span class="diff-icon good">✓</span> <b>Multi-layer guardrails</b>, schema enforcement &amp; human-in-the-loop</div>
+    </div>
+    <div class="diff-row">
+      <div class="diff-cell diff-feature"><b>Commercial Model</b></div>
+      <div class="diff-cell diff-other"><span class="diff-icon bad">✕</span> Open-ended hourly billing &amp; runaway budgets</div>
+      <div class="diff-cell diff-us"><span class="diff-icon good">✓</span> <b>100% fixed price &amp; written scope</b> signed before kickoff</div>
+    </div>
+    <div class="diff-row">
+      <div class="diff-cell diff-feature"><b>Live Proof</b></div>
+      <div class="diff-cell diff-other"><span class="diff-icon bad">✕</span> Slide decks and client prototypes only</div>
+      <div class="diff-cell diff-us"><span class="diff-icon good">✓</span> <b>We build &amp; run live AI products</b> (Evoluter &amp; Extuter) with real users</div>
+    </div>
+    <div class="diff-row">
+      <div class="diff-cell diff-feature"><b>IP &amp; Data Rights</b></div>
+      <div class="diff-cell diff-other"><span class="diff-icon bad">✕</span> Proprietary lock-in or accounts held by agency</div>
+      <div class="diff-cell diff-us"><span class="diff-icon good">✓</span> <b>100% ownership</b> of code, prompts &amp; data in accounts in your name</div>
+    </div>
+    <div class="diff-row">
+      <div class="diff-cell diff-feature"><b>Accountability</b></div>
+      <div class="diff-cell diff-other"><span class="diff-icon bad">✕</span> Relayed through account managers and juniors</div>
+      <div class="diff-cell diff-us"><span class="diff-icon good">✓</span> <b>Founder Daksh Suthar</b> personally signs off on every deploy</div>
+    </div>
+  </div>
+</div>
+
+<div class="why-promises-block reveal">
+  <div class="why-promises-head">
+    <span class="label">Contractual guarantees</span>
+    <h3 class="h3">Four promises written into every proposal.</h3>
+    <p class="lead" style="margin-top:8px">Not values on a wall. Binding terms in the contract you sign.</p>
+  </div>
+  <div class="promises">{prom}</div>
+</div>
+
+</div></section>'''
+
     main = f'''
 <section class="hero"><div class="corner-marks" aria-hidden="true"><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span></div><div class="wrap">
 <div class="hero-grid"><div class="hero-copy hero-in">
@@ -289,9 +477,7 @@ def home():
 <section class="band" id="services"><div class="wrap">{eyebrow("01", "Services")}
 <div class="sec-head reveal"><h2 class="h2">Five services. Each with a fixed scope, a date and a list of deliverables.</h2><p class="lead">Pick the one that matches the work your team does by hand today. Every package is fixed before kickoff.</p></div>
 <div class="svc-grid">{cards}</div></div></section>
-<section class="band band-black"><div class="wrap">{eyebrow("02", "Our promises")}
-<div class="sec-head reveal"><h2 class="h2">Four promises, written into every proposal.</h2><p class="lead">Not values on a wall. Terms in the contract you sign.</p></div>
-<div class="promises">{prom}</div></div></section>
+{why_ai}
 <section class="band"><div class="wrap">{eyebrow("03", "Our own products")}
 <div class="sec-head reveal"><h2 class="h2">We build and run our own products.</h2><p class="lead">The same team, process and standards that run Evoluter and Extuter go into every client project.</p></div>
 <div class="prod-grid">{prods}</div></div></section>

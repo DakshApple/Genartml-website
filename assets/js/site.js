@@ -432,6 +432,127 @@
     }
   }
 
+  /* ---------- Voice Agent landing page (/voice-agent/) ---------- */
+  function isVoicePage() { return /^\/voice-agent\//.test(currentPath()); }
+  function initVoiceAgent(root) {
+    if (!isVoicePage() && !$("[data-va-page]", root)) return;
+    var da = C.demoAudio || {}, anyAudio = false;
+    $$("audio[data-demo-audio]", root).forEach(function (a) {
+      var src = da[a.getAttribute("data-demo-audio")], card = a.closest(".use");
+      if (src) {
+        a.src = src; anyAudio = true; if (card) card.hidden = false;
+        a.addEventListener("play", function () { track(a.getAttribute("data-track-play"), { label: a.getAttribute("data-demo-audio") }); }, { once: true });
+      } else if (card) card.hidden = true;
+    });
+    $$("[data-demo-tel]", root).forEach(function (el) {
+      if (has("demoNumber")) { el.href = "tel:" + String(C.demoNumber).replace(/[^\d+]/g, ""); el.hidden = false; } else el.hidden = true;
+    });
+    var hear = $("[data-va-hear]", root);
+    if (hear) hear.hidden = !(anyAudio || has("demoNumber"));
+
+    // Team photos and client names show only when they exist in the config
+    var withPhoto = (C.team || []).filter(function (m) { return m && m.photo; });
+    var tm = $("[data-va-team]", root);
+    if (tm && withPhoto.length) {
+      $("[data-va-team-grid]", tm).innerHTML = withPhoto.map(function (m) {
+        return '<div class="member"><div class="ph"><img src="' + esc(m.photo) + '" alt="' + esc(m.name) + '" loading="lazy"></div><b>' + esc(m.name) + "</b>" + (m.role ? "<span>" + esc(m.role) + "</span>" : "") + "</div>";
+      }).join("");
+      tm.hidden = false;
+    }
+    var names = (C.caseStudies || []).map(function (c) { return c && c.client; }).filter(Boolean);
+    var cl = $("[data-va-clients]", root);
+    if (cl && names.length) { $("[data-va-clients-list]", cl).textContent = names.join(", ") + "."; cl.hidden = false; }
+
+    initPilotForm($("form#pilot", root));
+
+    // Thank-you page: the ad conversion event fires here and nowhere else
+    var ty = $("[data-va-thanks]", root);
+    if (ty) {
+      var d = null; try { d = JSON.parse(sess("gm_va") || "null"); } catch (e) {}
+      var first = d && d.name ? String(d.name).trim().split(/\s+/)[0] : "";
+      var h = $("[data-va-name]", ty);
+      if (h) h.textContent = first ? "Thank you, " + first + "." : "Thank you.";
+      if (sess("gm_va_conv") !== "1") {
+        sess("gm_va_conv", "1");
+        track("generate_lead", { source: "voice-agent-page" });
+        if (window.fbq) window.fbq("track", "Lead");
+      }
+    }
+  }
+  function initPilotForm(form) {
+    if (!form) return;
+    var q = params();
+    ["utm_source", "utm_medium", "utm_campaign"].forEach(function (k) {
+      var i = $("[name=" + k + "]", form); if (i) i.value = (q.get(k) || "").slice(0, 120);
+    });
+    function phoneOf(v) {
+      var dg = String(v || "").replace(/\D/g, "");
+      if (dg.length === 12 && dg.indexOf("91") === 0) dg = dg.slice(2);
+      else if (dg.length === 11 && dg.charAt(0) === "0") dg = dg.slice(1);
+      return /^[6-9]\d{9}$/.test(dg) ? "+91" + dg : "";
+    }
+    function setErr(el, on) { var f = el.closest(".field"); if (f) f.classList.toggle("invalid", on); el.setAttribute("aria-invalid", on ? "true" : "false"); }
+    function validate() {
+      var ok = true, first = null;
+      $$("[required]", form).forEach(function (el) {
+        var bad = !el.value.trim();
+        if (!bad && el.name === "phone") bad = !phoneOf(el.value);
+        setErr(el, bad);
+        if (bad) { ok = false; first = first || el; }
+      });
+      if (first) first.focus();
+      return ok;
+    }
+    $$("input, select", form).forEach(function (el) {
+      var clear = function () { if (el.getAttribute("aria-invalid") === "true") setErr(el, false); };
+      el.addEventListener("input", clear); el.addEventListener("change", clear);
+    });
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      if ($("[name=company_website]", form).value) return; // spam trap
+      if (!validate()) return;
+      var data = {};
+      $$("input, select", form).forEach(function (el) { if (el.name && el.name !== "company_website") data[el.name] = el.value.trim(); });
+      data.phone = phoneOf(data.phone);
+      sess("gm_va", JSON.stringify({ name: data.name }));
+      sess("gm_va_conv", "0");
+      track("voice_agent_form_submit", { source: "voice-agent-page" });
+      var btn = $("button[type=submit]", form), status = $(".form-status", form), label = btn.firstChild ? btn.firstChild.textContent : "";
+      function done() { go("/voice-agent/thank-you/"); }
+      if (BUNDLE) { btn.disabled = true; setTimeout(done, 500); return; }
+      btn.disabled = true;
+      if (btn.firstChild) btn.firstChild.textContent = "Sending ";
+
+      // Same destinations as the contact form: Supabase inbox, then the form endpoint if one is set
+      var supabaseDone = false;
+      var summary = "Voice agent pilot request" +
+        "\nPhone/WhatsApp: " + data.phone + "\nBusiness: " + data.business + "\nBusiness type: " + data.business_type + "\nCalls or enquiries a month: " + data.monthly_calls +
+        "\nSource: " + data.source + "\nutm_source: " + (data.utm_source || "-") + "\nutm_medium: " + (data.utm_medium || "-") + "\nutm_campaign: " + (data.utm_campaign || "-");
+      if (C.supabase && C.supabase.url) {
+        fetch(C.supabase.url + "/rest/v1/contact_messages", {
+          method: "POST",
+          headers: { "apikey": C.supabase.anonKey, "Authorization": "Bearer " + C.supabase.anonKey, "Content-Type": "application/json", "Prefer": "return=minimal" },
+          body: JSON.stringify({ name: data.name, email: "", message: summary, status: "unread" })
+        }).then(function (r) { if (r.ok) supabaseDone = true; }).catch(function (err) { console.warn("Supabase save error:", err); });
+      }
+      if (C.formEndpoint) {
+        fetch(C.formEndpoint, { method: "POST", headers: { "Accept": "application/json", "Content-Type": "application/json" }, body: JSON.stringify(data) })
+          .then(function (r) { if (!r.ok) throw new Error(r.status); done(); })
+          .catch(function () {
+            if (supabaseDone) { done(); return; }
+            btn.disabled = false; if (btn.firstChild) btn.firstChild.textContent = label;
+            status.hidden = false;
+            status.textContent = "Your request did not go through. Please try again, or email " + (C.email || "team@genartml.com") + " directly.";
+          });
+      } else if (C.supabase && C.supabase.url) {
+        setTimeout(done, 600);
+      } else {
+        location.href = "mailto:" + (C.email || "team@genartml.com") + "?subject=" + encodeURIComponent("Free pilot request from " + data.name) + "&body=" + encodeURIComponent(summary);
+        setTimeout(done, 600);
+      }
+    });
+  }
+
   /* ---------- Share and copy ---------- */
   function initShare(root) {
     $$("[data-share]", root).forEach(function (a) {
@@ -491,172 +612,6 @@
     if (a) track(a.getAttribute("data-track"), { label: (a.textContent || "").trim().slice(0, 60) });
   });
 
-  /* ---------- 🪔 Diwali Offer Engine (Scheduled / Single-Switch) ---------- */
-  function isDiwaliActive() {
-    var O = C.diwaliOffer;
-    if (!O || !O.enabled) return false;
-
-    // Local / Session override switch
-    var sessOverride = sess("gm_diwali_toggle");
-    if (sessOverride === "0") return false;
-    if (sessOverride === "1") return true;
-
-    // URL preview parameter check (?offer=preview, ?diwali=1, etc.)
-    var q = location.search;
-    if (BUNDLE && Router && Router.query) q = Router.query;
-    if (/[?&](offer=preview|diwali=1|previewOffer=true)/i.test(q)) return true;
-
-    // Local forcePreview config
-    if (O.forcePreview) return true;
-
-    // Automatic Schedule: checks if current date/time is between start & end
-    if (O.autoSchedule && O.startDate && O.endDate) {
-      var now = new Date();
-      var start = new Date(O.startDate);
-      var end = new Date(O.endDate);
-      return now >= start && now <= end;
-    }
-    return !!O.enabled;
-  }
-
-  function renderPreviewSwitch(isActive) {
-    var isDevOrPreview = BUNDLE || location.hostname === "localhost" || location.hostname === "127.0.0.1" || location.protocol === "file:";
-    if (!isDevOrPreview) return;
-
-    var existingSwitch = $("#diwali-preview-switch");
-    if (!existingSwitch) {
-      existingSwitch = document.createElement("button");
-      existingSwitch.id = "diwali-preview-switch";
-      existingSwitch.type = "button";
-      document.body.appendChild(existingSwitch);
-      existingSwitch.addEventListener("click", function () {
-        var nowActive = isDiwaliActive();
-        sess("gm_diwali_toggle", nowActive ? "0" : "1");
-        initDiwaliOffer(document);
-      });
-    }
-
-    var diyaIconSvg = '<svg style="width:14px;height:14px;display:inline-block;vertical-align:-2px;margin-right:4px" viewBox="0 0 24 24"><path fill="#FFA500" d="M12 2C11 5 9 7 9 9.5a3 3 0 0 0 6 0C15 7 13 5 12 2z"/><path fill="#CA9D35" d="M4 14c0 4.4 3.6 7 8 7s8-2.6 8-7H4z"/></svg>';
-
-    if (isActive) {
-      existingSwitch.className = "diwali-preview-switch";
-      existingSwitch.innerHTML = '<span class="dot"></span><b>' + diyaIconSvg + 'Diwali Offer: ACTIVE</b> <span style="opacity:0.7">(Click to preview OFF)</span>';
-      existingSwitch.title = "Click to preview website without Diwali offer";
-    } else {
-      existingSwitch.className = "diwali-preview-switch is-off";
-      existingSwitch.innerHTML = '<span class="dot"></span><b>' + diyaIconSvg + 'Diwali Offer: OFF</b> <span style="opacity:0.7">(Click to preview ON)</span>';
-      existingSwitch.title = "Click to preview website with Diwali offer";
-    }
-  }
-
-  function initDiwaliOffer(root) {
-    var active = isDiwaliActive();
-    var O = C.diwaliOffer || {};
-    var diyaIconSvg = '<svg style="width:14px;height:14px;display:inline-block;vertical-align:-2px;margin-right:4px" viewBox="0 0 24 24"><path fill="#FFA500" d="M12 2C11 5 9 7 9 9.5a3 3 0 0 0 6 0C15 7 13 5 12 2z"/><path fill="#CA9D35" d="M4 14c0 4.4 3.6 7 8 7s8-2.6 8-7H4z"/></svg>';
-
-    // 1. Cleanup old offer elements if not active (or if toggled off)
-    var existingBanner = $("#diwali-banner");
-    if (!active) {
-      if (existingBanner) existingBanner.remove();
-      $$(".diwali-badge, .diwali-offer-note, .tier-diwali-header, .svc-diwali-header", document).forEach(function (el) { el.remove(); });
-      $$(".diwali-card-highlight", document).forEach(function (el) { el.classList.remove("diwali-card-highlight"); });
-      renderPreviewSwitch(false);
-      return;
-    }
-
-    // 2. Inject or Update Top Festive Banner
-    if (existingBanner) existingBanner.remove();
-    var banner = document.createElement("div");
-      banner.id = "diwali-banner";
-      banner.className = "diwali-banner";
-      banner.innerHTML = '<div class="wrap diwali-wrap">' +
-        '<div class="diwali-left">' +
-          '<span class="diwali-diya" aria-hidden="true">' +
-            '<svg viewBox="0 0 24 24">' +
-              '<path class="diya-flame" d="M12 2C11 5 9 7 9 9.5a3 3 0 0 0 6 0C15 7 13 5 12 2z"/>' +
-              '<path class="diya-base" d="M4 14c0 4.4 3.6 7 8 7s8-2.6 8-7H4z"/>' +
-              '<ellipse class="diya-rim" cx="12" cy="14" rx="8" ry="2"/>' +
-            '</svg>' +
-          '</span>' +
-          '<span class="diwali-pill">' + diyaIconSvg + esc(O.bannerTag || "DIWALI SPECIAL") + '</span>' +
-          '<span class="diwali-text"><b>Flat ' + (O.discountPercent || 20) + '% OFF</b> on all Website & Custom Software packages</span>' +
-          (O.urgencyText ? '<span class="diwali-urgency">' + esc(O.urgencyText) + '</span>' : '') +
-        '</div>' +
-        '<div class="diwali-right">' +
-          '<a class="diwali-cta" href="/packages/#matrix" data-track="diwali_topbar_cta">' +
-            'Claim ' + (O.discountPercent || 20) + '% Festive Offer' +
-            '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>' +
-          '</a>' +
-        '</div>' +
-      '</div>';
-
-      var topbar = $(".topbar");
-      if (topbar && topbar.parentNode) {
-        topbar.parentNode.insertBefore(banner, topbar);
-      } else {
-        document.body.insertBefore(banner, document.body.firstChild);
-      }
-
-    // 3. Highlight Eligible Service Cards & Packages
-    var eligible = O.services || ["websites", "software-development"];
-
-    // A) On Packages Page (matrix-groups)
-    eligible.forEach(function (cat) {
-      var group = $('[data-group="' + cat + '"]', root || document);
-      if (group) {
-        $$(".tier", group).forEach(function (tier) {
-          if (!tier.classList.contains("diwali-card-highlight")) {
-            tier.classList.add("diwali-card-highlight");
-
-            // Add dedicated festive header row at the very top of the card
-            if (!$(".tier-diwali-header", tier)) {
-              var dHead = document.createElement("div");
-              dHead.className = "tier-diwali-header";
-              dHead.innerHTML = '<span class="diwali-badge">' + diyaIconSvg + (O.discountPercent || 20) + '% OFF · DIWALI SPECIAL</span>' +
-                '<span class="diwali-code-tag">Code: ' + esc(O.couponCode || "DIWALI20") + '</span>';
-              tier.insertBefore(dHead, tier.firstChild);
-            }
-
-            // Add Offer Note above CTA button
-            var btn = $(".btn", tier);
-            if (btn && !$(".diwali-offer-note", tier)) {
-              var note = document.createElement("div");
-              note.className = "diwali-offer-note";
-              note.innerHTML = '<span style="color:#D4AF37">✦</span><span><b>' + (O.discountPercent || 20) + '% Festive Savings</b> applied with code <code>' + esc(O.couponCode || "DIWALI20") + '</code></span>';
-              btn.parentNode.insertBefore(note, btn);
-
-              // Attach offer param to CTA URL
-              var href = btn.getAttribute("href");
-              if (href && href.indexOf("offer=") === -1) {
-                var sep = href.indexOf("?") === -1 ? "?" : "&";
-                btn.setAttribute("href", href + sep + "offer=" + encodeURIComponent(O.couponCode || "DIWALI20"));
-              }
-            }
-          }
-        });
-      }
-    });
-
-    // B) On Home / Services Page (svc-cards)
-    $$(".svc-card", root || document).forEach(function (card) {
-      var link = $("a.stretched", card);
-      if (link) {
-        var href = link.getAttribute("href") || "";
-        var isMatch = eligible.some(function (cat) { return href.indexOf(cat) !== -1; });
-        if (isMatch && !$(".svc-diwali-header", card)) {
-          card.classList.add("diwali-card-highlight");
-          var sHead = document.createElement("div");
-          sHead.className = "svc-diwali-header";
-          sHead.innerHTML = '<span class="diwali-badge">' + diyaIconSvg + (O.discountPercent || 20) + '% OFF · DIWALI SPECIAL</span>';
-          card.insertBefore(sHead, card.firstChild);
-        }
-      }
-    });
-
-    // 4. Render interactive toggle switch
-    renderPreviewSwitch(true);
-  }
-
   /* ---------- Page init (runs on load, and after each preview navigation) ---------- */
   function initPage(root) {
     applyConfig(root);
@@ -666,19 +621,18 @@
     initFilter(root);
     initBlogFilter(root);
     initContact(root);
+    initVoiceAgent(root);
     initThanks(root);
     initShare(root);
     initToc(root);
-    initDiwaliOffer(root);
     markActive();
   }
-  window.GENARTML = { initPage: initPage, setRouter: function (r) { Router = r; }, applyConfig: applyConfig, initDiwaliOffer: initDiwaliOffer };
+  window.GENARTML = { initPage: initPage, setRouter: function (r) { Router = r; }, applyConfig: applyConfig };
 
   function boot() {
     applyConfig(document);
     initHeader();
     initCookies();
-    initDiwaliOffer(document);
     if (!BUNDLE) initPage($("main") || document);
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot); else boot();

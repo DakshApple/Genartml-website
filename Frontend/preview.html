@@ -851,270 +851,203 @@ a.channel:hover b{text-decoration:underline;text-underline-offset:4px}
 .member .ph{display:flex;align-items:center;justify-content:center}
 .member .ph .ini{color:var(--paper);font-size:clamp(40px,4vw,56px);font-weight:var(--w-light);letter-spacing:.04em}
 
-/* ---------- 🪔 Diwali Festive Campaign & Offer Showcase ---------- */
-:root {
-  --gold-1: #FFE89E;
-  --gold-2: #E5BE59;
-  --gold-3: #CA9D35;
-  --gold-border: rgba(212, 175, 55, 0.45);
-  --gold-glow: rgba(212, 175, 55, 0.25);
+/* ---------- ✦ Why Genartml for AI Development ---------- */
+.why-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
 }
-
-/* Top Festive Banner */
-.diwali-banner {
-  background: linear-gradient(90deg, #0e0c08 0%, #1c170d 50%, #0e0c08 100%);
-  color: #FFFFFF;
-  border-bottom: 1px solid var(--gold-border);
-  position: relative;
-  overflow: hidden;
-  z-index: 50;
-  font-size: 13px;
-}
-.diwali-banner::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -50%;
-  width: 200%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, #FFE89E, #CA9D35, transparent);
-  animation: diwaliShimmer 5s ease-in-out infinite;
-}
-@keyframes diwaliShimmer {
-  0% { transform: translateX(-30%); }
-  50% { transform: translateX(30%); }
-  100% { transform: translateX(-30%); }
-}
-.diwali-wrap {
+.why-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--paper-line);
+  border-radius: var(--radius);
+  padding: 32px 28px;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
   gap: 16px;
-  min-height: 44px;
-  padding-block: 8px;
+  transition: transform 0.3s var(--ease), border-color 0.3s var(--ease), background 0.3s var(--ease), box-shadow 0.3s var(--ease);
+  min-width: 0;
+  position: relative;
 }
-.diwali-left {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
+.why-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5);
 }
-.diwali-diya {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-  flex-shrink: 0;
-}
-.diwali-diya svg {
-  width: 20px;
-  height: 20px;
-}
-.diya-flame {
-  fill: #FFA500;
-  transform-origin: 12px 10px;
-  animation: diyaFlicker 1.8s ease-in-out infinite alternate;
-  filter: drop-shadow(0 0 4px #FFD700);
-}
-@keyframes diyaFlicker {
-  0% { transform: scale(0.92) rotate(-2deg); fill: #FF8C00; filter: drop-shadow(0 0 3px #FFA500); }
-  50% { transform: scale(1.08) rotate(3deg); fill: #FFD700; filter: drop-shadow(0 0 6px #FFD700); }
-  100% { transform: scale(0.96) rotate(-1deg); fill: #FFA500; filter: drop-shadow(0 0 4px #FFA500); }
-}
-.diya-base { fill: #CA9D35; }
-.diya-rim { fill: #FFE89E; }
-
-.diwali-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(212, 175, 55, 0.18);
-  border: 1px solid var(--gold-border);
-  color: var(--gold-1);
-  padding: 3px 10px;
-  border-radius: 999px;
-  font-size: 11px;
-  font-weight: var(--w-med);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-.diwali-text {
-  color: rgba(255, 255, 255, 0.92);
-}
-.diwali-text b {
-  color: var(--gold-1);
-  font-weight: var(--w-bold);
-}
-.diwali-urgency {
-  color: rgba(255, 255, 255, 0.65);
-  font-size: 12px;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  border-left: 1px solid rgba(255, 255, 255, 0.2);
-  padding-left: 12px;
-}
-.diwali-right {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-shrink: 0;
-}
-.diwali-cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: linear-gradient(135deg, #FFE89E 0%, #E5BE59 100%);
-  color: #0A0A0A;
-  font-weight: var(--w-med);
-  font-size: 12px;
-  padding: 6px 14px;
-  border-radius: 999px;
-  transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
-}
-.diwali-cta:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 14px rgba(212, 175, 55, 0.4);
-}
-.diwali-cta svg {
-  width: 12px;
-  height: 12px;
-  transition: transform 0.2s var(--ease);
-}
-.diwali-cta:hover svg {
-  transform: translateX(3px);
-}
-
-/* Card Festive Highlights */
-.tier.diwali-card-highlight {
-  border: 1.5px solid #D4AF37 !important;
-  box-shadow: 0 4px 24px rgba(212, 175, 55, 0.12) !important;
-}
-.tier.featured.diwali-card-highlight {
-  border: 1.5px solid #E5BE59 !important;
-  box-shadow: 0 8px 32px rgba(212, 175, 55, 0.22) !important;
-}
-.svc-card.diwali-card-highlight {
-  border: 1.5px solid #D4AF37 !important;
-}
-
-/* Dedicated Festive Header in Cards (avoids jamming t-head) */
-.tier-diwali-header {
+.why-card .top {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 14px;
-  padding-bottom: 10px;
-  border-bottom: 1px dashed rgba(212, 175, 55, 0.25);
+  gap: 12px;
 }
-.svc-diwali-header {
-  margin-bottom: 14px;
-}
-
-/* Offer Badges - High Contrast & No Wrapping */
-.diwali-badge {
-  display: inline-flex;
+.why-art {
+  height: 84px;
+  display: flex;
   align-items: center;
-  gap: 6px;
-  background: linear-gradient(135deg, #FFF6D6 0%, #FFE8A3 100%);
-  border: 1px solid #D4AF37;
-  color: #5C4104;
-  padding: 4px 10px;
-  border-radius: 999px;
-  font-size: 11px;
-  font-weight: var(--w-bold);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  box-shadow: 0 2px 6px rgba(212, 175, 55, 0.15);
+  justify-content: flex-start;
+  margin: 4px 0;
 }
-.tier.featured .diwali-badge, .band-black .diwali-badge {
-  background: linear-gradient(135deg, #2A210D 0%, #1A1406 100%);
-  border: 1px solid #E5BE59;
-  color: #FFE58F;
-  box-shadow: 0 0 12px rgba(229, 190, 89, 0.25);
+.why-art svg {
+  width: 100%;
+  max-width: 220px;
+  height: 80px;
 }
-.diwali-code-tag {
-  font-size: 11px;
+.why-card h3 {
+  font-size: 20px;
   font-weight: var(--w-med);
-  color: #8C6B1B;
-  letter-spacing: 0.05em;
+  letter-spacing: -0.01em;
+  color: var(--paper);
+  line-height: 1.35;
+  margin: 0;
 }
-.tier.featured .diwali-code-tag {
-  color: var(--gold-1);
+.why-card p {
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--paper-70);
+  margin: 0;
 }
-
-/* Offer Note on Tier */
-.diwali-offer-note {
+.why-foot {
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
   display: flex;
   align-items: center;
   gap: 8px;
-  background: #FFFDF5;
-  border: 1px solid #E5CE85;
-  border-radius: var(--radius-s);
-  padding: 10px 14px;
-  font-size: 13px;
-  color: #5C4104;
-  margin-top: 16px;
+  font-size: 12.5px;
+  color: var(--paper);
+  font-weight: var(--w-med);
 }
-.tier.featured .diwali-offer-note {
-  background: rgba(229, 190, 89, 0.1);
-  border-color: rgba(229, 190, 89, 0.35);
-  color: #FFE58F;
-}
-.diwali-offer-note b {
-  font-weight: var(--w-bold);
-}
-.diwali-offer-note code {
-  background: rgba(212, 175, 55, 0.22);
-  color: inherit;
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-weight: var(--w-bold);
-  font-size: 12px;
-  letter-spacing: 0.05em;
+.why-foot .dot {
+  flex-shrink: 0;
 }
 
-/* Local Preview Switcher */
-.diwali-preview-switch {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  z-index: 1000;
+/* Contract Promises Sub-block */
+.why-promises-block {
+  margin-top: 64px;
+  border-top: 1px solid var(--paper-line);
+  padding-top: 48px;
+}
+.why-promises-head {
+  margin-bottom: 24px;
+}
+.why-promises-head .label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+/* Comparison Matrix */
+.why-compare {
+  margin-top: 64px;
+  border: 1px solid var(--paper-line);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.02);
+  overflow: hidden;
+}
+.why-compare-head {
+  padding: 32px;
+  border-bottom: 1px solid var(--paper-line);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.diff-table {
+  display: flex;
+  flex-direction: column;
+}
+.diff-row {
+  display: grid;
+  grid-template-columns: 200px 1fr 1fr;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 14.5px;
+  line-height: 1.5;
+}
+.diff-row:last-child {
+  border-bottom: 0;
+}
+.diff-head {
+  background: rgba(255, 255, 255, 0.05);
+  font-size: 12px;
+  font-weight: var(--w-med);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--paper-70);
+}
+.diff-cell {
+  padding: 20px 24px;
   display: flex;
   align-items: center;
   gap: 10px;
-  background: #0A0A0A;
-  border: 1px solid var(--gold-border);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), 0 0 15px var(--gold-glow);
-  padding: 8px 14px;
-  border-radius: 999px;
-  color: #FFFFFF;
-  font-size: 12px;
-  cursor: pointer;
-  transition: transform 0.2s var(--ease);
 }
-.diwali-preview-switch:hover {
-  transform: translateY(-2px);
+.diff-cell.diff-feature {
+  color: var(--paper);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
 }
-.diwali-preview-switch .dot {
-  width: 8px;
-  height: 8px;
+.diff-cell.diff-other {
+  color: var(--paper-55);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+}
+.diff-cell.diff-us {
+  color: var(--paper);
+  background: rgba(255, 255, 255, 0.035);
+}
+.diff-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
-  background: #28C840;
+  font-size: 11px;
+  font-weight: var(--w-bold);
+  flex-shrink: 0;
 }
-.diwali-preview-switch.is-off .dot {
-  background: #FF5F57;
+.diff-icon.bad {
+  background: rgba(255, 95, 87, 0.15);
+  color: #FF5F57;
+  border: 1px solid rgba(255, 95, 87, 0.3);
+}
+.diff-icon.good {
+  background: rgba(40, 200, 64, 0.15);
+  color: #28C840;
+  border: 1px solid rgba(40, 200, 64, 0.35);
 }
 
-@media (max-width: 800px) {
-  .diwali-wrap { flex-direction: column; align-items: flex-start; gap: 8px; }
-  .diwali-urgency { display: none; }
-  .diwali-right { width: 100%; justify-content: flex-end; }
-  .diwali-cta { width: 100%; justify-content: center; }
-  .diwali-preview-switch { bottom: 16px; right: 16px; font-size: 11px; padding: 6px 12px; }
+@media (max-width: 1060px) {
+  .why-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
+@media (max-width: 760px) {
+  .why-grid {
+    grid-template-columns: 1fr;
+  }
+  .diff-row {
+    grid-template-columns: 1fr;
+  }
+  .diff-head {
+    display: none;
+  }
+  .diff-cell.diff-feature {
+    border-right: 0;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
+    padding-bottom: 12px;
+    font-size: 15px;
+  }
+  .diff-cell.diff-other {
+    border-right: 0;
+    padding-top: 8px;
+    padding-bottom: 10px;
+  }
+  .diff-cell.diff-us {
+    padding-top: 10px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  }
+}
+
 
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:#FFFFFF}</style>
 <div style="background:#F4F4F4;border-bottom:1px solid #E6E6E6;font-size:12px;color:#545454;padding-block:6px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;gap:12px;justify-content:space-between;flex-wrap:wrap"><span>Preview of <b id="pv-path" style="font-weight:500;color:#0A0A0A">genartml.com/</b></span><span>Every link and form works here. Form submissions are not sent in the preview.</span></div>
@@ -1239,9 +1172,192 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 <div class="foot"><span class="from"><b>30 to 120 working days</b></span><a class="link-arrow" href="/services/software-development/">View deliverables &amp; scope <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a></div></article><article class="svc-card reveal d2"><div class="top"><span class="code">S/05</span><span class="pill">Fixed timeline</span></div>
 <div class="art"><svg viewBox="0 0 220 110" aria-hidden="true"><g class="a-fill"><rect x="10" y="70" width="4" height="26" rx="2" /><rect x="17" y="70" width="4" height="26" rx="2" /><rect x="24" y="70" width="4" height="26" rx="2" /><rect x="31" y="70" width="4" height="26" rx="2" /><rect x="38" y="70" width="4" height="26" rx="2" /><rect x="45" y="70" width="4" height="26" rx="2" /><rect x="52" y="70" width="4" height="26" rx="2" /><rect x="59" y="70" width="4" height="26" rx="2" /><rect x="66" y="70" width="4" height="26" rx="2" /><rect x="73" y="70" width="4" height="26" rx="2" /><rect x="80" y="70" width="4" height="26" rx="2" /><rect x="87" y="70" width="4" height="26" rx="2" /><rect x="94" y="70" width="4" height="26" rx="2" /><rect x="101" y="70" width="4" height="26" rx="2" /><rect x="108" y="70" width="4" height="26" rx="2" /><rect x="115" y="70" width="4" height="26" rx="2" /><rect x="122" y="70" width="4" height="26" rx="2" /><rect x="129" y="82" width="4" height="14" rx="2" opacity=.25/><rect x="136" y="70" width="4" height="26" rx="2" /><rect x="143" y="70" width="4" height="26" rx="2" /><rect x="150" y="70" width="4" height="26" rx="2" /><rect x="157" y="70" width="4" height="26" rx="2" /><rect x="164" y="70" width="4" height="26" rx="2" /><rect x="171" y="70" width="4" height="26" rx="2" /><rect x="178" y="70" width="4" height="26" rx="2" /><rect x="185" y="70" width="4" height="26" rx="2" /><rect x="192" y="70" width="4" height="26" rx="2" /><rect x="199" y="70" width="4" height="26" rx="2" /><rect x="206" y="70" width="4" height="26" rx="2" /></g><path d="M10 44h60l8-22 12 40 10-28 6 10h104" class="a-stroke"/></svg></div><h3><a class="stretched" href="/services/care-plans/">Care Plans</a></h3><p>A monthly plan that keeps your workflows, agents, websites and apps running, with fixes and small changes included.</p>
 <div class="foot"><span class="from"><b>First response in 4 to 48 hours</b></span><a class="link-arrow" href="/services/care-plans/">View deliverables &amp; scope <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a></div></article></div></div></section>
-<section class="band band-black"><div class="wrap"><div class="eyebrow"><span class="code">02</span><span class="label">Our promises</span><span class="tick" aria-hidden="true"></span></div>
-<div class="sec-head reveal"><h2 class="h2">Four promises, written into every proposal.</h2><p class="lead">Not values on a wall. Terms in the contract you sign.</p></div>
-<div class="promises"><div class="promise reveal d1"><div class="n">01</div><h3>Fixed scope, written before kickoff</h3><p>Every deliverable is listed and signed before work starts. No surprise bills, no hourly meter.</p></div><div class="promise reveal d2"><div class="n">02</div><h3>Fixed delivery date in working days</h3><p>The date is in the proposal. You see a milestone and a live test link every Friday.</p></div><div class="promise reveal d3"><div class="n">03</div><h3>You own all of it</h3><p>Code, designs and database pass to you on final payment, in accounts in your name.</p></div><div class="promise reveal d4"><div class="n">04</div><h3>Founder review</h3><p>Daksh Suthar personally inspects every deploy before it goes live.</p></div></div></div></section>
+<section class="band band-black" id="why-us"><div class="wrap"><div class="eyebrow"><span class="code">02</span><span class="label">Why Genartml for AI</span><span class="tick" aria-hidden="true"></span></div>
+<div class="sec-head reveal">
+  <h2 class="h2">Engineered for production. Not prompt experiments.</h2>
+  <p class="lead">Most agencies wrap an OpenAI prompt into a chatbot and bill on an open-ended hourly meter. We engineer deterministic AI systems, autonomous voice agents, and workflows with fixed pricing, enterprise guardrails, and complete IP ownership.</p>
+</div>
+
+<div class="why-grid">
+  <article class="why-card reveal d1">
+    <div class="top"><span class="code">WHY / 01</span><span class="pill">Enterprise Grade</span></div>
+    <div class="why-art">
+      <svg viewBox="0 0 220 80" aria-hidden="true">
+        <path d="M20 40 H75" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/>
+        <path d="M125 40 H160" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/>
+        <path d="M160 40 C175 40 175 22 195 22" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/>
+        <path d="M160 40 C175 40 175 58 195 58" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/>
+        <rect x="15" y="28" width="55" height="24" rx="6" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.3)" stroke-width="1.2"/>
+        <text x="42" y="44" fill="#fff" font-size="9" font-family="Poppins" font-weight="500" text-anchor="middle">EVENT</text>
+        <rect x="75" y="20" width="50" height="40" rx="8" fill="#fff"/>
+        <text x="100" y="44" fill="#0A0A0A" font-size="10" font-family="Poppins" font-weight="700" text-anchor="middle">AI CORE</text>
+        <circle cx="198" cy="22" r="8" fill="rgba(255,255,255,0.1)" stroke="#fff" stroke-width="1.2"/>
+        <circle cx="198" cy="58" r="8" fill="rgba(255,255,255,0.1)" stroke="#fff" stroke-width="1.2"/>
+        <circle cx="68" cy="40" r="2.5" fill="#28C840"/>
+        <circle cx="150" cy="40" r="2.5" fill="#28C840"/>
+      </svg>
+    </div>
+    <h3>Production Pipelines, Not Chatbot Toys</h3>
+    <p>We don't build generic ChatGPT wrappers. We architect event-driven, full-stack AI pipelines connected directly to your PostgreSQL, Supabase, Salesforce, HubSpot, WhatsApp Business API, and internal ERPs.</p>
+    <div class="why-foot"><span class="dot dot-live"></span><span>Direct CRM &amp; database integrations</span></div>
+  </article>
+
+  <article class="why-card reveal d2">
+    <div class="top"><span class="code">WHY / 02</span><span class="pill">Reliability</span></div>
+    <div class="why-art">
+      <svg viewBox="0 0 220 80" aria-hidden="true">
+        <path d="M30 40 H82" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/>
+        <path d="M138 40 H190" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/>
+        <path d="M110 14 L138 25 V45 C138 60 124 70 110 74 C96 70 82 60 82 45 V25 Z" fill="rgba(255,255,255,0.06)" stroke="#fff" stroke-width="1.5"/>
+        <path d="M98 43 L107 51 L124 34" fill="none" stroke="#28C840" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="30" cy="40" r="3.5" fill="rgba(255,255,255,0.4)"/>
+        <circle cx="190" cy="40" r="3.5" fill="#28C840"/>
+      </svg>
+    </div>
+    <h3>Zero-Hallucination Guardrails &amp; Fallbacks</h3>
+    <p>Business operations cannot tolerate hallucinations. We enforce strict typed schema outputs (Pydantic/Zod), semantic safety rails, deterministic state checks, and automated human-in-the-loop escalation paths.</p>
+    <div class="why-foot"><span class="dot dot-live"></span><span>Strict structured outputs &amp; human fallback</span></div>
+  </article>
+
+  <article class="why-card reveal d3">
+    <div class="top"><span class="code">WHY / 03</span><span class="pill">Live in Production</span></div>
+    <div class="why-art">
+      <svg viewBox="0 0 220 80" aria-hidden="true">
+        <rect x="25" y="15" width="80" height="50" rx="6" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.25)" stroke-width="1.2"/>
+        <path d="M25 27 H105" stroke="rgba(255,255,255,0.2)"/>
+        <circle cx="33" cy="21" r="2" fill="#28C840"/>
+        <rect x="35" y="34" width="40" height="4" rx="2" fill="rgba(255,255,255,0.7)"/>
+        <rect x="35" y="44" width="55" height="4" rx="2" fill="rgba(255,255,255,0.3)"/>
+        <rect x="35" y="54" width="30" height="4" rx="2" fill="rgba(255,255,255,0.3)"/>
+        <rect x="115" y="15" width="80" height="50" rx="6" fill="#fff"/>
+        <path d="M115 27 H195" stroke="rgba(10,10,10,0.1)"/>
+        <circle cx="123" cy="21" r="2" fill="#28C840"/>
+        <rect x="125" y="34" width="45" height="4" rx="2" fill="#0A0A0A"/>
+        <rect x="125" y="44" width="55" height="4" rx="2" fill="rgba(10,10,10,0.4)"/>
+        <rect x="125" y="54" width="35" height="4" rx="2" fill="rgba(10,10,10,0.4)"/>
+      </svg>
+    </div>
+    <h3>We Run Our Own AI in Production</h3>
+    <p>We don't just consult—we build and operate live AI products (Evoluter for UPSC evaluation and Extuter for STEM doubt solving). We battle-test model routing, latency, token caching, and cost on our own servers daily.</p>
+    <div class="why-foot"><span class="dot dot-live"></span><span>Battle-tested at scale on our own dime</span></div>
+  </article>
+
+  <article class="why-card reveal d1">
+    <div class="top"><span class="code">WHY / 04</span><span class="pill">Full Ownership</span></div>
+    <div class="why-art">
+      <svg viewBox="0 0 220 80" aria-hidden="true">
+        <rect x="70" y="28" width="80" height="42" rx="8" fill="rgba(255,255,255,0.06)" stroke="#fff" stroke-width="1.5"/>
+        <path d="M92 28 V20 C92 11 100 7 110 7 C120 7 128 11 128 20 V28" fill="none" stroke="#fff" stroke-width="1.6"/>
+        <circle cx="110" cy="46" r="4" fill="#fff"/>
+        <path d="M110 50 V58" stroke="#fff" stroke-width="2"/>
+        <path d="M25 49 H70" stroke="rgba(255,255,255,0.25)" stroke-dasharray="2 3"/>
+        <path d="M150 49 H195" stroke="rgba(255,255,255,0.25)" stroke-dasharray="2 3"/>
+        <circle cx="25" cy="49" r="3" fill="#fff"/>
+        <circle cx="195" cy="49" r="3" fill="#28C840"/>
+      </svg>
+    </div>
+    <h3>100% IP, Code &amp; Data Sovereignty</h3>
+    <p>You own every line of code, prompt pipeline, embedding database, and fine-tuning recipe. Everything runs in cloud accounts in your corporate name. Your proprietary company data is never used to train public models.</p>
+    <div class="why-foot"><span class="dot dot-live"></span><span>Zero vendor lock-in · Full IP handover</span></div>
+  </article>
+
+  <article class="why-card reveal d2">
+    <div class="top"><span class="code">WHY / 05</span><span class="pill">Transparent Pricing</span></div>
+    <div class="why-art">
+      <svg viewBox="0 0 220 80" aria-hidden="true">
+        <rect x="25" y="24" width="170" height="32" rx="16" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.2)" stroke-width="1.2"/>
+        <rect x="29" y="28" width="98" height="24" rx="12" fill="#fff"/>
+        <text x="78" y="44" fill="#0A0A0A" font-size="10" font-family="Poppins" font-weight="700" text-anchor="middle">AT COST (1.0x)</text>
+        <text x="158" y="44" fill="rgba(255,255,255,0.6)" font-size="9" font-family="Poppins" font-weight="500" text-anchor="middle">0% MARKUP</text>
+        <path d="M110 10 V20" stroke="rgba(255,255,255,0.3)"/>
+        <path d="M110 60 V70" stroke="rgba(255,255,255,0.3)"/>
+      </svg>
+    </div>
+    <h3>0% Agency Markup on AI Compute</h3>
+    <p>Most AI consultancies mark up token usage and model API costs by 2x to 5x. With Genartml, all API keys (OpenAI, Anthropic, ElevenLabs, Deepgram, Twilio) run directly on your own billing accounts at exact provider cost.</p>
+    <div class="why-foot"><span class="dot dot-live"></span><span>Billed at direct platform cost</span></div>
+  </article>
+
+  <article class="why-card reveal d3">
+    <div class="top"><span class="code">WHY / 06</span><span class="pill">Founder Sign-off</span></div>
+    <div class="why-art">
+      <svg viewBox="0 0 220 80" aria-hidden="true">
+        <g class="a-stroke" stroke="rgba(255,255,255,0.3)" stroke-width="1.2">
+          <rect x="30" y="22" width="32" height="36" rx="6" fill="rgba(255,255,255,0.06)"/>
+          <rect x="72" y="22" width="32" height="36" rx="6" fill="rgba(255,255,255,0.06)"/>
+          <rect x="114" y="22" width="32" height="36" rx="6" fill="rgba(255,255,255,0.06)"/>
+          <rect x="156" y="18" width="36" height="44" rx="8" fill="#fff" stroke="#fff"/>
+        </g>
+        <text x="46" y="43" fill="rgba(255,255,255,0.5)" font-size="9" font-family="Poppins" font-weight="500" text-anchor="middle">FRI 1</text>
+        <text x="88" y="43" fill="rgba(255,255,255,0.5)" font-size="9" font-family="Poppins" font-weight="500" text-anchor="middle">FRI 2</text>
+        <text x="130" y="43" fill="rgba(255,255,255,0.5)" font-size="9" font-family="Poppins" font-weight="500" text-anchor="middle">FRI 3</text>
+        <text x="174" y="42" fill="#0A0A0A" font-size="9" font-family="Poppins" font-weight="700" text-anchor="middle">DEPLOY</text>
+        <circle cx="174" cy="51" r="2.5" fill="#28C840"/>
+      </svg>
+    </div>
+    <h3>Founder Review &amp; Friday Test Links</h3>
+    <p>Your systems are never passed to junior offshore contractors. Founder Daksh Suthar personally architect-reviews every deploy, and your team gets a live working test link every single Friday throughout the build.</p>
+    <div class="why-foot"><span class="dot dot-live"></span><span>Personal founder sign-off on every deploy</span></div>
+  </article>
+</div>
+
+<div class="why-compare reveal">
+  <div class="why-compare-head">
+    <div>
+      <span class="label">The difference</span>
+      <h3 class="h3" style="margin-top:8px">Why businesses choose Genartml over conventional dev shops.</h3>
+    </div>
+    <span class="pill pill-solid"><span class="dot dot-live"></span>Built for ROI</span>
+  </div>
+  <div class="diff-table">
+    <div class="diff-row diff-head">
+      <div class="diff-cell diff-feature">Capability</div>
+      <div class="diff-cell diff-other">Typical Dev Agencies</div>
+      <div class="diff-cell diff-us">Genartml Studio</div>
+    </div>
+    <div class="diff-row">
+      <div class="diff-cell diff-feature"><b>AI Engineering</b></div>
+      <div class="diff-cell diff-other"><span class="diff-icon bad">✕</span> Surface-level prompt wrappers &amp; chat widgets</div>
+      <div class="diff-cell diff-us"><span class="diff-icon good">✓</span> <b>Production pipelines</b> with voice agents, workflows &amp; CRM integration</div>
+    </div>
+    <div class="diff-row">
+      <div class="diff-cell diff-feature"><b>Accuracy &amp; Safety</b></div>
+      <div class="diff-cell diff-other"><span class="diff-icon bad">✕</span> Unvalidated prompts prone to hallucination</div>
+      <div class="diff-cell diff-us"><span class="diff-icon good">✓</span> <b>Multi-layer guardrails</b>, schema enforcement &amp; human-in-the-loop</div>
+    </div>
+    <div class="diff-row">
+      <div class="diff-cell diff-feature"><b>Commercial Model</b></div>
+      <div class="diff-cell diff-other"><span class="diff-icon bad">✕</span> Open-ended hourly billing &amp; runaway budgets</div>
+      <div class="diff-cell diff-us"><span class="diff-icon good">✓</span> <b>100% fixed price &amp; written scope</b> signed before kickoff</div>
+    </div>
+    <div class="diff-row">
+      <div class="diff-cell diff-feature"><b>Live Proof</b></div>
+      <div class="diff-cell diff-other"><span class="diff-icon bad">✕</span> Slide decks and client prototypes only</div>
+      <div class="diff-cell diff-us"><span class="diff-icon good">✓</span> <b>We build &amp; run live AI products</b> (Evoluter &amp; Extuter) with real users</div>
+    </div>
+    <div class="diff-row">
+      <div class="diff-cell diff-feature"><b>IP &amp; Data Rights</b></div>
+      <div class="diff-cell diff-other"><span class="diff-icon bad">✕</span> Proprietary lock-in or accounts held by agency</div>
+      <div class="diff-cell diff-us"><span class="diff-icon good">✓</span> <b>100% ownership</b> of code, prompts &amp; data in accounts in your name</div>
+    </div>
+    <div class="diff-row">
+      <div class="diff-cell diff-feature"><b>Accountability</b></div>
+      <div class="diff-cell diff-other"><span class="diff-icon bad">✕</span> Relayed through account managers and juniors</div>
+      <div class="diff-cell diff-us"><span class="diff-icon good">✓</span> <b>Founder Daksh Suthar</b> personally signs off on every deploy</div>
+    </div>
+  </div>
+</div>
+
+<div class="why-promises-block reveal">
+  <div class="why-promises-head">
+    <span class="label">Contractual guarantees</span>
+    <h3 class="h3">Four promises written into every proposal.</h3>
+    <p class="lead" style="margin-top:8px">Not values on a wall. Binding terms in the contract you sign.</p>
+  </div>
+  <div class="promises"><div class="promise reveal d1"><div class="n">01</div><h3>Fixed scope, written before kickoff</h3><p>Every deliverable is listed and signed before work starts. No surprise bills, no hourly meter.</p></div><div class="promise reveal d2"><div class="n">02</div><h3>Fixed delivery date in working days</h3><p>The date is in the proposal. You see a milestone and a live test link every Friday.</p></div><div class="promise reveal d3"><div class="n">03</div><h3>You own all of it</h3><p>Code, designs and database pass to you on final payment, in accounts in your name.</p></div><div class="promise reveal d4"><div class="n">04</div><h3>Founder review</h3><p>Daksh Suthar personally inspects every deploy before it goes live.</p></div></div>
+</div>
+
+</div></section>
 <section class="band"><div class="wrap"><div class="eyebrow"><span class="code">03</span><span class="label">Our own products</span><span class="tick" aria-hidden="true"></span></div>
 <div class="sec-head reveal"><h2 class="h2">We build and run our own products.</h2><p class="lead">The same team, process and standards that run Evoluter and Extuter go into every client project.</p></div>
 <div class="prod-grid"><article class="prod reveal d1"><div class="prod-shot"><div class="browser"><div class="browser-bar"><span class="lights"><i></i><i></i><i></i></span><span class="url">evoluter.in</span></div>
@@ -2781,23 +2897,7 @@ window.GENARTML_CONFIG = {
 
   // Client case studies on the work page and home page. Add only after the client signs off on public disclosure.
   // { industry: "", client: "", bottleneck: "", built: "", outcome: "", quote: "", quoteBy: "" }
-  caseStudies: [],
-
-  // 🪔 Diwali Special Offer & Festive Campaign
-  // To remove in one go: simply set `enabled: false`!
-  diwaliOffer: {
-    enabled: true,                          // Master Switch: false turns off everything across the site
-    autoSchedule: true,                     // Automatically goes live Nov 1, expires Nov 15 (IST)
-    startDate: "2026-11-01T00:00:00+05:30", // November 1st, 2026 at midnight IST
-    endDate: "2026-11-15T23:59:59+05:30",   // November 15th, 2026 at 23:59 IST
-    forcePreview: true,                     // Set to true to view locally right now before Nov 1
-    discountPercent: 20,                    // 20% OFF
-    couponCode: "DIWALI20",                 // Coupon / tracking code attached to proposals
-    services: ["websites", "software-development"], // Eligible categories
-    bannerTag: "DIWALI SPECIAL",
-    bannerText: "Flat 20% OFF on all Website & Custom Software packages",
-    urgencyText: "Limited to first 5 November project bookings"
-  }
+  caseStudies: []
 };
 </script>
 <script>window.GENARTML_PACKAGES = {"services": [{"slug": "ai-workflows", "name": "AI Workflows", "tiers": [{"id": "starter", "name": "Starter", "deliveryShort": "7 working days delivery"}, {"id": "growth", "name": "Growth", "deliveryShort": "20 working days delivery"}, {"id": "enterprise", "name": "Enterprise", "deliveryShort": "35 to 45 working days delivery"}]}, {"slug": "voice-ai-agents", "name": "Voice AI Agents", "tiers": [{"id": "starter", "name": "Starter", "deliveryShort": "10 working days delivery"}, {"id": "growth", "name": "Growth", "deliveryShort": "20 working days delivery"}, {"id": "enterprise", "name": "Enterprise", "deliveryShort": "35 working days delivery"}]}, {"slug": "websites", "name": "Websites", "tiers": [{"id": "launch", "name": "Launch", "deliveryShort": "10 working days delivery"}, {"id": "business", "name": "Business", "deliveryShort": "20 working days delivery"}, {"id": "commerce", "name": "Commerce or corporate", "deliveryShort": "35 working days delivery"}]}, {"slug": "software-development", "name": "Software Development", "tiers": [{"id": "prototype", "name": "Prototype", "deliveryShort": "30 working days delivery"}, {"id": "standard", "name": "Standard", "deliveryShort": "60 working days delivery"}, {"id": "enterprise", "name": "Enterprise", "deliveryShort": "90 to 120 working days delivery"}]}, {"slug": "care-plans", "name": "Care Plans", "tiers": [{"id": "care", "name": "Care", "deliveryShort": "Monthly plan, 48 hours first response"}, {"id": "growth", "name": "Growth", "deliveryShort": "Monthly plan, 24 hours first response"}, {"id": "dedicated", "name": "Dedicated", "deliveryShort": "Monthly plan, 4 working hours first response"}]}]};
@@ -3295,172 +3395,6 @@ window.GENARTML_CONFIG = {
     if (a) track(a.getAttribute("data-track"), { label: (a.textContent || "").trim().slice(0, 60) });
   });
 
-  /* ---------- 🪔 Diwali Offer Engine (Scheduled / Single-Switch) ---------- */
-  function isDiwaliActive() {
-    var O = C.diwaliOffer;
-    if (!O || !O.enabled) return false;
-
-    // Local / Session override switch
-    var sessOverride = sess("gm_diwali_toggle");
-    if (sessOverride === "0") return false;
-    if (sessOverride === "1") return true;
-
-    // URL preview parameter check (?offer=preview, ?diwali=1, etc.)
-    var q = location.search;
-    if (BUNDLE && Router && Router.query) q = Router.query;
-    if (/[?&](offer=preview|diwali=1|previewOffer=true)/i.test(q)) return true;
-
-    // Local forcePreview config
-    if (O.forcePreview) return true;
-
-    // Automatic Schedule: checks if current date/time is between start & end
-    if (O.autoSchedule && O.startDate && O.endDate) {
-      var now = new Date();
-      var start = new Date(O.startDate);
-      var end = new Date(O.endDate);
-      return now >= start && now <= end;
-    }
-    return !!O.enabled;
-  }
-
-  function renderPreviewSwitch(isActive) {
-    var isDevOrPreview = BUNDLE || location.hostname === "localhost" || location.hostname === "127.0.0.1" || location.protocol === "file:";
-    if (!isDevOrPreview) return;
-
-    var existingSwitch = $("#diwali-preview-switch");
-    if (!existingSwitch) {
-      existingSwitch = document.createElement("button");
-      existingSwitch.id = "diwali-preview-switch";
-      existingSwitch.type = "button";
-      document.body.appendChild(existingSwitch);
-      existingSwitch.addEventListener("click", function () {
-        var nowActive = isDiwaliActive();
-        sess("gm_diwali_toggle", nowActive ? "0" : "1");
-        initDiwaliOffer(document);
-      });
-    }
-
-    var diyaIconSvg = '<svg style="width:14px;height:14px;display:inline-block;vertical-align:-2px;margin-right:4px" viewBox="0 0 24 24"><path fill="#FFA500" d="M12 2C11 5 9 7 9 9.5a3 3 0 0 0 6 0C15 7 13 5 12 2z"/><path fill="#CA9D35" d="M4 14c0 4.4 3.6 7 8 7s8-2.6 8-7H4z"/></svg>';
-
-    if (isActive) {
-      existingSwitch.className = "diwali-preview-switch";
-      existingSwitch.innerHTML = '<span class="dot"></span><b>' + diyaIconSvg + 'Diwali Offer: ACTIVE</b> <span style="opacity:0.7">(Click to preview OFF)</span>';
-      existingSwitch.title = "Click to preview website without Diwali offer";
-    } else {
-      existingSwitch.className = "diwali-preview-switch is-off";
-      existingSwitch.innerHTML = '<span class="dot"></span><b>' + diyaIconSvg + 'Diwali Offer: OFF</b> <span style="opacity:0.7">(Click to preview ON)</span>';
-      existingSwitch.title = "Click to preview website with Diwali offer";
-    }
-  }
-
-  function initDiwaliOffer(root) {
-    var active = isDiwaliActive();
-    var O = C.diwaliOffer || {};
-    var diyaIconSvg = '<svg style="width:14px;height:14px;display:inline-block;vertical-align:-2px;margin-right:4px" viewBox="0 0 24 24"><path fill="#FFA500" d="M12 2C11 5 9 7 9 9.5a3 3 0 0 0 6 0C15 7 13 5 12 2z"/><path fill="#CA9D35" d="M4 14c0 4.4 3.6 7 8 7s8-2.6 8-7H4z"/></svg>';
-
-    // 1. Cleanup old offer elements if not active (or if toggled off)
-    var existingBanner = $("#diwali-banner");
-    if (!active) {
-      if (existingBanner) existingBanner.remove();
-      $$(".diwali-badge, .diwali-offer-note, .tier-diwali-header, .svc-diwali-header", document).forEach(function (el) { el.remove(); });
-      $$(".diwali-card-highlight", document).forEach(function (el) { el.classList.remove("diwali-card-highlight"); });
-      renderPreviewSwitch(false);
-      return;
-    }
-
-    // 2. Inject or Update Top Festive Banner
-    if (existingBanner) existingBanner.remove();
-    var banner = document.createElement("div");
-      banner.id = "diwali-banner";
-      banner.className = "diwali-banner";
-      banner.innerHTML = '<div class="wrap diwali-wrap">' +
-        '<div class="diwali-left">' +
-          '<span class="diwali-diya" aria-hidden="true">' +
-            '<svg viewBox="0 0 24 24">' +
-              '<path class="diya-flame" d="M12 2C11 5 9 7 9 9.5a3 3 0 0 0 6 0C15 7 13 5 12 2z"/>' +
-              '<path class="diya-base" d="M4 14c0 4.4 3.6 7 8 7s8-2.6 8-7H4z"/>' +
-              '<ellipse class="diya-rim" cx="12" cy="14" rx="8" ry="2"/>' +
-            '</svg>' +
-          '</span>' +
-          '<span class="diwali-pill">' + diyaIconSvg + esc(O.bannerTag || "DIWALI SPECIAL") + '</span>' +
-          '<span class="diwali-text"><b>Flat ' + (O.discountPercent || 20) + '% OFF</b> on all Website & Custom Software packages</span>' +
-          (O.urgencyText ? '<span class="diwali-urgency">' + esc(O.urgencyText) + '</span>' : '') +
-        '</div>' +
-        '<div class="diwali-right">' +
-          '<a class="diwali-cta" href="/packages/#matrix" data-track="diwali_topbar_cta">' +
-            'Claim ' + (O.discountPercent || 20) + '% Festive Offer' +
-            '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>' +
-          '</a>' +
-        '</div>' +
-      '</div>';
-
-      var topbar = $(".topbar");
-      if (topbar && topbar.parentNode) {
-        topbar.parentNode.insertBefore(banner, topbar);
-      } else {
-        document.body.insertBefore(banner, document.body.firstChild);
-      }
-
-    // 3. Highlight Eligible Service Cards & Packages
-    var eligible = O.services || ["websites", "software-development"];
-
-    // A) On Packages Page (matrix-groups)
-    eligible.forEach(function (cat) {
-      var group = $('[data-group="' + cat + '"]', root || document);
-      if (group) {
-        $$(".tier", group).forEach(function (tier) {
-          if (!tier.classList.contains("diwali-card-highlight")) {
-            tier.classList.add("diwali-card-highlight");
-
-            // Add dedicated festive header row at the very top of the card
-            if (!$(".tier-diwali-header", tier)) {
-              var dHead = document.createElement("div");
-              dHead.className = "tier-diwali-header";
-              dHead.innerHTML = '<span class="diwali-badge">' + diyaIconSvg + (O.discountPercent || 20) + '% OFF · DIWALI SPECIAL</span>' +
-                '<span class="diwali-code-tag">Code: ' + esc(O.couponCode || "DIWALI20") + '</span>';
-              tier.insertBefore(dHead, tier.firstChild);
-            }
-
-            // Add Offer Note above CTA button
-            var btn = $(".btn", tier);
-            if (btn && !$(".diwali-offer-note", tier)) {
-              var note = document.createElement("div");
-              note.className = "diwali-offer-note";
-              note.innerHTML = '<span style="color:#D4AF37">✦</span><span><b>' + (O.discountPercent || 20) + '% Festive Savings</b> applied with code <code>' + esc(O.couponCode || "DIWALI20") + '</code></span>';
-              btn.parentNode.insertBefore(note, btn);
-
-              // Attach offer param to CTA URL
-              var href = btn.getAttribute("href");
-              if (href && href.indexOf("offer=") === -1) {
-                var sep = href.indexOf("?") === -1 ? "?" : "&";
-                btn.setAttribute("href", href + sep + "offer=" + encodeURIComponent(O.couponCode || "DIWALI20"));
-              }
-            }
-          }
-        });
-      }
-    });
-
-    // B) On Home / Services Page (svc-cards)
-    $$(".svc-card", root || document).forEach(function (card) {
-      var link = $("a.stretched", card);
-      if (link) {
-        var href = link.getAttribute("href") || "";
-        var isMatch = eligible.some(function (cat) { return href.indexOf(cat) !== -1; });
-        if (isMatch && !$(".svc-diwali-header", card)) {
-          card.classList.add("diwali-card-highlight");
-          var sHead = document.createElement("div");
-          sHead.className = "svc-diwali-header";
-          sHead.innerHTML = '<span class="diwali-badge">' + diyaIconSvg + (O.discountPercent || 20) + '% OFF · DIWALI SPECIAL</span>';
-          card.insertBefore(sHead, card.firstChild);
-        }
-      }
-    });
-
-    // 4. Render interactive toggle switch
-    renderPreviewSwitch(true);
-  }
-
   /* ---------- Page init (runs on load, and after each preview navigation) ---------- */
   function initPage(root) {
     applyConfig(root);
@@ -3473,16 +3407,14 @@ window.GENARTML_CONFIG = {
     initThanks(root);
     initShare(root);
     initToc(root);
-    initDiwaliOffer(root);
     markActive();
   }
-  window.GENARTML = { initPage: initPage, setRouter: function (r) { Router = r; }, applyConfig: applyConfig, initDiwaliOffer: initDiwaliOffer };
+  window.GENARTML = { initPage: initPage, setRouter: function (r) { Router = r; }, applyConfig: applyConfig };
 
   function boot() {
     applyConfig(document);
     initHeader();
     initCookies();
-    initDiwaliOffer(document);
     if (!BUNDLE) initPage($("main") || document);
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot); else boot();
